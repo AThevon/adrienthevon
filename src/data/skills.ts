@@ -263,9 +263,10 @@ export function getSkillConnections(skillId: string): Skill[] {
 // Helper to get projects using a specific skill
 export function getProjectsForSkill(skillName: string) {
   // Import projects dynamically to avoid circular dependency
-  const { projects } = require("./projects");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { projects } = require("./projects") as { projects: Array<{ tags: string[] }> };
 
-  return projects.filter((project: any) =>
+  return projects.filter((project) =>
     project.tags.some((tag: string) =>
       tag.toLowerCase().replace(/[.\s]/g, "") === skillName.toLowerCase().replace(/[.\s]/g, "")
     )
@@ -274,17 +275,18 @@ export function getProjectsForSkill(skillName: string) {
 
 // Helper to get all skills with their associated projects
 export function getSkillsWithProjects() {
-  const { projects } = require("./projects");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { projects } = require("./projects") as { projects: Array<{ id: string; skills?: string[] }> };
 
   return skills.map((skill) => {
     // Use the new skills field for precise mapping
-    const relatedProjects = projects.filter((project: any) =>
+    const relatedProjects = projects.filter((project) =>
       project.skills && project.skills.includes(skill.id)
     );
 
     return {
       ...skill,
-      projectIds: relatedProjects.map((p: any) => p.id),
+      projectIds: relatedProjects.map((p) => p.id),
     };
   });
 }

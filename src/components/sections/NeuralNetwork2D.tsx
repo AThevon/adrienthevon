@@ -35,7 +35,7 @@ interface Connection {
 export default function NeuralNetwork2D() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   const nodesRef = useRef<Map<string, SkillNode>>(new Map());
   const connectionsRef = useRef<Connection[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -46,7 +46,10 @@ export default function NeuralNetwork2D() {
   const tProject = useTranslations("projectsData");
 
   const selectedSkill = selectedSkillId
-    ? getSkillsUsedInProjects().find((s) => s.id === selectedSkillId)
+    ? (() => {
+        const skill = getSkillsUsedInProjects().find((s) => s.id === selectedSkillId);
+        return skill ? { ...skill, color: skillCategories[skill.category].color } : null;
+      })()
     : null;
 
   // Initialize nodes and connections

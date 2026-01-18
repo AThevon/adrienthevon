@@ -100,35 +100,23 @@
     "events": {
       "beginning": {
         "title": "LES DÉBUTS",
-        "description": "Premières lignes de code, premiers bugs, premières nuits blanches."
+        "description": "Découverte du code web, formation officielle, première immersion dans React. Le début d'une belle histoire."
       },
-      "deepDive": {
-        "title": "DEEP DIVE",
-        "description": "Plongée dans le monde du web, JavaScript devient mon meilleur pote."
+      "firstDiploma": {
+        "title": "PREMIER DIPLÔME",
+        "description": "Premier diplôme obtenu, première app React pro. Game on."
       },
-      "creativeSpark": {
-        "title": "ÉTINCELLE CRÉATIVE",
-        "description": "Découverte du creative coding. Le code devient art."
+      "airbus3D": {
+        "title": "AIRBUS × 3D",
+        "description": "Concepteur diplômé, configurateur 3D chez Airbus. Three.js devient mon nouveau terrain de jeu."
       },
-      "professional": {
-        "title": "PRO MODE",
-        "description": "Premiers clients, premiers vrais projets, premières vraies galères."
+      "usCompany": {
+        "title": "USA VIBES",
+        "description": "Deuxième diplôme validé, mission US en image processing. Frontend specialist mode activé."
       },
-      "levelUp": {
-        "title": "LEVEL UP",
-        "description": "Three.js, WebGL, shaders... Le rabbit hole ne fait que commencer."
-      },
-      "now": {
-        "title": "MAINTENANT",
-        "description": "Toujours en train d'apprendre, toujours en train de coder, toujours en train de créer."
-      },
-      "future": {
-        "title": "VERS L'AVENIR",
-        "description": "Exploration de nouvelles frontières, expérimentations audacieuses, projets ambitieux."
-      },
-      "vision": {
-        "title": "LA VISION",
-        "description": "Repousser les limites du possible, créer des expériences qui marquent les esprits."
+      "toolsMaker": {
+        "title": "TOOLS MAKER",
+        "description": "Multiplication d'outils et d'apps en mode créatif. Le code comme terrain d'expression infini."
       }
     }
   },

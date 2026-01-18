@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { usePerformance, useReducedMotion } from "@/hooks";
+import { timelineEvents } from "@/data/timeline";
 
 const ConstellationTimeline = dynamic(
   () => import("@/components/sections/ConstellationTimeline"),
@@ -14,14 +14,6 @@ const ConstellationTimeline = dynamic(
 function TimelineFallback() {
   const t = useTranslations("timeline");
   const tEvents = useTranslations("timeline.events");
-
-  const events = [
-    { year: "2022", key: "professional", color: "#ff4d00" },
-    { year: "2023", key: "levelUp", color: "#00d4ff" },
-    { year: "2024", key: "now", color: "#fdbb00" },
-    { year: "2025", key: "future", color: "#a855f7" },
-    { year: "2026", key: "vision", color: "#ff00ff" },
-  ];
 
   return (
     <section className="py-32 px-8 md:px-16 bg-background" data-cursor-mode="timeline">
@@ -37,7 +29,7 @@ function TimelineFallback() {
         </h2>
 
         <div className="relative space-y-12">
-          {events.map((event) => {
+          {timelineEvents.map((event) => {
             const title = tEvents(`${event.key}.title`);
             const description = tEvents(`${event.key}.description`);
 

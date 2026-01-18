@@ -57,14 +57,13 @@ src/
 │   │   ├── WaveField.tsx         # Champ de vagues
 │   │   └── NoiseTerrain.tsx      # Terrain procédural
 │   ├── sections/
-│   │   ├── Hero.tsx              # Section hero avec floating shapes
-│   │   ├── Projects.tsx          # Grille de projets
-│   │   ├── About.tsx             # Section about avec ASCII art
-│   │   ├── Contact.tsx           # Section contact
-│   │   ├── NoiseSection.tsx      # Section avec effet de bruit
-│   │   ├── HorizontalGallery.tsx # Scroll horizontal avec parallax
-│   │   ├── SkillsMatrix3D.tsx    # Grille 3D des skills + matrix rain
-│   │   └── Timeline3D.tsx        # Timeline carrière 3D avec nodes impressionnants
+│   │   ├── Hero.tsx                  # Section hero avec floating shapes
+│   │   ├── Projects.tsx              # Grille de projets
+│   │   ├── NavigationGrid.tsx        # Grille de navigation homepage
+│   │   ├── NavigationStrips.tsx      # Strips de navigation homepage
+│   │   ├── HorizontalGallery.tsx     # Scroll horizontal avec parallax
+│   │   ├── NeuralNetwork2D.tsx       # Réseau neuronal 2D Canvas (Skills)
+│   │   └── ConstellationTimeline.tsx # Timeline constellation 2D Canvas (Journey)
 │   └── ui/
 │       ├── MagneticButton.tsx    # Bouton avec effet magnétique
 │       ├── TextReveal.tsx        # Révélation de texte animée
@@ -75,7 +74,8 @@ src/
 │       └── LanguageSwitcher.tsx  # Switch FR/EN avec persistance cookie
 ├── data/
 │   ├── projects.ts           # Données des projets (structure + helpers)
-│   └── timeline.ts           # Événements de la timeline (avec clés i18n)
+│   ├── timeline.ts           # Événements de la timeline (avec clés i18n)
+│   └── skills.ts             # Compétences et catégories (avec liens projets)
 ├── hooks/
 │   ├── index.ts
 │   ├── useReducedMotion.ts   # Détecte prefers-reduced-motion
@@ -85,7 +85,8 @@ src/
 ├── i18n/
 │   └── request.ts            # Config next-intl (cookie + Accept-Language fallback)
 ├── lib/
-│   └── constants.ts          # Couleurs et constantes globales
+│   ├── constants.ts          # Couleurs et constantes globales
+│   └── skillLogos.ts         # URLs des logos Simple Icons pour skills
 └── providers/
     └── SmoothScrollProvider.tsx  # Provider Lenis
 messages/
@@ -174,12 +175,20 @@ interface Project {
 ```
 
 **Projets actuels :**
-- **Under The Flow** - Plateforme de sessions live hip-hop
-- **Victor Denay** - Portfolio vidéaste/photographe
-- **Dépense Man** - App de gestion de finances (PWA)
-- **Linekut** - Convertisseur d'images en patrons découpables
+- **Under The Flow** (2024) - Plateforme de sessions live hip-hop
+- **Victor Denay** (2024) - Portfolio vidéaste/photographe
+- **Dépense Man** (2024) - App de gestion de finances (PWA)
+- **Linekut** (2024) - Convertisseur d'images en patrons découpables
+- **BlenkDev** (2024) - Site vitrine agence freelance
 
 Les textes des projets sont traduits via `projectsData.{slug}` dans les fichiers de traduction.
+
+**Timeline réelle (2022-2026) :**
+- **2022** - Découverte du code web, formation React
+- **2023** - Premier diplôme, première app React pro
+- **2024** - Second diplôme (concepteur), configurateur 3D chez Airbus
+- **2025** - Entreprise US, image processing et frontend specialist
+- **2026** - Multiplication d'outils et d'apps en mode créatif
 
 ---
 
@@ -195,14 +204,26 @@ Les textes des projets sont traduits via `projectsData.{slug}` dans les fichiers
 
 ## Fonctionnalités Implémentées
 
+### Pages complètes
+- ✅ **Homepage** - NavigationGrid + NavigationStrips pour navigation visuelle
+- ✅ **Work** - Liste projets avec toggle gallery/list view
+- ✅ **Work/[slug]** - Case studies avec vue standard et immersive
+- ✅ **Skills** - NeuralNetwork2D Canvas avec système de nodes interactifs et liens projets
+- ✅ **Journey** - ConstellationTimeline Canvas avec navigation entre événements
+
+### Pages en cours de rework
+- 🚧 **Philosophy** - À retravailler
+- 🚧 **About** - À retravailler
+- 🚧 **Contact** - À retravailler
+
+### Effets et composants
 - GlitchCursor avec texte contextuel par section
-- SectionEffects (particules : constellation, magnetic, vortex, electric, ripple)
-- Timeline3D avec nodes impressionnants (anneaux rotatifs, particules orbitantes)
-- SkillsMatrix3D avec matrix rain
-- Horizontal Gallery avec parallax
-- Case Study Immersive (scroll storytelling)
+- CustomCursor pour pages spécifiques (Skills)
+- NavigationGrid/Strips avec effets au hover
+- NeuralNetwork2D (Canvas force-directed graph)
+- ConstellationTimeline (Canvas avec étoiles et shooting stars)
+- HorizontalGallery avec parallax
 - DualText pour messages cachés au hover
-- Liquid Cursor (metaballs)
 - Internationalisation FR/EN complète
 - Optimisations mobile/reduced-motion
 - SEO meta tags

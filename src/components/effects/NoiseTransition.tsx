@@ -38,7 +38,7 @@ export default function NoiseTransition({
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let startTime = performance.now();
+    const startTime = performance.now();
     let frame = 0;
 
     const drawNoise = () => {

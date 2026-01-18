@@ -41,13 +41,16 @@ src/
 
 ## Features
 
+- **Homepage** - NavigationGrid et NavigationStrips pour navigation immersive
+- **Work** - Liste projets avec gallery/list toggle et case studies détaillés
+- **Skills** - Réseau neuronal 2D interactif (Canvas force-directed graph)
+- **Journey** - Timeline constellation 2D avec étoiles filantes et navigation
 - Curseur custom avec effets contextuels par section
-- Timeline 3D interactive
-- Skills Matrix 3D avec matrix rain
 - Horizontal Gallery avec parallax
 - Case studies avec mode immersif (scroll storytelling)
-- Internationalisation FR/EN
+- Internationalisation FR/EN complète
 - Optimisations mobile/reduced-motion
+- Architecture data centralisée (projects, timeline, skills)
 
 ## Commandes
 
@@ -60,7 +63,13 @@ npm run lint     # Linting
 
 ## Projets présentés
 
-- **Under The Flow** - Plateforme de sessions live hip-hop
-- **Victor Denay** - Portfolio vidéaste/photographe
-- **Dépense Man** - App de gestion de finances (PWA)
-- **Linekut** - Convertisseur d'images en patrons découpables
+- **Under The Flow** (2024) - Plateforme de sessions live hip-hop
+- **Victor Denay** (2024) - Portfolio vidéaste/photographe
+- **Dépense Man** (2024) - App de gestion de finances (PWA)
+- **Linekut** (2024) - Convertisseur d'images en patrons découpables
+- **BlenkDev** (2024) - Site vitrine agence freelance
+
+## Status
+
+- ✅ Pages complètes: Home, Work, Skills, Journey
+- 🚧 Pages à retravailler: Philosophy, About, Contact

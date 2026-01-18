@@ -100,35 +100,23 @@
     "events": {
       "beginning": {
         "title": "THE BEGINNING",
-        "description": "First lines of code, first bugs, first sleepless nights."
+        "description": "Discovering web code, official training, first React immersion. The start of something beautiful."
       },
-      "deepDive": {
-        "title": "DEEP DIVE",
-        "description": "Diving into the web world, JavaScript became my best friend."
+      "firstDiploma": {
+        "title": "FIRST DIPLOMA",
+        "description": "First diploma obtained, first pro React app. Game on."
       },
-      "creativeSpark": {
-        "title": "CREATIVE SPARK",
-        "description": "Discovered creative coding. Code becomes art."
+      "airbus3D": {
+        "title": "AIRBUS × 3D",
+        "description": "Designer certified, 3D configurator at Airbus. Three.js becomes my new playground."
       },
-      "professional": {
-        "title": "PRO MODE",
-        "description": "First clients, first real projects, first real struggles."
+      "usCompany": {
+        "title": "USA VIBES",
+        "description": "Second diploma validated, US mission in image processing. Frontend specialist mode activated."
       },
-      "levelUp": {
-        "title": "LEVEL UP",
-        "description": "Three.js, WebGL, shaders... The rabbit hole just keeps going."
-      },
-      "now": {
-        "title": "NOW",
-        "description": "Still learning, still coding, still creating."
-      },
-      "future": {
-        "title": "TOWARD THE FUTURE",
-        "description": "Exploring new frontiers, bold experiments, ambitious projects."
-      },
-      "vision": {
-        "title": "THE VISION",
-        "description": "Pushing the boundaries of what's possible, creating experiences that leave a mark."
+      "toolsMaker": {
+        "title": "TOOLS MAKER",
+        "description": "Multiplying tools and apps in creative mode. Code as an infinite canvas for expression."
       }
     }
   },

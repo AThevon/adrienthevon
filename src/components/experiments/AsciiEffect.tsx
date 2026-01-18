@@ -190,7 +190,7 @@ export default function AsciiEffect({
       document.addEventListener("mousemove", handleMouseMove, { passive: true });
     }
 
-    let startTime = performance.now();
+    const startTime = performance.now();
 
     const animate = () => {
       const time = (performance.now() - startTime) / 1000;

@@ -25,7 +25,10 @@ export default function MainNav() {
 
   // Close menu on route change
   useEffect(() => {
-    setIsOpen(false);
+    if (isOpen) {
+      setIsOpen(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Prevent body scroll when menu is open

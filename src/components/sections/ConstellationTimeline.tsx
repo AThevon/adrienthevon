@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useTranslations } from "next-intl";
-import { COLORS } from "@/lib/constants";
+import { timelineEvents } from "@/data/timeline";
 
 interface ConstellationNode {
   x: number;
@@ -40,22 +40,13 @@ interface ShootingStar {
   maxLife: number;
 }
 
-// Timeline events with colors
-const timelineEvents = [
-  { year: "2022", key: "professional", color: "#ff4d00" },
-  { year: "2023", key: "levelUp", color: "#00d4ff" },
-  { year: "2024", key: "now", color: "#fdbb00" },
-  { year: "2025", key: "future", color: "#a855f7" },
-  { year: "2026", key: "vision", color: "#ff00ff" },
-];
-
 export default function ConstellationTimeline() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const nodesRef = useRef<ConstellationNode[]>([]);
   const starsRef = useRef<Star[]>([]);
   const shootingStarsRef = useRef<ShootingStar[]>([]);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   const [activeIndex, setActiveIndex] = useState(2); // Start at 2024
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const t = useTranslations("timeline");
@@ -179,6 +170,15 @@ export default function ConstellationTimeline() {
     return () => clearInterval(interval);
   }, [dimensions]);
 
+  // Navigation handlers
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => Math.max(0, prev - 1));
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => Math.min(timelineEvents.length - 1, prev + 1));
+  }, [timelineEvents.length]);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -191,7 +191,7 @@ export default function ConstellationTimeline() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex]);
+  }, [handlePrev, handleNext]);
 
   // Main animation loop
   useEffect(() => {
@@ -452,15 +452,14 @@ export default function ConstellationTimeline() {
     []
   );
 
-  const handlePrev = () => {
-    setActiveIndex((prev) => Math.max(0, prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => Math.min(timelineEvents.length - 1, prev + 1));
-  };
-
-  const activeNode = nodesRef.current[activeIndex];
+  // Get active node from timelineEvents data instead of ref
+  const activeNode = timelineEvents[activeIndex]
+    ? {
+        ...timelineEvents[activeIndex],
+        title: tEvents(`${timelineEvents[activeIndex].key}.title`),
+        description: tEvents(`${timelineEvents[activeIndex].key}.description`)
+      }
+    : null;
 
   return (
     <section
