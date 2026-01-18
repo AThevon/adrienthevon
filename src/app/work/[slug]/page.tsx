@@ -10,6 +10,31 @@ import TextReveal from "@/components/ui/TextReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { getProjectById, getNextProject } from "@/data/projects";
 
+// Letter by letter reveal component
+function LetterReveal({ text, delay = 0 }: { text: string; delay?: number }) {
+  const letters = text.split("");
+
+  return (
+    <span>
+      {letters.map((letter, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 50, rotateX: -90 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{
+            duration: 0.5,
+            delay: delay + i * 0.03,
+            ease: [0.33, 1, 0.68, 1],
+          }}
+          style={{ display: "inline-block", transformOrigin: "bottom" }}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 const CustomCursor = dynamic(
   () => import("@/components/effects/CustomCursor"),
   { ssr: false }
@@ -53,118 +78,96 @@ export default function ProjectPage() {
       <CustomCursor />
 
       <main ref={containerRef} className="min-h-screen">
-        {/* Hero */}
-        <motion.section
-          className="h-screen flex flex-col justify-center px-8 md:px-16 relative overflow-hidden"
-          style={{ scale: heroScale, opacity: heroOpacity }}
-        >
-          {/* Background color accent */}
+        {/* Hero - Immersive style */}
+        <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
+          {/* Background gradient */}
           <div
-            className="absolute inset-0 opacity-10"
+            className="absolute inset-0 opacity-20"
             style={{
-              background: `radial-gradient(circle at 70% 30%, ${project.color} 0%, transparent 50%)`,
+              background: `radial-gradient(circle at 50% 50%, ${project.color} 0%, transparent 70%)`,
             }}
           />
 
-          <div className="max-w-7xl mx-auto w-full relative z-10">
-            <div className="flex items-center gap-6 mb-12">
-              <motion.a
-                href="/work"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-foreground transition-colors"
-                data-cursor="hover"
-              >
-                {t("backToWork")}
-              </motion.a>
-              <span className="w-[1px] h-4 bg-foreground/20" />
-              <motion.a
-                href={`/work/${params.slug}/immersive`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="inline-flex items-center gap-2 font-mono text-sm hover:text-accent transition-colors"
-                style={{ color: project.color }}
-                data-cursor="hover"
-              >
-                {t("immersiveView")}
-              </motion.a>
-            </div>
+          {/* Back button */}
+          <motion.a
+            href="/work"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="fixed top-24 left-8 z-40 font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
+            data-cursor="hover"
+          >
+            ← {t("backToWork")}
+          </motion.a>
 
-            <div className="flex items-center gap-4 mb-6">
-              <span
-                className="font-mono text-sm"
-                style={{ color: project.color }}
-              >
-                {tProject("category")}
-              </span>
-              <span className="w-12 h-[1px] bg-foreground/20" />
-              <span className="font-mono text-sm text-muted">{project.year}</span>
-            </div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-6xl md:text-8xl lg:text-[10vw] font-bold tracking-tighter leading-[0.9]"
-            >
-              {project.title}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-8 text-xl md:text-2xl text-muted max-w-2xl"
-            >
-              {tProject("description")}
-            </motion.p>
-          </div>
-
-          {/* Scroll indicator */}
+          {/* Category */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+            transition={{ delay: 0.3 }}
+            className="font-mono text-sm mb-8"
+            style={{ color: project.color }}
+          >
+            {tProject("category")} — {project.year}
+          </motion.div>
+
+          {/* Title with letter reveal */}
+          <h1 className="text-6xl md:text-8xl lg:text-[12vw] font-bold tracking-tighter text-center px-8">
+            <LetterReveal text={project.title} delay={0.5} />
+          </h1>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            className="mt-8 text-xl text-muted text-center max-w-xl px-8"
+          >
+            {tProject("description")}
+          </motion.p>
+
+          {/* Scroll prompt */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="absolute bottom-12 flex flex-col items-center gap-4"
           >
             <span className="font-mono text-xs text-muted">{t("scroll")}</span>
             <motion.div
-              className="w-[1px] h-12 bg-gradient-to-b from-foreground to-transparent"
-              animate={{ scaleY: [0.5, 1, 0.5] }}
+              className="w-6 h-10 border border-foreground/30 rounded-full flex justify-center pt-2"
+              animate={{ borderColor: [project.color + "50", project.color, project.color + "50"] }}
               transition={{ duration: 2, repeat: Infinity }}
-            />
+            >
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: project.color }}
+                animate={{ y: [0, 12, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.div>
           </motion.div>
-
-          {/* Corner decoration */}
-          <div
-            className="absolute top-8 right-8 w-24 h-24"
-            style={{
-              background: `linear-gradient(135deg, ${project.color} 50%, transparent 50%)`,
-              opacity: 0.3,
-            }}
-          />
-        </motion.section>
+        </section>
 
         {/* Project image */}
         <section className="px-8 md:px-16 py-16">
           <div className="max-w-7xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="aspect-video relative overflow-hidden"
+              className="relative"
             >
               <Image
                 src={project.image}
                 alt={project.title}
-                fill
-                className="object-cover"
+                width={1920}
+                height={1080}
+                className="w-full h-auto"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1280px"
               />
-              <div className="absolute inset-0 border border-foreground/10" />
+              <div className="absolute inset-0 border border-foreground/10 pointer-events-none" />
             </motion.div>
           </div>
         </section>
@@ -236,32 +239,6 @@ export default function ProjectPage() {
                   {tProject("longDescription")}
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* More images placeholder */}
-        <section className="px-8 md:px-16 py-16">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-2 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="aspect-square relative overflow-hidden"
-                >
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background: `linear-gradient(${45 + i * 30}deg, ${project.color}20 0%, transparent 100%)`,
-                    }}
-                  />
-                  <div className="absolute inset-0 border border-foreground/10" />
-                </motion.div>
-              ))}
             </div>
           </div>
         </section>

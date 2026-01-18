@@ -185,7 +185,7 @@ export default function ImmersiveCaseStudy() {
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed top-8 left-8 z-40 flex items-center gap-4"
+        className="fixed top-24 left-8 z-40 flex items-center gap-4"
       >
         <a
           href={`/work/${project.id}`}

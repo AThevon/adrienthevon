@@ -5,6 +5,9 @@ import { getMessages, getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScrollProvider from "@/providers/SmoothScrollProvider";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import MainNav from "@/components/navigation/MainNav";
+import PageTransition from "@/components/navigation/PageTransition";
+import CursorWrapper from "@/components/effects/CursorWrapper";
 
 // Primary sans-serif - Bold geometric font for headings
 const spaceGrotesk = Space_Grotesk({
@@ -101,11 +104,16 @@ export default async function RootLayout({
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} antialiased grain`}
       >
         <NextIntlClientProvider messages={messages}>
-          {/* Language Switcher - Fixed position */}
-          <div className="fixed top-6 right-6 z-50">
-            <LanguageSwitcher />
-          </div>
-          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          {/* Global Custom Cursor */}
+          <CursorWrapper />
+
+          {/* Main Navigation */}
+          <MainNav />
+
+          {/* Smooth Scroll + Page Transitions */}
+          <SmoothScrollProvider>
+            <PageTransition>{children}</PageTransition>
+          </SmoothScrollProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -6,15 +6,8 @@ import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import HoverReveal from "@/components/ui/HoverReveal";
-import TextReveal from "@/components/ui/TextReveal";
-import ScrollImageReveal from "@/components/ui/ScrollImageReveal";
 import HorizontalGallery from "@/components/sections/HorizontalGallery";
 import { projects } from "@/data/projects";
-
-const CustomCursor = dynamic(
-  () => import("@/components/effects/CustomCursor"),
-  { ssr: false }
-);
 
 const LiquidCursor = dynamic(
   () => import("@/components/effects/LiquidCursor"),
@@ -34,137 +27,84 @@ export default function WorkPage() {
   // Gallery view - immersive horizontal scroll
   if (viewMode === "gallery") {
     return (
-      <>
-        <CustomCursor />
-        <LiquidCursor intensity={0.3} />
+      <main className="min-h-screen">
+        {/* Page header - fixed like the global header */}
+        <div className="fixed top-24 left-0 right-0 z-30 w-full px-8 py-1 flex items-center justify-between">
+          {/* Back button */}
+          <motion.a
+            href="/"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
+            data-cursor="hover"
+          >
+            ← {tNav("back")}
+          </motion.a>
 
-        {/* Mode toggle - positioned below language switcher */}
-        <div className="fixed top-8 right-32 z-40 flex items-center gap-4">
+          {/* Title */}
+          <span className="font-mono text-xs text-muted bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2">
+            {t("subtitle")}
+          </span>
+
+          {/* Mode toggle */}
           <button
             onClick={() => setViewMode("list")}
-            className="font-mono text-xs text-muted hover:text-foreground transition-colors"
+            className="font-mono text-xs text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2 flex items-center gap-2"
             data-cursor="hover"
           >
             {t("listView")}
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6H10M10 6L7 3M10 6L7 9" stroke="currentColor" strokeWidth="1" />
+            </svg>
           </button>
         </div>
 
-        {/* Back button */}
-        <motion.a
-          href="/"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed top-8 left-8 z-40 font-mono text-sm text-muted hover:text-foreground transition-colors"
-          data-cursor="hover"
-        >
-          ← {tNav("back")}
-        </motion.a>
-
-        {/* Title overlay */}
-        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-40">
-          <span className="font-mono text-xs text-muted">{t("subtitle")}</span>
-        </div>
-
         <HorizontalGallery items={projects} onItemClick={handleProjectClick} />
-      </>
+      </main>
     );
   }
 
   // List view - classic scrolling
   return (
-    <>
-      <CustomCursor />
-      <LiquidCursor intensity={0.3} />
+    <main className="min-h-screen">
+      {/* Page header - fixed like gallery view */}
+      <div className="fixed top-24 left-0 right-0 z-30 w-full px-8 py-1 flex items-center justify-between">
+        {/* Back button */}
+        <motion.a
+          href="/"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
+          data-cursor="hover"
+        >
+          ← {tNav("back")}
+        </motion.a>
 
-      <main className="min-h-screen">
-        {/* Header */}
-        <section className="pt-32 pb-16 px-8 md:px-16">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="flex items-center justify-between mb-8"
-            >
-              <div className="flex items-center gap-4">
-                <motion.a
-                  href="/"
-                  className="font-mono text-sm text-muted hover:text-foreground transition-colors"
-                  whileHover={{ x: -5 }}
-                  data-cursor="hover"
-                >
-                  ← {tNav("back")}
-                </motion.a>
-                <span className="w-16 h-[1px] bg-foreground/20" />
-                <span className="font-mono text-sm text-muted">{t("subtitle")}</span>
-              </div>
+        {/* Title */}
+        <span className="font-mono text-xs text-muted bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2">
+          {t("subtitle")}
+        </span>
 
-              {/* Mode toggle */}
-              <button
-                onClick={() => setViewMode("gallery")}
-                className="font-mono text-xs text-muted hover:text-accent transition-colors mr-28"
-                data-cursor="hover"
-              >
-                {t("galleryView")}
-              </button>
-            </motion.div>
-
-            <TextReveal className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter">
-              {t("title")}
-            </TextReveal>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-8 text-xl text-muted max-w-2xl"
-            >
-              {t("intro")}
-            </motion.p>
-          </div>
-        </section>
+        {/* Mode toggle */}
+        <button
+          onClick={() => setViewMode("gallery")}
+          className="font-mono text-xs text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2 flex items-center gap-2"
+          data-cursor="hover"
+        >
+          {t("galleryView")}
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6H10M10 6L7 3M10 6L7 9" stroke="currentColor" strokeWidth="1" />
+          </svg>
+        </button>
+      </div>
 
         {/* Projects list with hover reveal */}
-        <section className="py-16 px-8 md:px-16">
+        <section className="pt-40 pb-32 px-8 md:px-16">
           <div className="max-w-7xl mx-auto">
             <HoverReveal
               projects={projects}
               onProjectClick={handleProjectClick}
             />
-          </div>
-        </section>
-
-        {/* Featured images with scroll reveal */}
-        <section className="py-32 px-8 md:px-16">
-          <div className="max-w-7xl mx-auto space-y-32">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div className="flex items-center gap-4 mb-16">
-                <span className="font-mono text-sm text-muted">{t("featured")}</span>
-                <span className="flex-1 h-[1px] bg-foreground/10" />
-              </div>
-            </motion.div>
-
-            {projects.slice(0, 3).map((project, index) => (
-              <motion.div
-                key={project.id}
-                className="cursor-pointer"
-                onClick={() => handleProjectClick(project)}
-                data-cursor="hover"
-              >
-                <ScrollImageReveal
-                  src={project.image}
-                  alt={project.title}
-                  title={project.title}
-                  subtitle={project.category}
-                  direction={index % 2 === 0 ? "left" : "right"}
-                />
-              </motion.div>
-            ))}
           </div>
         </section>
 
@@ -186,7 +126,7 @@ export default function WorkPage() {
                   viewport={{ once: true }}
                   className="text-center"
                 >
-                  <div className="text-5xl md:text-7xl font-bold text-accent mb-2">
+                  <div className="text-5xl md:text-7xl font-bold mb-2" style={{ color: '#ffaa00' }}>
                     {stat.value}
                   </div>
                   <div className="font-mono text-xs text-muted">{stat.label}</div>
@@ -195,7 +135,6 @@ export default function WorkPage() {
             </div>
           </div>
         </section>
-      </main>
-    </>
+    </main>
   );
 }

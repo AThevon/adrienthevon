@@ -75,6 +75,14 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
           <motion.div
             key={project.id}
             className="group py-8 cursor-pointer"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{
+              duration: 0.6,
+              delay: index * 0.1,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
             onClick={() => onProjectClick?.(project)}
@@ -87,7 +95,7 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
                   {String(index + 1).padStart(2, "0")}
                 </span>
 
-                <div className="overflow-hidden">
+                <div className="overflow-hidden flex items-baseline gap-3">
                   <motion.h3
                     className="text-4xl md:text-6xl font-bold tracking-tighter"
                     initial={{ y: 0 }}
@@ -99,6 +107,9 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
                   >
                     {project.title}
                   </motion.h3>
+                  <span className="font-mono text-sm text-muted">
+                    {project.year}
+                  </span>
                 </div>
               </div>
 

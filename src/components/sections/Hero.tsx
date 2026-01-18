@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { usePerformance } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
@@ -12,6 +13,46 @@ const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
   { ssr: false }
 );
+
+// Navigation items configuration
+const navigationItems = [
+  {
+    key: "work",
+    href: "/work",
+    color: "#ffaa00",
+    icon: "W",
+  },
+  {
+    key: "skills",
+    href: "/skills",
+    color: "#00ccff",
+    icon: "S",
+  },
+  {
+    key: "journey",
+    href: "/journey",
+    color: "#8844ff",
+    icon: "J",
+  },
+  {
+    key: "philosophy",
+    href: "/philosophy",
+    color: "#00ff88",
+    icon: "P",
+  },
+  {
+    key: "about",
+    href: "/about",
+    color: "#ff0088",
+    icon: "A",
+  },
+  {
+    key: "contact",
+    href: "/contact",
+    color: "#ffcc00",
+    icon: "C",
+  },
+];
 
 // Floating shapes configuration
 const floatingShapes = [
@@ -125,8 +166,11 @@ function FloatingShape({
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
+  const [particleKey, setParticleKey] = useState(0);
   const { enable3D } = usePerformance();
   const t = useTranslations("hero");
+  const tNav = useTranslations("nav");
+  const tHome = useTranslations("home");
 
   const roles = [
     t("roles.creative"),
@@ -140,20 +184,19 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Scale starts immediately but opacity stays at 100% longer
-  // Scale: 0 -> 0.5 (immediate)
-  // Opacity: stays 100% until 0.35, then fades 0.35 -> 0.6
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+  // Only fade out content, no scale down
   const opacity = useTransform(scrollYProgress, [0.35, 0.6], [1, 0]);
 
-  // CTAs fade even later
-  const ctaOpacity = useTransform(scrollYProgress, [0.5, 0.7], [1, 0]);
-
-  // CTAs slide up into view as we scroll (starts hidden below, appears as we scroll)
-  const ctaY = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
+  // CTAs and cards appear together when scrolling
+  const contentY = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsReady(true), 100);
+    const timer = setTimeout(() => {
+      setIsReady(true);
+      // Force particle effect remount
+      setParticleKey((prev) => prev + 1);
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -161,16 +204,16 @@ export default function Hero() {
     <section
       ref={containerRef}
       data-cursor-mode="hero"
-      className="relative min-h-[150vh] flex flex-col items-center justify-start pt-[30vh]"
+      className="relative min-h-[120vh] flex flex-col items-center justify-start pt-[30vh]"
     >
       {/* Sticky hero content */}
       <motion.div
         className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden"
-        style={{ opacity, scale }}
+        style={{ opacity }}
       >
         {/* Particle Text Background - Upper portion only */}
         {enable3D && isReady && (
-          <div className="absolute top-0 left-0 right-0 h-[65vh] z-0 pointer-events-none">
+          <div key={particleKey} className="absolute top-0 left-0 right-0 h-[65vh] z-0 pointer-events-none">
             <ParticleText
               text={"ADRIEN\nTHEVON"}
               fontSize={160}
@@ -208,13 +251,13 @@ export default function Hero() {
         </div>
 
         {/* Main content - overflow-hidden clips CTAs when at y:30 (pre-animation) */}
-        <div className="relative z-10 flex flex-col items-center justify-end h-full pb-32 overflow-hidden">
+        <div className="relative z-10 w-full flex flex-col items-center justify-end h-full pb-16 overflow-hidden">
           {/* Top label - positioned at top */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="absolute top-8 left-1/2 -translate-x-1/2 flex items-center gap-4"
+            className="absolute top-8 left-1/2 -translate-x-1/2 flex items-center gap-4 whitespace-nowrap"
           >
             <span className="w-12 h-px bg-accent" />
             <span className="font-mono text-xs text-muted tracking-[0.3em]">
@@ -272,9 +315,9 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* CTA Buttons - Scroll-driven: starts below view, slides up, then fades out */}
+          {/* CTA Buttons - Scroll-driven: starts below view, slides up */}
           <motion.div
-            style={{ y: ctaY, opacity: ctaOpacity }}
+            style={{ y: contentY, opacity: contentOpacity }}
             className="mt-16 flex flex-col sm:flex-row gap-6 sm:gap-8"
           >
             {/* Primary button - Glitch Effect */}
@@ -322,7 +365,7 @@ export default function Hero() {
 
             {/* Secondary button - Magnetic Reveal */}
             <a
-              href="#contact"
+              href="/contact"
               className="group relative overflow-hidden"
               data-cursor="hover"
             >
@@ -369,30 +412,271 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          {/* Interaction hint */}
-          {enable3D && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 2.5 }}
-              className="mt-12 flex items-center gap-3"
-            >
-              <motion.div
-                className="w-6 h-6 border border-accent/50 rounded-full flex items-center justify-center"
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <motion.div
-                  className="w-1.5 h-1.5 bg-accent rounded-full"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                />
-              </motion.div>
-              <span className="font-mono text-xs text-muted/60">
-                <DualText visible={t("hint")} hidden={t("hintHidden")} />
-              </span>
-            </motion.div>
-          )}
+          {/* Navigation Dock - appears from below CTAs like macOS dock */}
+          <motion.div
+            style={{ y: contentY, opacity: contentOpacity }}
+            className="mt-8 w-screen px-4 flex items-end justify-center gap-2"
+          >
+            {navigationItems.map((item, index) => {
+              // Unique 3D artifact for each page
+              const renderArtifact = (isHovered: boolean) => {
+                switch(item.key) {
+                  case 'work':
+                    // Rotating hexagonal grid
+                    return (
+                      <motion.div className="relative w-16 h-16">
+                        {[0, 1, 2].map((ring) => (
+                          <motion.div
+                            key={ring}
+                            className="absolute inset-0"
+                            style={{
+                              border: `1px solid ${item.color}`,
+                              clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)',
+                              scale: 1 - ring * 0.25
+                            }}
+                            animate={isHovered ? {
+                              rotate: [0, 360],
+                              opacity: [0.2, 0.6, 0.2]
+                            } : {}}
+                            transition={{
+                              rotate: { duration: 8 + ring * 2, repeat: Infinity, ease: "linear" },
+                              opacity: { duration: 2, repeat: Infinity, delay: ring * 0.3 }
+                            }}
+                          />
+                        ))}
+                      </motion.div>
+                    );
+
+                  case 'skills':
+                    // Matrix cube
+                    return (
+                      <motion.div className="relative w-16 h-16" style={{ perspective: '200px' }}>
+                        <motion.div
+                          className="w-full h-full border"
+                          style={{
+                            borderColor: item.color,
+                            transformStyle: 'preserve-3d'
+                          }}
+                          animate={isHovered ? {
+                            rotateX: [0, 360],
+                            rotateY: [0, 360]
+                          } : {}}
+                          transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        >
+                          {/* Cube faces */}
+                          {[0, 90, 180, 270].map((deg, i) => (
+                            <div
+                              key={i}
+                              className="absolute inset-0"
+                              style={{
+                                border: `1px solid ${item.color}40`,
+                                transform: `rotateY(${deg}deg) translateZ(32px)`
+                              }}
+                            />
+                          ))}
+                        </motion.div>
+                      </motion.div>
+                    );
+
+                  case 'journey':
+                    // Orbital rings
+                    return (
+                      <motion.div className="relative w-16 h-16">
+                        {[0, 45, 90].map((angle, i) => (
+                          <motion.div
+                            key={i}
+                            className="absolute inset-2 rounded-full"
+                            style={{
+                              border: `1px solid ${item.color}`,
+                              rotate: `${angle}deg`
+                            }}
+                            animate={isHovered ? {
+                              scale: [1, 1.2, 1],
+                              opacity: [0.3, 0.8, 0.3]
+                            } : {}}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              delay: i * 0.4
+                            }}
+                          />
+                        ))}
+                        <motion.div
+                          className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full"
+                          style={{ backgroundColor: item.color, x: '-50%', y: '-50%' }}
+                          animate={isHovered ? {
+                            scale: [1, 1.5, 1],
+                            boxShadow: [`0 0 10px ${item.color}`, `0 0 20px ${item.color}`, `0 0 10px ${item.color}`]
+                          } : {}}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity
+                          }}
+                        />
+                      </motion.div>
+                    );
+
+                  case 'philosophy':
+                    // Fractal triangle
+                    return (
+                      <motion.div className="relative w-16 h-16">
+                        {[0, 1, 2, 3].map((level) => (
+                          <motion.div
+                            key={level}
+                            className="absolute inset-0"
+                            style={{
+                              clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)',
+                              border: `1px solid ${item.color}`,
+                              scale: 1 - level * 0.2
+                            }}
+                            animate={isHovered ? {
+                              rotate: [0, -360],
+                              opacity: [0.2, 0.7, 0.2]
+                            } : {}}
+                            transition={{
+                              rotate: { duration: 12 - level * 2, repeat: Infinity, ease: "linear" },
+                              opacity: { duration: 3, repeat: Infinity, delay: level * 0.2 }
+                            }}
+                          />
+                        ))}
+                      </motion.div>
+                    );
+
+                  case 'about':
+                    // DNA helix
+                    return (
+                      <motion.div className="relative w-16 h-16">
+                        {[0, 1].map((strand) => (
+                          <motion.div
+                            key={strand}
+                            className="absolute w-full h-full"
+                            animate={isHovered ? {
+                              rotate: [0, 360]
+                            } : {}}
+                            transition={{
+                              duration: 6,
+                              repeat: Infinity,
+                              ease: "linear",
+                              delay: strand * 3
+                            }}
+                          >
+                            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+                              <motion.div
+                                key={angle}
+                                className="absolute w-1.5 h-1.5 rounded-full"
+                                style={{
+                                  backgroundColor: item.color,
+                                  left: '50%',
+                                  top: '50%',
+                                  transform: `rotate(${angle}deg) translateX(24px)`
+                                }}
+                                animate={isHovered ? {
+                                  scale: [0.5, 1, 0.5],
+                                  opacity: [0.3, 1, 0.3]
+                                } : {}}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  delay: angle / 360
+                                }}
+                              />
+                            ))}
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    );
+
+                  case 'contact':
+                    // Ripple waves
+                    return (
+                      <motion.div className="relative w-16 h-16">
+                        {[0, 1, 2, 3].map((wave) => (
+                          <motion.div
+                            key={wave}
+                            className="absolute inset-0 rounded-full"
+                            style={{
+                              border: `1px solid ${item.color}`
+                            }}
+                            animate={isHovered ? {
+                              scale: [0, 2],
+                              opacity: [0.8, 0]
+                            } : {}}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              delay: wave * 0.75,
+                              ease: "easeOut"
+                            }}
+                          />
+                        ))}
+                      </motion.div>
+                    );
+
+                  default:
+                    return null;
+                }
+              };
+
+              const [isHovered, setIsHovered] = useState(false);
+
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className="group relative flex-1"
+                  data-cursor="hover"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <motion.div
+                    className="relative origin-bottom"
+                    whileHover={{ scale: 1.2, y: -16 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 17
+                    }}
+                  >
+                    {/* Card container - landscape ratio */}
+                    <div className="relative w-full aspect-video overflow-visible">
+                      {/* Glow on hover */}
+                      <motion.div
+                        className="absolute -inset-8 rounded-3xl opacity-0 group-hover:opacity-40 blur-3xl"
+                        style={{ backgroundColor: item.color }}
+                        transition={{ duration: 0.5 }}
+                      />
+
+                      {/* Content */}
+                      <div className="relative w-full h-full flex flex-col items-center justify-center gap-3 p-4">
+                        {/* 3D Artifact - only animates on hover */}
+                        <motion.div
+                          className="opacity-60 group-hover:opacity-100"
+                        >
+                          {renderArtifact(isHovered)}
+                        </motion.div>
+
+                        {/* Label */}
+                        <motion.span
+                          className="font-mono text-xs font-medium tracking-wider opacity-0 group-hover:opacity-100"
+                          style={{
+                            color: item.color,
+                            textShadow: `0 0 10px ${item.color}60`
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {tNav(item.key).toUpperCase()}
+                        </motion.span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </motion.div>
         </div>
 
         {/* Side decorations */}
@@ -430,31 +714,13 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Bottom scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.2 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20"
-        >
-          <motion.div
-            className="w-5 h-8 border border-foreground/30 rounded-full flex justify-center pt-2"
-          >
-            <motion.div
-              className="w-1 h-2 bg-accent rounded-full"
-              animate={{ y: [0, 8, 0], opacity: [1, 0, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-          </motion.div>
-        </motion.div>
-
         {/* Corner accents */}
         <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-accent/30 z-20" />
         <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-accent/30 z-20" />
       </motion.div>
 
       {/* Spacer for scroll effect */}
-      <div className="h-[50vh]" />
+      <div className="h-[20vh]" />
     </section>
   );
 }

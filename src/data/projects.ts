@@ -9,6 +9,7 @@ export interface Project {
   title: string;
   category: string;
   year: string;
+  date: string; // Format: "YYYY-MM" pour le tri
   color: string;
   description: string;
   longDescription: string;
@@ -21,12 +22,13 @@ export interface Project {
   sections: ProjectSection[];
 }
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
   {
     id: "under-the-flow",
     title: "UNDER THE FLOW",
     category: "WEB PLATFORM",
-    year: "2024",
+    year: "2025",
+    date: "2025-05", // Mai 2025
     color: "#60cbd7", // Cyan turquoise (couleur officielle du projet)
     description: "Plateforme de sessions live hip-hop avec une expérience immersive pour les artistes et les fans.",
     longDescription: `Under The Flow est une plateforme dédiée aux sessions live de hip-hop.
@@ -68,6 +70,7 @@ avec une direction artistique forte et moderne.`,
     title: "VICTOR DENAY",
     category: "PORTFOLIO",
     year: "2024",
+    date: "2024-03", // Mars 2024
     color: "#1890ff", // Bleu vibrant (couleur officielle du portfolio)
     description: "Portfolio créatif pour un vidéaste et photographe professionnel.",
     longDescription: `Portfolio sur-mesure pour Victor Denay, vidéaste et photographe.
@@ -108,7 +111,8 @@ tout en offrant une expérience de navigation mémorable.`,
     id: "depense-man",
     title: "DÉPENSE MAN",
     category: "WEB APP",
-    year: "2024",
+    year: "2025",
+    date: "2025-09", // Septembre 2025
     color: "#D97706", // Orange-amber (couleur officielle de l'app)
     description: "Application de gestion de finances personnelles simple et efficace.",
     longDescription: `Dépense Man est une application web progressive (PWA) pour gérer
@@ -149,7 +153,8 @@ avec une interface claire et des visualisations pertinentes.`,
     id: "linekut",
     title: "LINEKUT",
     category: "CREATIVE TOOL",
-    year: "2024",
+    year: "2025",
+    date: "2025-12", // Décembre 2025
     color: "#F97316", // Orange (couleur officielle de l'outil)
     description: "Convertisseur d'images en patrons découpables pour scie à chantourner, laser et vinyl.",
     longDescription: `Linekut transforme n'importe quelle image en patron prêt à découper.
@@ -191,6 +196,7 @@ rendant accessible un processus habituellement complexe.`,
     title: "BLENKDEV",
     category: "WEB AGENCY",
     year: "2024",
+    date: "2024-05", // Mai 2024
     color: "#fdbb00", // Jaune (couleur officielle de l'agence)
     description: "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
     longDescription: `BlenkDev est le site vitrine de mon activité freelance en développement web.
@@ -226,6 +232,11 @@ L'objectif : inspirer confiance et démontrer mon expertise à travers une ident
     ],
   },
 ];
+
+// Sort projects by date (most recent first)
+export const projects = allProjects.sort((a, b) => {
+  return b.date.localeCompare(a.date);
+});
 
 // Helper functions
 export function getProjectById(id: string): Project | undefined {

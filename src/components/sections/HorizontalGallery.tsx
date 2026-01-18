@@ -35,7 +35,7 @@ export default function HorizontalGallery({
 
   // Transform vertical scroll to horizontal
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollWidth]);
-  const springX = useSpring(x, { stiffness: 100, damping: 30 });
+  const springX = useSpring(x, { stiffness: 200, damping: 25 });
 
   // Parallax for background elements
   const bgX = useTransform(scrollYProgress, [0, 1], [0, -scrollWidth * 0.5]);
@@ -53,10 +53,10 @@ export default function HorizontalGallery({
     <section
       ref={containerRef}
       className="relative"
-      style={{ height: `${items.length * 100}vh` }}
+      style={{ height: `${items.length * 60}vh` }}
     >
       {/* Sticky container */}
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-24 h-[calc(100vh-6rem)] overflow-hidden">
         {/* Background parallax layer */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
@@ -83,7 +83,7 @@ export default function HorizontalGallery({
           {items.map((item, index) => (
             <motion.div
               key={item.id}
-              className="relative shrink-0 w-[70vw] md:w-[50vw] h-[60vh] cursor-pointer"
+              className="relative shrink-0 w-[75vw] md:w-[55vw] h-[70vh] cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => onItemClick?.(item)}
@@ -105,63 +105,57 @@ export default function HorizontalGallery({
 
                 {/* Image with 3D perspective - view from side angle */}
                 <div
-                  className="absolute inset-0 overflow-visible"
+                  className="absolute inset-y-8 inset-x-0 overflow-visible"
                   style={{ perspective: "1200px" }}
                 >
                   <motion.div
-                    className="relative w-full h-full p-12"
+                    className="relative w-full h-full flex items-center justify-center"
                     style={{
                       transformStyle: "preserve-3d",
+                      padding: hoveredIndex === index ? "1rem 1rem 4rem 1rem" : "2rem 2rem 5rem 2rem"
                     }}
                     animate={{
                       rotateY: hoveredIndex === index ? 0 : -25,
                       rotateX: hoveredIndex === index ? 0 : 5,
-                      scale: hoveredIndex === index ? 1 : 0.85,
+                      scale: hoveredIndex === index ? 1 : 0.8,
                     }}
                     transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
                   >
                     {/* Shadow under the image */}
                     <motion.div
-                      className="absolute inset-x-12 -bottom-4 h-8 blur-2xl"
+                      className="absolute inset-x-0 -bottom-6 h-12 blur-3xl"
                       style={{ background: item.color }}
                       animate={{
-                        opacity: hoveredIndex === index ? 0.4 : 0.2,
-                        scale: hoveredIndex === index ? 1.1 : 0.9,
+                        opacity: hoveredIndex === index ? 0.5 : 0.2,
+                        scale: hoveredIndex === index ? 1.2 : 0.8,
                       }}
                       transition={{ duration: 0.6 }}
                     />
 
-                    {/* Actual image */}
+                    {/* Actual image - contained to show full image */}
                     <div className="relative w-full h-full">
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-contain drop-shadow-2xl"
-                        sizes="(max-width: 768px) 70vw, 50vw"
+                        className="object-contain"
+                        sizes="(max-width: 768px) 75vw, 55vw"
+                        style={{
+                          filter: hoveredIndex === index ? "none" : "brightness(0.9)",
+                          objectPosition: "center center"
+                        }}
                       />
                     </div>
-
-                    {/* Colored border around image on hover */}
-                    <motion.div
-                      className="absolute inset-0 border-2 pointer-events-none"
-                      style={{ borderColor: item.color }}
-                      animate={{
-                        opacity: hoveredIndex === index ? 0.6 : 0,
-                        scale: hoveredIndex === index ? 1.02 : 0.98,
-                      }}
-                      transition={{ duration: 0.3 }}
-                    />
                   </motion.div>
                 </div>
 
-                {/* Top bar with number */}
-                <div className="absolute top-0 left-0 right-0 h-12 bg-background/80 backdrop-blur-sm border-b border-foreground/10 flex items-center justify-between px-4">
-                  <span className="font-mono text-xs text-muted">
+                {/* Top bar with number - compact */}
+                <div className="absolute top-0 left-0 right-0 h-8 bg-background/80 backdrop-blur-sm border-b border-foreground/10 flex items-center justify-between px-3">
+                  <span className="font-mono text-[10px] text-muted">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <motion.span
-                    className="font-mono text-xs"
+                    className="font-mono text-[10px]"
                     style={{ color: item.color }}
                     animate={{
                       opacity: hoveredIndex === index ? 1 : 0.5,
@@ -171,17 +165,22 @@ export default function HorizontalGallery({
                   </motion.span>
                 </div>
 
-                {/* Bottom info bar */}
-                <div className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-foreground/10 p-6">
-                  <motion.h3
-                    className="text-2xl md:text-3xl font-bold tracking-tighter mb-2"
+                {/* Bottom info bar - compact */}
+                <div className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-foreground/10 p-4">
+                  <motion.div
+                    className="flex items-baseline gap-2 mb-1"
                     animate={{
                       x: hoveredIndex === index ? 0 : -10,
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    {item.title}
-                  </motion.h3>
+                    <h3 className="text-xl md:text-2xl font-bold tracking-tighter">
+                      {item.title}
+                    </h3>
+                    <span className="font-mono text-xs text-muted">
+                      {item.year}
+                    </span>
+                  </motion.div>
 
                   {/* View indicator */}
                   <motion.div
@@ -192,7 +191,7 @@ export default function HorizontalGallery({
                     }}
                     transition={{ duration: 0.3, delay: 0.1 }}
                   >
-                    <span className="font-mono text-xs text-muted">
+                    <span className="font-mono text-[10px] text-muted">
                       VIEW PROJECT
                     </span>
                     <motion.div
@@ -204,7 +203,7 @@ export default function HorizontalGallery({
                         repeat: hoveredIndex === index ? Infinity : 0,
                       }}
                     >
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                      <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
                         <path
                           d="M4 12L12 4M12 4H6M12 4V10"
                           stroke="currentColor"
@@ -217,7 +216,7 @@ export default function HorizontalGallery({
 
                 {/* Corner accent */}
                 <motion.div
-                  className="absolute top-12 right-0 w-1 h-24"
+                  className="absolute top-8 right-0 w-1 h-16"
                   style={{ background: item.color }}
                   animate={{
                     scaleY: hoveredIndex === index ? 1 : 0,

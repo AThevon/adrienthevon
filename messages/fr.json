@@ -4,14 +4,20 @@
     "description": "Portfolio créatif d'un développeur passionné par les expériences web uniques"
   },
   "nav": {
+    "home": "Accueil",
     "work": "Projets",
-    "lab": "Lab",
+    "skills": "Compétences",
+    "journey": "Parcours",
+    "philosophy": "Philosophie",
     "about": "À propos",
     "contact": "Contact",
+    "menu": "Menu",
+    "close": "Fermer",
+    "lab": "Lab",
     "back": "Retour"
   },
   "hero": {
-    "portfolio": "PORTFOLIO — 2025",
+    "portfolio": "PORTFOLIO — 2026",
     "portfolioHidden": "enfin, c'est ce qu'on dit...",
     "currently": "EN CE MOMENT :",
     "roles": {
@@ -28,6 +34,18 @@
     "hintHidden": "je te vois...",
     "scroll": "SCROLL"
   },
+  "home": {
+    "explore": "EXPLORER",
+    "discoverTitle": "DÉCOUVRIR MON UNIVERS",
+    "workExplore": "Mes réalisations et projets créatifs",
+    "projectsExplore": "Mes réalisations et projets créatifs",
+    "skillsExplore": "Technologies et compétences techniques",
+    "journeyExplore": "Mon parcours et évolution professionnelle",
+    "philosophyExplore": "Ma vision du développement créatif",
+    "aboutExplore": "Qui je suis et ce qui me passionne",
+    "contactExplore": "Discutons de votre projet",
+    "scrollHint": "SCROLL POUR CONTINUER L'EXPLORATION"
+  },
   "projects": {
     "sectionNumber": "002",
     "title": "PROJETS",
@@ -36,7 +54,7 @@
     "viewProject": "VOIR LE PROJET",
     "featured": "À LA UNE",
     "listView": "VUE LISTE",
-    "galleryView": "VUE GALERIE →",
+    "galleryView": "VUE GALERIE",
     "intro": "Une collection de projets qui repoussent les limites, cassent les conventions et créent des expériences digitales mémorables.",
     "stats": {
       "projects": "PROJETS",
@@ -181,7 +199,7 @@
     "skills": ["STACK", "TECH", "CODE", "OUTILS"]
   },
   "projectPage": {
-    "backToWork": "← RETOUR AUX PROJETS",
+    "backToWork": "RETOUR AUX PROJETS",
     "immersiveView": "VUE IMMERSIVE →",
     "standardView": "← VUE STANDARD",
     "allWork": "TOUS LES PROJETS",

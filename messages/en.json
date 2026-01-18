@@ -4,14 +4,20 @@
     "description": "Creative portfolio of a developer passionate about unique web experiences"
   },
   "nav": {
+    "home": "Home",
     "work": "Work",
-    "lab": "Lab",
+    "skills": "Skills",
+    "journey": "Journey",
+    "philosophy": "Philosophy",
     "about": "About",
     "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close",
+    "lab": "Lab",
     "back": "Back"
   },
   "hero": {
-    "portfolio": "PORTFOLIO — 2025",
+    "portfolio": "PORTFOLIO — 2026",
     "portfolioHidden": "well, that's what they say...",
     "currently": "CURRENTLY:",
     "roles": {
@@ -28,6 +34,18 @@
     "hintHidden": "I see you...",
     "scroll": "SCROLL"
   },
+  "home": {
+    "explore": "EXPLORE",
+    "discoverTitle": "DISCOVER MY UNIVERSE",
+    "workExplore": "My creative projects and achievements",
+    "projectsExplore": "My creative projects and achievements",
+    "skillsExplore": "Technologies and technical skills",
+    "journeyExplore": "My journey and professional evolution",
+    "philosophyExplore": "My vision of creative development",
+    "aboutExplore": "Who I am and what drives me",
+    "contactExplore": "Let's discuss your project",
+    "scrollHint": "SCROLL TO CONTINUE EXPLORING"
+  },
   "projects": {
     "sectionNumber": "002",
     "title": "PROJECTS",
@@ -36,7 +54,7 @@
     "viewProject": "VIEW PROJECT",
     "featured": "FEATURED",
     "listView": "LIST VIEW",
-    "galleryView": "GALLERY VIEW →",
+    "galleryView": "GALLERY VIEW",
     "intro": "A collection of projects that push boundaries, break conventions, and create memorable digital experiences.",
     "stats": {
       "projects": "PROJECTS",
@@ -181,7 +199,7 @@
     "skills": ["STACK", "TECH", "CODE", "TOOLS"]
   },
   "projectPage": {
-    "backToWork": "← BACK TO WORK",
+    "backToWork": "BACK TO WORK",
     "immersiveView": "IMMERSIVE VIEW →",
     "standardView": "← STANDARD VIEW",
     "allWork": "ALL WORK",
