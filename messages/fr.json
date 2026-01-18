@@ -121,6 +121,14 @@
       "now": {
         "title": "MAINTENANT",
         "description": "Toujours en train d'apprendre, toujours en train de coder, toujours en train de créer."
+      },
+      "future": {
+        "title": "VERS L'AVENIR",
+        "description": "Exploration de nouvelles frontières, expérimentations audacieuses, projets ambitieux."
+      },
+      "vision": {
+        "title": "LA VISION",
+        "description": "Repousser les limites du possible, créer des expériences qui marquent les esprits."
       }
     }
   },

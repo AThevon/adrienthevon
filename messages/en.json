@@ -121,6 +121,14 @@
       "now": {
         "title": "NOW",
         "description": "Still learning, still coding, still creating."
+      },
+      "future": {
+        "title": "TOWARD THE FUTURE",
+        "description": "Exploring new frontiers, bold experiments, ambitious projects."
+      },
+      "vision": {
+        "title": "THE VISION",
+        "description": "Pushing the boundaries of what's possible, creating experiences that leave a mark."
       }
     }
   },

@@ -497,12 +497,14 @@ export default function NeuralNetwork2D() {
         animate={{ opacity: 1, y: 0 }}
         className="absolute top-8 left-8 z-10 pointer-events-none"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-xs text-muted/60">{t("sectionNumber")}</span>
-          <span className="w-12 h-px bg-foreground/10" />
+        <div className="flex items-center gap-4 mb-4">
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
+          <span className="w-16 h-px bg-foreground/20" />
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
-        <h2 className="text-2xl font-bold tracking-tight opacity-80">
-          {t("title")}
+        <h2 className="text-xl md:text-3xl font-bold tracking-tighter">
+          {t("subtitle").split(" ")[0]}{" "}
+          <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
         </h2>
       </motion.div>
 
