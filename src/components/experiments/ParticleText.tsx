@@ -35,11 +35,10 @@ export default function ParticleText({
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number | null>(null);
   const lastFrameTime = useRef(0);
-  const mouseRadiusSq = mouseRadius * mouseRadius; // Pre-compute squared radius
+  const mouseRadiusSq = mouseRadius * mouseRadius;
 
   const initParticles = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-      // Use offscreen canvas for text rendering
       const offscreen = new OffscreenCanvas(width, height);
       const offCtx = offscreen.getContext("2d");
       if (!offCtx) return;
@@ -60,10 +59,8 @@ export default function ParticleText({
       const imageData = offCtx.getImageData(0, 0, width, height);
       const data = imageData.data;
 
-      // Clear and create particles with typed array for better performance
       const particles: Particle[] = [];
 
-      // Sample every particleGap pixels
       for (let y = 0; y < height; y += particleGap) {
         for (let x = 0; x < width; x += particleGap) {
           const i = (y * width + x) * 4;
@@ -92,7 +89,7 @@ export default function ParticleText({
 
     const ctx = canvas.getContext("2d", {
       alpha: true,
-      desynchronized: true, // Reduces latency
+      desynchronized: true,
     });
     if (!ctx) return;
 
@@ -114,7 +111,6 @@ export default function ParticleText({
 
     resize();
 
-    // Debounced resize handler
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
@@ -122,7 +118,6 @@ export default function ParticleText({
     };
     window.addEventListener("resize", handleResize);
 
-    // Throttled mouse move with RAF - listen on document for pointer-events-none canvas
     let mouseMoveRAF: number | null = null;
     const handleMouseMove = (e: MouseEvent) => {
       if (mouseMoveRAF) return;
@@ -132,7 +127,6 @@ export default function ParticleText({
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // Check if mouse is within canvas bounds
         if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
           mouseRef.current = { x, y };
         } else {
@@ -142,14 +136,11 @@ export default function ParticleText({
       });
     };
 
-    // Use document-level events so canvas can have pointer-events: none
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
 
-    // Pre-compute color values
     const baseColor = color;
 
     const animate = (timestamp: number) => {
-      // Target 60fps, skip frames if needed
       const elapsed = timestamp - lastFrameTime.current;
       if (elapsed < 16) {
         animationRef.current = requestAnimationFrame(animate);
@@ -167,14 +158,10 @@ export default function ParticleText({
       const mouseY = mouseRef.current.y;
       const len = particles.length;
 
-      // Batch similar operations
-      ctx.fillStyle = baseColor;
-      ctx.beginPath();
-
+      // Update physics
       for (let i = 0; i < len; i++) {
         const p = particles[i];
 
-        // Use squared distance to avoid sqrt
         const dx = mouseX - p.x;
         const dy = mouseY - p.y;
         const distSq = dx * dx + dy * dy;
@@ -187,41 +174,50 @@ export default function ParticleText({
           p.vy -= dy * invDist * force * 12;
         }
 
-        // Return to origin with spring physics (stronger spring = faster return)
         p.vx += (p.originX - p.x) * 0.08;
         p.vy += (p.originY - p.y) * 0.08;
 
-        // Friction (slightly less friction = more responsive)
         p.vx *= 0.88;
         p.vy *= 0.88;
 
-        // Update position
         p.x += p.vx;
         p.y += p.vy;
+      }
 
-        // Draw - use arc for each particle
+      // Draw soft glow layer first (blurred effect to soften aliasing)
+      ctx.fillStyle = `${baseColor}18`;
+      ctx.beginPath();
+      for (let i = 0; i < len; i++) {
+        const p = particles[i];
+        ctx.moveTo(p.x + p.size * 2, p.y);
+        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+      }
+      ctx.fill();
+
+      // Draw main particles
+      ctx.fillStyle = baseColor;
+      ctx.beginPath();
+      for (let i = 0; i < len; i++) {
+        const p = particles[i];
         ctx.moveTo(p.x + p.size, p.y);
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       }
-
       ctx.fill();
 
-      // Draw displaced particles with slightly brighter accent color
+      // Draw displaced particles with accent color
       ctx.fillStyle = COLORS.secondary.yellow;
       ctx.beginPath();
-
       for (let i = 0; i < len; i++) {
         const p = particles[i];
         const dispX = p.x - p.originX;
         const dispY = p.y - p.originY;
         const dispSq = dispX * dispX + dispY * dispY;
 
-        if (dispSq > 25) { // 5^2
+        if (dispSq > 25) {
           ctx.moveTo(p.x + p.size * 1.2, p.y);
           ctx.arc(p.x, p.y, p.size * 1.2, 0, Math.PI * 2);
         }
       }
-
       ctx.fill();
 
       animationRef.current = requestAnimationFrame(animate);
