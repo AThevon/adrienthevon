@@ -73,7 +73,7 @@ function FloatingShape({
       case "line":
         return (
           <motion.div
-            className="bg-gradient-to-r from-accent/40 via-accent/20 to-transparent"
+            className="bg-linear-to-r from-accent/40 via-accent/20 to-transparent"
             style={{ width: size, height: 1, rotate: rotation }}
             animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.3, 0.6, 0.3] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -183,7 +183,7 @@ export default function Hero() {
         )}
 
         {/* Floating shapes layer */}
-        <div className="absolute inset-0 z-[1] pointer-events-none">
+        <div className="absolute inset-0 z-1 pointer-events-none">
           {floatingShapes.map((shape, i) => (
             <FloatingShape
               key={i}
@@ -194,7 +194,7 @@ export default function Hero() {
         </div>
 
         {/* Grid overlay for depth */}
-        <div className="absolute inset-0 z-[2] pointer-events-none opacity-[0.03]">
+        <div className="absolute inset-0 z-2 pointer-events-none opacity-[0.03]">
           <div
             className="w-full h-full"
             style={{
@@ -422,11 +422,11 @@ export default function Hero() {
           className="absolute right-8 top-1/2 -translate-y-1/2 hidden lg:block z-20"
         >
           <div className="flex flex-col items-center gap-4">
-            <div className="w-px h-16 bg-gradient-to-b from-transparent via-foreground/20 to-transparent" />
+            <div className="w-px h-16 bg-linear-to-b from-transparent via-foreground/20 to-transparent" />
             <span className="font-mono text-xs text-muted/50 [writing-mode:vertical-lr] rotate-180">
               {t("scroll")}
             </span>
-            <div className="w-px h-16 bg-gradient-to-b from-transparent via-foreground/20 to-transparent" />
+            <div className="w-px h-16 bg-linear-to-b from-transparent via-foreground/20 to-transparent" />
           </div>
         </motion.div>
 

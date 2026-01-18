@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import TextReveal from "@/components/ui/TextReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
@@ -14,13 +15,18 @@ const CustomCursor = dynamic(
   { ssr: false }
 );
 
+// Helper to convert kebab-case to camelCase for i18n keys
+function kebabToCamel(str: string): string {
+  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+}
+
 export default function ProjectPage() {
   const params = useParams();
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const slug = params.slug as string;
   const t = useTranslations("projectPage");
-  const tProject = useTranslations(`projectsData.${slug.replace(/-/g, "")}`);
+  const tProject = useTranslations(`projectsData.${kebabToCamel(slug)}`);
 
   const project = getProjectById(slug);
 
@@ -141,7 +147,7 @@ export default function ProjectPage() {
           />
         </motion.section>
 
-        {/* Project image placeholder */}
+        {/* Project image */}
         <section className="px-8 md:px-16 py-16">
           <div className="max-w-7xl mx-auto">
             <motion.div
@@ -151,20 +157,14 @@ export default function ProjectPage() {
               viewport={{ once: true }}
               className="aspect-video relative overflow-hidden"
             >
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(135deg, ${project.color}30 0%, ${project.color}10 100%)`,
-                }}
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1280px"
               />
               <div className="absolute inset-0 border border-foreground/10" />
-
-              {/* Placeholder text */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-mono text-sm text-muted">
-                  {t("projectVisual")}
-                </span>
-              </div>
             </motion.div>
           </div>
         </section>
@@ -208,6 +208,8 @@ export default function ProjectPage() {
                   <MagneticButton>
                     <a
                       href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-background text-sm font-medium hover:bg-foreground transition-colors"
                       data-cursor="hover"
                     >

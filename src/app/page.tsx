@@ -47,7 +47,7 @@ function SkillsFallback() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
           <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
-          <span className="w-16 h-[1px] bg-foreground/20" />
+          <span className="w-16 h-px bg-foreground/20" />
           <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-12">
@@ -83,7 +83,7 @@ function TimelineFallback() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
           <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
-          <span className="w-16 h-[1px] bg-foreground/20" />
+          <span className="w-16 h-px bg-foreground/20" />
           <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-12">

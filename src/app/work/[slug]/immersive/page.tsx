@@ -12,6 +12,11 @@ const CustomCursor = dynamic(
   { ssr: false }
 );
 
+// Helper to convert kebab-case to camelCase for i18n keys
+function kebabToCamel(str: string): string {
+  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+}
+
 // Letter by letter reveal component
 function LetterReveal({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) {
   const letters = text.split("");
@@ -131,7 +136,7 @@ export default function ImmersiveCaseStudy() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const slug = params.slug as string;
   const t = useTranslations("projectPage");
-  const tProject = useTranslations(`projectsData.${slug.replace(/-/g, "")}`);
+  const tProject = useTranslations(`projectsData.${kebabToCamel(slug)}`);
 
   const project = getProjectById(slug);
 

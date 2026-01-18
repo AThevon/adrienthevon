@@ -8,7 +8,11 @@
       "Bash(timeout 15 npm run dev)",
       "Bash(npm install:*)",
       "Bash(npx tsc:*)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(ls:*)",
+      "Bash(for img in /Users/athevon/projects/adrienthevon/public/images/projects/*.png)",
+      "Bash(do echo \"$img:\")",
+      "Bash(done)"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono, Syne } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getLocale } from "next-intl/server";
+import { getMessages, getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScrollProvider from "@/providers/SmoothScrollProvider";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
@@ -30,53 +30,62 @@ const syne = Syne({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Portfolio — Creative Developer",
-    template: "%s | Creative Developer",
-  },
-  description:
-    "Creative developer portfolio showcasing innovative web experiences, 3D interactions, and experimental creative coding projects.",
-  keywords: [
-    "creative developer",
-    "web developer",
-    "portfolio",
-    "three.js",
-    "webgl",
-    "react",
-    "next.js",
-    "creative coding",
-    "interactive design",
-    "motion design",
-  ],
-  authors: [{ name: "Creative Developer" }],
-  creator: "Creative Developer",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    siteName: "Creative Developer Portfolio",
-    title: "Portfolio — Creative Developer",
-    description:
-      "Creative developer portfolio showcasing innovative web experiences, 3D interactions, and experimental creative coding projects.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Portfolio — Creative Developer",
-    description:
-      "Creative developer portfolio showcasing innovative web experiences, 3D interactions, and experimental creative coding projects.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations({ locale, namespace: "meta" });
+
+  return {
+    metadataBase: new URL(
+      process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000"
+    ),
+    title: {
+      default: t("title"),
+      template: `%s | ${t("title")}`,
+    },
+    description: t("description"),
+    keywords: [
+      "creative developer",
+      "développeur créatif",
+      "web developer",
+      "portfolio",
+      "three.js",
+      "webgl",
+      "react",
+      "next.js",
+      "creative coding",
+      "interactive design",
+      "motion design",
+    ],
+    authors: [{ name: "Adrien Thevon" }],
+    creator: "Adrien Thevon",
+    openGraph: {
+      type: "website",
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+      alternateLocale: locale === "fr" ? ["en_US"] : ["fr_FR"],
+      siteName: t("title"),
+      title: t("title"),
+      description: t("description"),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-};
+  };
+}
 
 export default async function RootLayout({
   children,

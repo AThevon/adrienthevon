@@ -297,6 +297,31 @@
           "content": "A tool used by makers and craftspeople to quickly create custom cutting patterns."
         }
       }
+    },
+    "blenkdev": {
+      "category": "WEB AGENCY",
+      "description": "Showcase website for a freelance web development agency specialized in custom solutions.",
+      "longDescription": "BlenkDev is the showcase website for my freelance web development activity.\nA platform that presents my services, approach and portfolio in a clear and professional manner.\n\nThe goal: inspire trust and demonstrate my expertise through a modern visual identity and detailed case studies.",
+      "role": "FULL-STACK DEVELOPER",
+      "client": "BLENKDEV",
+      "sections": {
+        "intro": {
+          "title": "THE MISSION",
+          "content": "Create a professional online presence for my freelance activity. A website that inspires trust and demonstrates my technical expertise."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Stand out in a saturated market by highlighting my unique skills and client-centered approach."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Modern and clean design. Showcase of completed projects. Clear services section. Client testimonials for credibility."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "A showcase website that converts visitors into potential clients and reflects my professional identity."
+        }
+      }
     }
   }
 }

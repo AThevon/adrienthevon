@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import Image from "next/image";
 import type { Project } from "@/data/projects";
 
 interface HorizontalGalleryProps {
@@ -82,124 +83,160 @@ export default function HorizontalGallery({
           {items.map((item, index) => (
             <motion.div
               key={item.id}
-              className="relative flex-shrink-0 w-[70vw] md:w-[50vw] h-[60vh] cursor-pointer group"
+              className="relative shrink-0 w-[70vw] md:w-[50vw] h-[60vh] cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => onItemClick?.(item)}
               data-cursor="hover"
             >
-              {/* Image container */}
-              <motion.div
-                className="relative w-full h-full overflow-hidden"
-                animate={{
-                  scale: hoveredIndex === index ? 0.98 : 1,
-                }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* Placeholder / Image */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `linear-gradient(135deg, ${item.color}30 0%, ${item.color}10 100%)`,
-                  }}
-                />
-
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-
-                {/* RGB Split effect on hover */}
+              {/* Card container - classic flat */}
+              <div className="relative w-full h-full bg-background border border-foreground/10 overflow-hidden">
+                {/* Background glow */}
                 <motion.div
-                  className="absolute inset-0"
-                  animate={{
-                    x: hoveredIndex === index ? [-2, 2, -2] : 0,
-                  }}
-                  transition={{
-                    duration: 0.15,
-                    repeat: hoveredIndex === index ? Infinity : 0,
-                  }}
+                  className="absolute inset-0 opacity-5"
                   style={{
-                    background: `linear-gradient(135deg, ${item.color}20 0%, transparent 100%)`,
-                    mixBlendMode: "screen",
+                    background: `radial-gradient(circle at 50% 50%, ${item.color}, transparent 70%)`,
                   }}
+                  animate={{
+                    opacity: hoveredIndex === index ? 0.15 : 0.05,
+                  }}
+                  transition={{ duration: 0.4 }}
                 />
 
-                {/* Border */}
-                <div className="absolute inset-0 border border-foreground/10" />
+                {/* Image with 3D perspective - view from side angle */}
+                <div
+                  className="absolute inset-0 overflow-visible"
+                  style={{ perspective: "1200px" }}
+                >
+                  <motion.div
+                    className="relative w-full h-full p-12"
+                    style={{
+                      transformStyle: "preserve-3d",
+                    }}
+                    animate={{
+                      rotateY: hoveredIndex === index ? 0 : -25,
+                      rotateX: hoveredIndex === index ? 0 : 5,
+                      scale: hoveredIndex === index ? 1 : 0.85,
+                    }}
+                    transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
+                  >
+                    {/* Shadow under the image */}
+                    <motion.div
+                      className="absolute inset-x-12 -bottom-4 h-8 blur-2xl"
+                      style={{ background: item.color }}
+                      animate={{
+                        opacity: hoveredIndex === index ? 0.4 : 0.2,
+                        scale: hoveredIndex === index ? 1.1 : 0.9,
+                      }}
+                      transition={{ duration: 0.6 }}
+                    />
+
+                    {/* Actual image */}
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-contain drop-shadow-2xl"
+                        sizes="(max-width: 768px) 70vw, 50vw"
+                      />
+                    </div>
+
+                    {/* Colored border around image on hover */}
+                    <motion.div
+                      className="absolute inset-0 border-2 pointer-events-none"
+                      style={{ borderColor: item.color }}
+                      animate={{
+                        opacity: hoveredIndex === index ? 0.6 : 0,
+                        scale: hoveredIndex === index ? 1.02 : 0.98,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </motion.div>
+                </div>
+
+                {/* Top bar with number */}
+                <div className="absolute top-0 left-0 right-0 h-12 bg-background/80 backdrop-blur-sm border-b border-foreground/10 flex items-center justify-between px-4">
+                  <span className="font-mono text-xs text-muted">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <motion.span
+                    className="font-mono text-xs"
+                    style={{ color: item.color }}
+                    animate={{
+                      opacity: hoveredIndex === index ? 1 : 0.5,
+                    }}
+                  >
+                    {item.category}
+                  </motion.span>
+                </div>
+
+                {/* Bottom info bar */}
+                <div className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-foreground/10 p-6">
+                  <motion.h3
+                    className="text-2xl md:text-3xl font-bold tracking-tighter mb-2"
+                    animate={{
+                      x: hoveredIndex === index ? 0 : -10,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {item.title}
+                  </motion.h3>
+
+                  {/* View indicator */}
+                  <motion.div
+                    className="flex items-center gap-2"
+                    animate={{
+                      opacity: hoveredIndex === index ? 1 : 0,
+                      x: hoveredIndex === index ? 0 : -10,
+                    }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                  >
+                    <span className="font-mono text-xs text-muted">
+                      VIEW PROJECT
+                    </span>
+                    <motion.div
+                      animate={{
+                        x: hoveredIndex === index ? [0, 5, 0] : 0,
+                      }}
+                      transition={{
+                        duration: 1,
+                        repeat: hoveredIndex === index ? Infinity : 0,
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                        <path
+                          d="M4 12L12 4M12 4H6M12 4V10"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    </motion.div>
+                  </motion.div>
+                </div>
 
                 {/* Corner accent */}
                 <motion.div
-                  className="absolute top-0 right-0 w-20 h-20"
-                  style={{
-                    background: `linear-gradient(135deg, ${item.color} 50%, transparent 50%)`,
-                  }}
+                  className="absolute top-12 right-0 w-1 h-24"
+                  style={{ background: item.color }}
                   animate={{
-                    scale: hoveredIndex === index ? 1.2 : 1,
+                    scaleY: hoveredIndex === index ? 1 : 0,
                   }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.4 }}
                 />
-
-                {/* Number */}
-                <div className="absolute top-6 left-6 font-mono text-sm text-muted">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
-              </motion.div>
-
-              {/* Text content */}
-              <div className="absolute bottom-8 left-8 right-8">
-                <motion.span
-                  className="font-mono text-xs block mb-2"
-                  style={{ color: item.color }}
-                  animate={{
-                    y: hoveredIndex === index ? 0 : 10,
-                    opacity: hoveredIndex === index ? 1 : 0.7,
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {item.category}
-                </motion.span>
-
-                <motion.h3
-                  className="text-4xl md:text-5xl font-bold tracking-tighter"
-                  animate={{
-                    y: hoveredIndex === index ? 0 : 10,
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {item.title}
-                </motion.h3>
-
-                {/* View indicator */}
-                <motion.div
-                  className="mt-4 flex items-center gap-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{
-                    opacity: hoveredIndex === index ? 1 : 0,
-                    y: hoveredIndex === index ? 0 : 10,
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="font-mono text-sm">VIEW PROJECT</span>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M4 12L12 4M12 4H6M12 4V10"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                  </svg>
-                </motion.div>
               </div>
             </motion.div>
           ))}
 
           {/* End spacer */}
-          <div className="flex-shrink-0 w-[20vw]" />
+          <div className="shrink-0 w-[20vw]" />
         </motion.div>
 
         {/* Progress indicator */}
         <div className="absolute bottom-8 left-8 right-8">
           <div className="flex items-center gap-4">
             <span className="font-mono text-xs text-muted">SCROLL</span>
-            <div className="flex-1 h-[1px] bg-foreground/10 overflow-hidden">
+            <div className="flex-1 h-px bg-foreground/10 overflow-hidden">
               <motion.div
                 className="h-full bg-accent"
                 style={{ scaleX: scrollYProgress, originX: 0 }}

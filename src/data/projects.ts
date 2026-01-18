@@ -1,5 +1,3 @@
-import { COLORS } from "@/lib/constants";
-
 export interface ProjectSection {
   type: "intro" | "challenge" | "process" | "result";
   title: string;
@@ -29,7 +27,7 @@ export const projects: Project[] = [
     title: "UNDER THE FLOW",
     category: "WEB PLATFORM",
     year: "2024",
-    color: COLORS.accent,
+    color: "#60cbd7", // Cyan turquoise (couleur officielle du projet)
     description: "Plateforme de sessions live hip-hop avec une expérience immersive pour les artistes et les fans.",
     longDescription: `Under The Flow est une plateforme dédiée aux sessions live de hip-hop.
 Le projet capture l'essence du freestyle et des performances live, offrant une vitrine
@@ -41,8 +39,7 @@ avec une direction artistique forte et moderne.`,
     role: "DÉVELOPPEUR FULL-STACK",
     client: "UNDER THE FLOW",
     link: "https://undertheflow.com",
-    image: "/images/projects/under-the-flow.jpg",
-    ogImage: "https://www.undertheflow.com/opengraph-image?1e869925752f604d",
+    image: "/images/projects/under-the-flow-medium.png",
     sections: [
       {
         type: "intro",
@@ -71,7 +68,7 @@ avec une direction artistique forte et moderne.`,
     title: "VICTOR DENAY",
     category: "PORTFOLIO",
     year: "2024",
-    color: COLORS.secondary.purple,
+    color: "#1890ff", // Bleu vibrant (couleur officielle du portfolio)
     description: "Portfolio créatif pour un vidéaste et photographe professionnel.",
     longDescription: `Portfolio sur-mesure pour Victor Denay, vidéaste et photographe.
 Un design épuré qui laisse toute la place au travail visuel de l'artiste,
@@ -83,7 +80,7 @@ tout en offrant une expérience de navigation mémorable.`,
     role: "DÉVELOPPEUR FULL-STACK",
     client: "VICTOR DENAY",
     link: "https://victordenay.com",
-    image: "/images/projects/victor-denay.jpg",
+    image: "/images/projects/victor-denay-medium.png",
     sections: [
       {
         type: "intro",
@@ -112,7 +109,7 @@ tout en offrant une expérience de navigation mémorable.`,
     title: "DÉPENSE MAN",
     category: "WEB APP",
     year: "2024",
-    color: COLORS.secondary.green,
+    color: "#D97706", // Orange-amber (couleur officielle de l'app)
     description: "Application de gestion de finances personnelles simple et efficace.",
     longDescription: `Dépense Man est une application web progressive (PWA) pour gérer
 ses finances mensuelles de manière simple et intuitive. Pas de complexité inutile,
@@ -124,7 +121,7 @@ avec une interface claire et des visualisations pertinentes.`,
     role: "DÉVELOPPEUR FULL-STACK",
     client: "PROJET PERSONNEL",
     link: "https://depense-man.vercel.app",
-    image: "/images/projects/depense-man.jpg",
+    image: "/images/projects/depense-man-medium.png",
     sections: [
       {
         type: "intro",
@@ -153,7 +150,7 @@ avec une interface claire et des visualisations pertinentes.`,
     title: "LINEKUT",
     category: "CREATIVE TOOL",
     year: "2024",
-    color: COLORS.secondary.cyan,
+    color: "#F97316", // Orange (couleur officielle de l'outil)
     description: "Convertisseur d'images en patrons découpables pour scie à chantourner, laser et vinyl.",
     longDescription: `Linekut transforme n'importe quelle image en patron prêt à découper.
 Que ce soit pour la scie à chantourner, la découpe laser, le vinyl ou les stickers,
@@ -165,7 +162,7 @@ rendant accessible un processus habituellement complexe.`,
     role: "DÉVELOPPEUR FRONT-END",
     client: "PROJET PERSONNEL",
     link: "https://linekut.vercel.app",
-    image: "/images/projects/linekut.jpg",
+    image: "/images/projects/linekut-medium.png",
     sections: [
       {
         type: "intro",
@@ -186,6 +183,45 @@ rendant accessible un processus habituellement complexe.`,
         type: "result",
         title: "LE RÉSULTAT",
         content: "Un outil utilisé par des makers et artisans pour créer rapidement des patrons de découpe personnalisés.",
+      },
+    ],
+  },
+  {
+    id: "blenkdev",
+    title: "BLENKDEV",
+    category: "WEB AGENCY",
+    year: "2024",
+    color: "#fdbb00", // Jaune (couleur officielle de l'agence)
+    description: "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
+    longDescription: `BlenkDev est le site vitrine de mon activité freelance en développement web.
+Une plateforme qui présente mes services, mon approche et mon portfolio de manière claire et professionnelle.
+
+L'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.`,
+    tags: ["NEXT.JS", "TAILWIND", "MOTION", "SEO", "ANALYTICS"],
+    role: "DÉVELOPPEUR FULL-STACK",
+    client: "BLENKDEV",
+    link: "https://blenkdev.vercel.app",
+    image: "/images/projects/blenkdev-medium.png",
+    sections: [
+      {
+        type: "intro",
+        title: "LA MISSION",
+        content: "Créer une présence en ligne professionnelle pour mon activité freelance. Un site qui inspire confiance et démontre mon expertise technique.",
+      },
+      {
+        type: "challenge",
+        title: "LE DÉFI",
+        content: "Se démarquer dans un marché saturé en mettant en avant mes compétences uniques et mon approche centrée sur le client.",
+      },
+      {
+        type: "process",
+        title: "LE PROCESS",
+        content: "Design moderne et épuré. Mise en avant des projets réalisés. Section services claire. Témoignages clients pour la crédibilité.",
+      },
+      {
+        type: "result",
+        title: "LE RÉSULTAT",
+        content: "Un site vitrine qui convertit les visiteurs en clients potentiels et reflète mon identité professionnelle.",
       },
     ],
   },

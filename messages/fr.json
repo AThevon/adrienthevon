@@ -297,6 +297,31 @@
           "content": "Un outil utilisé par des makers et artisans pour créer rapidement des patrons de découpe personnalisés."
         }
       }
+    },
+    "blenkdev": {
+      "category": "AGENCE WEB",
+      "description": "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
+      "longDescription": "BlenkDev est le site vitrine de mon activité freelance en développement web.\nUne plateforme qui présente mes services, mon approche et mon portfolio de manière claire et professionnelle.\n\nL'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.",
+      "role": "DÉVELOPPEUR FULL-STACK",
+      "client": "BLENKDEV",
+      "sections": {
+        "intro": {
+          "title": "LA MISSION",
+          "content": "Créer une présence en ligne professionnelle pour mon activité freelance. Un site qui inspire confiance et démontre mon expertise technique."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Se démarquer dans un marché saturé en mettant en avant mes compétences uniques et mon approche centrée sur le client."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Design moderne et épuré. Mise en avant des projets réalisés. Section services claire. Témoignages clients pour la crédibilité."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un site vitrine qui convertit les visiteurs en clients potentiels et reflète mon identité professionnelle."
+        }
+      }
     }
   }
 }
