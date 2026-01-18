@@ -19,293 +19,173 @@ export interface Project {
   client: string;
   link: string;
   image: string;
+  ogImage?: string;
   sections: ProjectSection[];
 }
 
 export const projects: Project[] = [
   {
-    id: "project-alpha",
-    title: "PROJECT ALPHA",
-    category: "WEB EXPERIENCE",
+    id: "under-the-flow",
+    title: "UNDER THE FLOW",
+    category: "WEB PLATFORM",
     year: "2024",
     color: COLORS.accent,
-    description: "An immersive 3D web experience pushing the boundaries of WebGL and real-time graphics.",
-    longDescription: `Project Alpha represents the pinnacle of creative web development.
-Built with cutting-edge technologies, it delivers an unforgettable user experience
-that blurs the line between website and art installation.
+    description: "Plateforme de sessions live hip-hop avec une expérience immersive pour les artistes et les fans.",
+    longDescription: `Under The Flow est une plateforme dédiée aux sessions live de hip-hop.
+Le projet capture l'essence du freestyle et des performances live, offrant une vitrine
+unique pour les artistes émergents de la scène hip-hop française.
 
-The project features real-time 3D graphics, physics simulations, and
-audio-reactive elements that respond to user interaction.`,
-    tags: ["THREE.JS", "WEBGL", "REACT", "GSAP"],
-    role: "LEAD DEVELOPER",
-    client: "CREATIVE AGENCY X",
-    link: "https://project-alpha.example.com",
-    image: "/images/projects/project-alpha.jpg",
+Une expérience web immersive qui met en avant la musique et les artistes
+avec une direction artistique forte et moderne.`,
+    tags: ["NEXT.JS", "TAILWIND", "MOTION", "SUPABASE"],
+    role: "DÉVELOPPEUR FULL-STACK",
+    client: "UNDER THE FLOW",
+    link: "https://undertheflow.com",
+    image: "/images/projects/under-the-flow.jpg",
+    ogImage: "https://www.undertheflow.com/opengraph-image?1e869925752f604d",
     sections: [
       {
         type: "intro",
-        title: "THE VISION",
-        content: "To create something that transcends the ordinary. A digital experience that feels alive, breathing, responding to every movement.",
+        title: "LA VISION",
+        content: "Créer une plateforme qui capture l'énergie brute des sessions live hip-hop. Un espace où la musique prend vie à travers le digital.",
       },
       {
         type: "challenge",
-        title: "THE CHALLENGE",
-        content: "How do you make pixels feel organic? How do you create emotion from code? These were the questions that drove this project.",
+        title: "LE DÉFI",
+        content: "Transmettre l'authenticité et l'énergie du live à travers une interface web. Créer une expérience immersive sans sacrifier la performance.",
       },
       {
         type: "process",
-        title: "THE PROCESS",
-        content: "Months of experimentation. Thousands of iterations. Pushing WebGL to its limits while maintaining 60fps across devices.",
+        title: "LE PROCESS",
+        content: "Next.js pour la performance et le SEO. Design sombre et contrasté pour mettre en valeur le contenu vidéo. Animations fluides pour renforcer l'immersion.",
       },
       {
         type: "result",
-        title: "THE RESULT",
-        content: "An award-winning experience that redefined what's possible on the web. Featured on Awwwards, FWA, and CSS Design Awards.",
+        title: "LE RÉSULTAT",
+        content: "Une plateforme qui met en lumière la scène hip-hop live française avec une identité visuelle forte et mémorable.",
       },
     ],
   },
   {
-    id: "neural-canvas",
-    title: "NEURAL CANVAS",
-    category: "CREATIVE TOOL",
+    id: "victor-denay",
+    title: "VICTOR DENAY",
+    category: "PORTFOLIO",
+    year: "2024",
+    color: COLORS.secondary.purple,
+    description: "Portfolio créatif pour un vidéaste et photographe professionnel.",
+    longDescription: `Portfolio sur-mesure pour Victor Denay, vidéaste et photographe.
+Un design épuré qui laisse toute la place au travail visuel de l'artiste,
+avec des transitions fluides et une navigation intuitive.
+
+L'objectif était de créer un écrin digital qui sublime les créations
+tout en offrant une expérience de navigation mémorable.`,
+    tags: ["NUXT", "TAILWIND", "MOTION", "THREE.JS", "SUPABASE"],
+    role: "DÉVELOPPEUR FULL-STACK",
+    client: "VICTOR DENAY",
+    link: "https://victordenay.com",
+    image: "/images/projects/victor-denay.jpg",
+    sections: [
+      {
+        type: "intro",
+        title: "LE BRIEF",
+        content: "Un portfolio qui s'efface pour laisser briller le travail. Minimaliste mais impactant, sobre mais mémorable.",
+      },
+      {
+        type: "challenge",
+        title: "LE DÉFI",
+        content: "Présenter du contenu vidéo et photo de haute qualité sans compromettre les temps de chargement. Créer une galerie fluide et intuitive.",
+      },
+      {
+        type: "process",
+        title: "LE PROCESS",
+        content: "Design mobile-first. Lazy loading intelligent. Transitions soignées entre les projets. Typographie minimaliste.",
+      },
+      {
+        type: "result",
+        title: "LE RÉSULTAT",
+        content: "Un portfolio élégant qui met en valeur le travail de Victor tout en offrant une expérience utilisateur premium.",
+      },
+    ],
+  },
+  {
+    id: "depense-man",
+    title: "DÉPENSE MAN",
+    category: "WEB APP",
     year: "2024",
     color: COLORS.secondary.green,
-    description: "AI-powered generative art platform for digital artists and creative professionals.",
-    longDescription: `Neural Canvas empowers artists to create unique generative artwork
-using the latest in machine learning technology. The platform provides intuitive
-controls while hiding the complexity of AI models behind a beautiful interface.
+    description: "Application de gestion de finances personnelles simple et efficace.",
+    longDescription: `Dépense Man est une application web progressive (PWA) pour gérer
+ses finances mensuelles de manière simple et intuitive. Pas de complexité inutile,
+juste les fonctionnalités essentielles pour suivre ses dépenses.
 
-Artists can train custom models, blend styles, and generate endless variations
-while maintaining complete creative control over the output.`,
-    tags: ["AI/ML", "CANVAS", "REACT", "NODE.JS"],
-    role: "FULL-STACK DEVELOPER",
-    client: "STARTUP Y",
-    link: "https://neural-canvas.example.com",
-    image: "/images/projects/neural-canvas.jpg",
+Une approche minimaliste du budget personnel, accessible sur tous les appareils
+avec une interface claire et des visualisations pertinentes.`,
+    tags: ["NEXT.JS", "TAILWIND", "PWA", "SUPABASE"],
+    role: "DÉVELOPPEUR FULL-STACK",
+    client: "PROJET PERSONNEL",
+    link: "https://depense-man.vercel.app",
+    image: "/images/projects/depense-man.jpg",
     sections: [
       {
         type: "intro",
-        title: "THE IDEA",
-        content: "Art meets artificial intelligence. A tool that amplifies human creativity rather than replacing it.",
+        title: "LE BESOIN",
+        content: "Une app de budget sans la complexité des solutions bancaires. Simple, rapide, efficace.",
       },
       {
         type: "challenge",
-        title: "THE COMPLEXITY",
-        content: "Making AI accessible without dumbing it down. Preserving artistic intent while leveraging machine learning.",
+        title: "LE DÉFI",
+        content: "Rendre la gestion de budget agréable. Créer une interface qui donne envie d'être utilisée régulièrement.",
       },
       {
         type: "process",
-        title: "THE BUILD",
-        content: "Custom neural networks trained on millions of artworks. Real-time generation with intuitive controls.",
+        title: "LE PROCESS",
+        content: "PWA pour l'accès offline. Interface épurée. Visualisations claires des dépenses. Catégorisation intelligente.",
       },
       {
         type: "result",
-        title: "THE IMPACT",
-        content: "Used by over 50,000 artists worldwide. Generating millions of unique artworks every month.",
+        title: "LE RÉSULTAT",
+        content: "Une app que j'utilise au quotidien pour gérer mes finances. Simple, mais qui fait exactement ce qu'on lui demande.",
       },
     ],
   },
   {
-    id: "void-studio",
-    title: "VOID STUDIO",
-    category: "DESIGN SYSTEM",
-    year: "2023",
-    color: COLORS.secondary.purple,
-    description: "A comprehensive design system for modern web applications with 100+ components.",
-    longDescription: `Void Studio is a meticulously crafted design system that provides
-developers and designers with a unified language for building consistent,
-accessible, and beautiful user interfaces.
-
-Featuring dark mode support, responsive components, and extensive documentation,
-it's the foundation for building modern web applications at scale.`,
-    tags: ["DESIGN SYSTEM", "REACT", "STORYBOOK", "FIGMA"],
-    role: "DESIGN ENGINEER",
-    client: "TECH COMPANY Z",
-    link: "https://void-studio.example.com",
-    image: "/images/projects/void-studio.jpg",
-    sections: [
-      {
-        type: "intro",
-        title: "THE NEED",
-        content: "Consistency at scale. A design language that speaks clearly across hundreds of interfaces.",
-      },
-      {
-        type: "challenge",
-        title: "THE PUZZLE",
-        content: "Flexibility vs consistency. Enabling creativity while maintaining brand coherence.",
-      },
-      {
-        type: "process",
-        title: "THE CRAFT",
-        content: "Token-based architecture. Themeable components. Documentation that developers actually want to read.",
-      },
-      {
-        type: "result",
-        title: "THE OUTCOME",
-        content: "Adopted by 12 product teams. Reduced design-to-dev handoff time by 60%.",
-      },
-    ],
-  },
-  {
-    id: "particle-flow",
-    title: "PARTICLE FLOW",
-    category: "EXPERIMENT",
-    year: "2023",
-    color: COLORS.secondary.pink,
-    description: "Real-time particle simulation using GPU compute shaders and WebGPU.",
-    longDescription: `Particle Flow is an experimental project exploring the capabilities
-of WebGPU for real-time particle simulations. Millions of particles dance across
-the screen, creating mesmerizing patterns driven by mathematical forces.
-
-A deep dive into emergent behaviors, flocking algorithms, and the beauty
-that emerges from simple rules applied at massive scale.`,
-    tags: ["WEBGPU", "SHADERS", "CREATIVE CODING"],
-    role: "CREATIVE DEVELOPER",
-    client: "PERSONAL PROJECT",
-    link: "https://particle-flow.example.com",
-    image: "/images/projects/particle-flow.jpg",
-    sections: [
-      {
-        type: "intro",
-        title: "THE CURIOSITY",
-        content: "What if we could render millions of particles in real-time? What patterns would emerge?",
-      },
-      {
-        type: "challenge",
-        title: "THE LIMITS",
-        content: "Browser APIs. GPU memory. Frame budgets. Every constraint became an opportunity.",
-      },
-      {
-        type: "process",
-        title: "THE EXPLORATION",
-        content: "WebGPU compute shaders. Spatial hashing. Emergent behaviors from simple rules.",
-      },
-      {
-        type: "result",
-        title: "THE BEAUTY",
-        content: "5 million particles dancing at 60fps. Organic patterns from mathematical precision.",
-      },
-    ],
-  },
-  {
-    id: "echo-space",
-    title: "ECHO SPACE",
-    category: "AUDIO VISUAL",
-    year: "2023",
+    id: "linekut",
+    title: "LINEKUT",
+    category: "CREATIVE TOOL",
+    year: "2024",
     color: COLORS.secondary.cyan,
-    description: "Audio-reactive visual experience that transforms sound into stunning visuals.",
-    longDescription: `Echo Space transforms sound into stunning visuals in real-time.
-Using the Web Audio API and custom shaders, every beat and frequency becomes
-a visual element in an ever-evolving digital canvas.
+    description: "Convertisseur d'images en patrons découpables pour scie à chantourner, laser et vinyl.",
+    longDescription: `Linekut transforme n'importe quelle image en patron prêt à découper.
+Que ce soit pour la scie à chantourner, la découpe laser, le vinyl ou les stickers,
+l'outil génère des fichiers optimisés pour chaque technique.
 
-Experience music like never before - see the bass, feel the treble,
-and immerse yourself in a synesthetic journey.`,
-    tags: ["WEB AUDIO", "CANVAS", "MOTION"],
-    role: "CREATIVE DEVELOPER",
-    client: "MUSIC LABEL",
-    link: "https://echo-space.example.com",
-    image: "/images/projects/echo-space.jpg",
+Une PWA qui démocratise la création de patrons de découpe,
+rendant accessible un processus habituellement complexe.`,
+    tags: ["NEXT.JS", "CANVAS", "PWA", "IMAGE PROCESSING"],
+    role: "DÉVELOPPEUR FRONT-END",
+    client: "PROJET PERSONNEL",
+    link: "https://linekut.vercel.app",
+    image: "/images/projects/linekut.jpg",
     sections: [
       {
         type: "intro",
-        title: "THE SYNESTHESIA",
-        content: "Sound has color. Rhythm has shape. Music has dimension.",
+        title: "L'IDÉE",
+        content: "Simplifier la création de patrons de découpe. Transformer une photo en fichier prêt à usiner en quelques clics.",
       },
       {
         type: "challenge",
-        title: "THE LATENCY",
-        content: "Audio analysis in real-time. Visual response with zero perceptible delay.",
+        title: "LE DÉFI",
+        content: "Traitement d'image côté client pour la rapidité. Algorithmes de vectorisation et de simplification des contours.",
       },
       {
         type: "process",
-        title: "THE SYNTHESIS",
-        content: "FFT analysis. Custom shaders. A visual language that speaks in frequencies.",
+        title: "LE PROCESS",
+        content: "Canvas API pour le traitement d'image. Algorithmes de détection de contours. Export en formats standards (SVG, DXF).",
       },
       {
         type: "result",
-        title: "THE EXPERIENCE",
-        content: "Featured at 3 music festivals. Transformed how audiences experience live performances.",
-      },
-    ],
-  },
-  {
-    id: "flux-motion",
-    title: "FLUX MOTION",
-    category: "ANIMATION LIBRARY",
-    year: "2024",
-    color: "#ff6b35",
-    description: "A lightweight animation library for fluid, physics-based web animations.",
-    longDescription: `Flux Motion is a performance-focused animation library that brings
-natural, physics-based motion to the web. Spring animations, gesture handling,
-and seamless transitions - all with a tiny footprint.
-
-Built for developers who want beautiful animations without the bloat.
-Every kilobyte counts when you're crafting premium web experiences.`,
-    tags: ["TYPESCRIPT", "ANIMATION", "OPEN SOURCE"],
-    role: "CREATOR & MAINTAINER",
-    client: "OPEN SOURCE",
-    link: "https://github.com/example/flux-motion",
-    image: "/images/projects/flux-motion.jpg",
-    sections: [
-      {
-        type: "intro",
-        title: "THE FRUSTRATION",
-        content: "Animation libraries that are either too heavy or too limited. There had to be a better way.",
-      },
-      {
-        type: "challenge",
-        title: "THE BALANCE",
-        content: "Power vs simplicity. Features vs bundle size. Developer experience vs runtime performance.",
-      },
-      {
-        type: "process",
-        title: "THE ENGINEERING",
-        content: "Custom spring physics. Tree-shakeable architecture. TypeScript from day one.",
-      },
-      {
-        type: "result",
-        title: "THE ADOPTION",
-        content: "10k+ GitHub stars. Used in production by companies like Vercel and Stripe.",
-      },
-    ],
-  },
-  {
-    id: "spectrum-ui",
-    title: "SPECTRUM UI",
-    category: "DASHBOARD",
-    year: "2024",
-    color: "#9d4edd",
-    description: "Real-time data visualization dashboard for financial analytics.",
-    longDescription: `Spectrum UI transforms complex financial data into intuitive,
-real-time visualizations. Processing millions of data points per second,
-it delivers insights at a glance while maintaining sub-16ms render times.
-
-A masterclass in WebGL performance optimization and data streaming architecture.`,
-    tags: ["D3.JS", "WEBGL", "WEBSOCKETS", "REACT"],
-    role: "LEAD FRONTEND ENGINEER",
-    client: "FINTECH STARTUP",
-    link: "https://spectrum-ui.example.com",
-    image: "/images/projects/spectrum-ui.jpg",
-    sections: [
-      {
-        type: "intro",
-        title: "THE DATA",
-        content: "Millions of transactions. Hundreds of metrics. One unified view.",
-      },
-      {
-        type: "challenge",
-        title: "THE SCALE",
-        content: "Real-time updates at 60fps. Smooth interactions with massive datasets.",
-      },
-      {
-        type: "process",
-        title: "THE ARCHITECTURE",
-        content: "WebGL-accelerated charts. Streaming data with WebSockets. Virtual scrolling for infinite lists.",
-      },
-      {
-        type: "result",
-        title: "THE IMPACT",
-        content: "Reduced analyst decision time by 40%. Now handles 10x more data than the previous solution.",
+        title: "LE RÉSULTAT",
+        content: "Un outil utilisé par des makers et artisans pour créer rapidement des patrons de découpe personnalisés.",
       },
     ],
   },
