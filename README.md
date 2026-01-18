@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Creative - Adrien Thevon
+
+Portfolio créatif expérimental avec des effets de creative coding avancés. Dark theme, animations fluides, expériences 3D interactives.
+
+## Stack Technique
+
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS 4
+- **Animations:** Motion (framer-motion), GSAP
+- **3D:** Three.js, @react-three/fiber, @react-three/drei
+- **i18n:** next-intl (FR/EN)
+- **Smooth Scroll:** Lenis
+- **Language:** TypeScript
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Pages Next.js (App Router)
+│   ├── page.tsx           # Homepage avec toutes les sections
+│   └── work/              # Pages projets
+├── components/
+│   ├── effects/           # Curseurs, preloader, effets visuels
+│   ├── experiments/       # ASCII, particules, waves, terrain
+│   ├── sections/          # Hero, Projects, About, Contact, etc.
+│   └── ui/                # Boutons, textes animés, composants réutilisables
+├── data/                   # Projets et timeline
+├── hooks/                  # usePerformance, useDeviceDetect, etc.
+├── i18n/                   # Configuration next-intl
+└── messages/               # Traductions FR/EN
+```
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- Curseur custom avec effets contextuels par section
+- Timeline 3D interactive
+- Skills Matrix 3D avec matrix rain
+- Horizontal Gallery avec parallax
+- Case studies avec mode immersif (scroll storytelling)
+- Internationalisation FR/EN
+- Optimisations mobile/reduced-motion
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Commandes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev      # Serveur de dev
+npm run build    # Build production
+npm run start    # Serveur production
+npm run lint     # Linting
+```
 
-## Deploy on Vercel
+## Projets présentés
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Under The Flow** - Plateforme de sessions live hip-hop
+- **Victor Denay** - Portfolio vidéaste/photographe
+- **Dépense Man** - App de gestion de finances (PWA)
+- **Linekut** - Convertisseur d'images en patrons découpables

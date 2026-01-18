@@ -39,7 +39,7 @@ export default function WorkPage() {
         <LiquidCursor intensity={0.3} />
 
         {/* Mode toggle - positioned below language switcher */}
-        <div className="fixed top-8 right-24 z-40 flex items-center gap-4">
+        <div className="fixed top-8 right-32 z-40 flex items-center gap-4">
           <button
             onClick={() => setViewMode("list")}
             className="font-mono text-xs text-muted hover:text-foreground transition-colors"
@@ -102,7 +102,7 @@ export default function WorkPage() {
               {/* Mode toggle */}
               <button
                 onClick={() => setViewMode("gallery")}
-                className="font-mono text-xs text-muted hover:text-accent transition-colors mr-20"
+                className="font-mono text-xs text-muted hover:text-accent transition-colors mr-28"
                 data-cursor="hover"
               >
                 {t("galleryView")}
