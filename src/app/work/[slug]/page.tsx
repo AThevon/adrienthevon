@@ -10,28 +10,37 @@ import TextReveal from "@/components/ui/TextReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { getProjectById, getNextProject } from "@/data/projects";
 
-// Letter by letter reveal component
+// Letter by letter reveal component that respects word boundaries
 function LetterReveal({ text, delay = 0 }: { text: string; delay?: number }) {
-  const letters = text.split("");
+  const words = text.split(" ");
+  let letterIndex = 0;
 
   return (
-    <span>
-      {letters.map((letter, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 50, rotateX: -90 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{
-            duration: 0.5,
-            delay: delay + i * 0.03,
-            ease: [0.33, 1, 0.68, 1],
-          }}
-          style={{ display: "inline-block", transformOrigin: "bottom" }}
-        >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
+    <>
+      {words.map((word, wordIdx) => (
+        <span key={wordIdx} style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+          {word.split("").map((letter, letterIdx) => {
+            const currentIndex = letterIndex++;
+            return (
+              <motion.span
+                key={letterIdx}
+                initial={{ opacity: 0, y: 50, rotateX: -90 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: delay + currentIndex * 0.03,
+                  ease: [0.33, 1, 0.68, 1],
+                }}
+                style={{ display: "inline-block", transformOrigin: "bottom" }}
+              >
+                {letter}
+              </motion.span>
+            );
+          })}
+          {wordIdx < words.length - 1 && "\u00A0"}
+        </span>
       ))}
-    </span>
+    </>
   );
 }
 
@@ -63,6 +72,9 @@ export default function ProjectPage() {
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.9]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
+  // Gradient opacity that fades drastically as you scroll
+  const gradientOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -77,17 +89,25 @@ export default function ProjectPage() {
     <>
       <CustomCursor />
 
-      <main ref={containerRef} className="min-h-screen">
+      {/* Fixed gradient background that fades with scroll */}
+      <motion.div
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          opacity: gradientOpacity,
+          willChange: "opacity",
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(ellipse 140% 140% at 50% 0%, ${project.color}40 0%, ${project.color}25 25%, ${project.color}15 45%, ${project.color}08 60%, transparent 75%)`,
+          }}
+        />
+      </motion.div>
+
+      <main ref={containerRef} className="min-h-screen relative">
         {/* Hero - Immersive style */}
         <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
-          {/* Background gradient */}
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              background: `radial-gradient(circle at 50% 50%, ${project.color} 0%, transparent 70%)`,
-            }}
-          />
-
           {/* Back button */}
           <motion.a
             href="/work"
@@ -112,7 +132,7 @@ export default function ProjectPage() {
           </motion.div>
 
           {/* Title with letter reveal */}
-          <h1 className="text-6xl md:text-8xl lg:text-[12vw] font-bold tracking-tighter text-center px-8">
+          <h1 className="text-6xl md:text-8xl lg:text-[10vw] xl:text-[8vw] font-bold tracking-tighter text-center px-8 max-w-[90vw] leading-[0.9] break-normal">
             <LetterReveal text={project.title} delay={0.5} />
           </h1>
 
@@ -244,7 +264,12 @@ export default function ProjectPage() {
         </section>
 
         {/* Next project */}
-        <section className="py-32 px-8 md:px-16 border-t border-foreground/10">
+        <section
+          className="py-32 px-8 md:px-16 border-t border-foreground/10 relative"
+          style={{
+            background: `radial-gradient(ellipse 120% 100% at 50% 50%, ${nextProject.color}10 0%, transparent 60%)`,
+          }}
+        >
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0 }}
