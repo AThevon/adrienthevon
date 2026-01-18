@@ -123,20 +123,22 @@
   "philosophy": {
     "title": "PHILOSOPHIE",
     "subtitle": "MA VISION",
-    "hint": "[ BOUGE TA SOURIS ]",
-    "items": {
-      "craft": {
-        "title": "LE CRAFT, ÇA COMPTE",
-        "description": "Chaque projet est une occasion de repousser les limites. Les détails font toute la différence."
-      },
-      "pixels": {
-        "title": "DES PIXELS AVEC UN BUT",
-        "description": "Les interfaces doivent vivre. Esthétique et fonction en parfait équilibre."
-      },
-      "code": {
-        "title": "LE CODE, C'EST DE L'ART",
-        "description": "Coder c'est s'exprimer. Logique et créativité entrelacées."
-      }
+    "instruction": "SURVOLE OU CLIQUE SUR CHAQUE ZONE POUR RÉVÉLER L'EFFET",
+    "magic": {
+      "title": "MAGIC IN MOTION",
+      "description": "Créer des interfaces qui surprennent et enchantent. Chaque interaction doit donner envie d'explorer, de toucher, de rester. Le code devient un terrain de jeu où l'impossible prend vie."
+    },
+    "fullstack": {
+      "title": "FULL STACK SOUL",
+      "description": "Pas juste du frontend qui brille. Backend solide, scripts shell qui automatisent, APIs qui tiennent la charge. La magie se construit sur des fondations en béton."
+    },
+    "obsessed": {
+      "title": "OBSESSED, NOT OBLIGATED",
+      "description": "Je code pas parce qu'il le faut. Je code parce que ça me consume. Cette passion se ressent dans chaque pixel, chaque ligne, chaque détail. C'est viscéral."
+    },
+    "human": {
+      "title": "HUMAN > PROTOCOL",
+      "description": "La tech c'est un outil. L'humain c'est le cœur. Échanger, comprendre les besoins réels, créer des liens authentiques. Les meilleurs projets naissent de vraies discussions."
     },
     "quote": "Les détails ne sont pas des détails. Ils font le design.",
     "quoteAuthor": "— CHARLES EAMES"

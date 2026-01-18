@@ -123,20 +123,22 @@
   "philosophy": {
     "title": "PHILOSOPHY",
     "subtitle": "HOW I THINK",
-    "hint": "[ MOVE YOUR CURSOR ]",
-    "items": {
-      "craft": {
-        "title": "CRAFT MATTERS",
-        "description": "Every project is an opportunity to push boundaries. The details make the difference."
-      },
-      "pixels": {
-        "title": "PIXELS WITH PURPOSE",
-        "description": "Interfaces should feel alive. Aesthetics and function in perfect balance."
-      },
-      "code": {
-        "title": "CODE IS ART",
-        "description": "Writing code is a form of expression. Logic and creativity intertwined."
-      }
+    "instruction": "HOVER OR CLICK ON EACH ZONE TO REVEAL THE EFFECT",
+    "magic": {
+      "title": "MAGIC IN MOTION",
+      "description": "Creating interfaces that surprise and delight. Every interaction should make you want to explore, touch, stay. Code becomes a playground where the impossible comes alive."
+    },
+    "fullstack": {
+      "title": "FULL STACK SOUL",
+      "description": "Not just shiny frontend. Solid backend, shell scripts that automate, APIs that scale. Magic is built on concrete foundations."
+    },
+    "obsessed": {
+      "title": "OBSESSED, NOT OBLIGATED",
+      "description": "I don't code because I have to. I code because it consumes me. This passion shows in every pixel, every line, every detail. It's visceral."
+    },
+    "human": {
+      "title": "HUMAN > PROTOCOL",
+      "description": "Tech is a tool. Humans are the heart. Exchanging, understanding real needs, building authentic connections. The best projects are born from real conversations."
     },
     "quote": "The details are not the details. They make the design.",
     "quoteAuthor": "— CHARLES EAMES"
