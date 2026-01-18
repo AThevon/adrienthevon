@@ -1,4 +1,4 @@
-# Claude Code Context - Portfolio Creative
+# Claude Code Context - Adrien Thevon
 
 > Ce fichier fournit le contexte nécessaire pour que Claude Code comprenne rapidement ce projet.
 

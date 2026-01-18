@@ -1,4 +1,4 @@
-# Portfolio Creative - Adrien Thevon
+# Adrien Thevon
 
 Portfolio créatif expérimental avec des effets de creative coding avancés. Dark theme, animations fluides, expériences 3D interactives.
 
