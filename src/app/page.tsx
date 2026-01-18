@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Hero from "@/components/sections/Hero";
 import { usePerformance } from "@/hooks";
@@ -16,13 +16,28 @@ const SectionEffects = dynamic(
 
 export default function Home() {
   const { enableAnimations, enableCursorEffects } = usePerformance();
-  const [isLoading, setIsLoading] = useState(enableAnimations);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Check if preloader has already been shown this session
+    const hasSeenPreloader = sessionStorage.getItem("hasSeenPreloader");
+
+    if (!hasSeenPreloader && enableAnimations) {
+      setIsLoading(true);
+    }
+  }, [enableAnimations]);
+
+  const handlePreloaderComplete = () => {
+    setIsLoading(false);
+    // Mark preloader as seen for this session
+    sessionStorage.setItem("hasSeenPreloader", "true");
+  };
 
   return (
     <>
-      {/* Preloader - skip if animations disabled */}
+      {/* Preloader - only on first load of the session */}
       {enableAnimations && isLoading && (
-        <Preloader onComplete={() => setIsLoading(false)} />
+        <Preloader onComplete={handlePreloaderComplete} />
       )}
 
       {/* Geometry particles cursor - only on homepage */}

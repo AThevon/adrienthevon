@@ -1,44 +1,34 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePageTransition } from "@/hooks/usePageTransition";
 
 interface PageTransitionProps {
   children: React.ReactNode;
 }
 
 export default function PageTransition({ children }: PageTransitionProps) {
-  const pathname = usePathname();
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  useEffect(() => {
-    setIsTransitioning(true);
-    const timer = setTimeout(() => setIsTransitioning(false), 800);
-    return () => clearTimeout(timer);
-  }, [pathname]);
+  const { isTransitioning } = usePageTransition();
 
   return (
     <>
       {/* Transition overlay */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {isTransitioning && (
           <motion.div
-            key={pathname}
             className="fixed inset-0 z-[100] pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
           >
-            {/* Static noise layers */}
+            {/* Wipe curtain */}
             <motion.div
               className="absolute inset-0 bg-background"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              exit={{ scaleY: 0 }}
-              transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
-              style={{ originY: 0 }}
+              initial={{ y: "100%" }}
+              animate={{ y: "0%" }}
+              exit={{ y: "-100%" }}
+              transition={{
+                duration: 0.6,
+                ease: [0.76, 0, 0.24, 1],
+                times: [0, 1]
+              }}
             >
               {/* Noise texture */}
               <div className="absolute inset-0 opacity-20 bg-noise" />
@@ -59,59 +49,117 @@ export default function PageTransition({ children }: PageTransitionProps) {
                   repeat: Infinity,
                 }}
               />
-
-              {/* Glitch bars */}
-              <motion.div
-                className="absolute left-0 right-0 h-1 bg-accent"
-                animate={{
-                  y: ["10%", "90%"],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: "easeInOut",
-                }}
-              />
-
-              <motion.div
-                className="absolute left-0 right-0 h-1 bg-accent"
-                animate={{
-                  y: ["90%", "10%"],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: "easeInOut",
-                  delay: 0.2,
-                }}
-              />
             </motion.div>
 
-            {/* Loading indicator */}
+            {/* Loading indicator - FIXED center, clipped by wipe position */}
             <motion.div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+              style={{
+                clipPath: "inset(0 0 0 0)"
+              }}
+              initial={{ clipPath: "inset(100% 0 0 0)" }}
+              animate={{ clipPath: "inset(0% 0 0 0)" }}
+              exit={{ clipPath: "inset(0 0 100% 0)" }}
+              transition={{
+                duration: 0.6,
+                ease: [0.76, 0, 0.24, 1],
+              }}
             >
-              <div className="flex items-center gap-2">
-                {/* Dots */}
-                {[0, 1, 2].map((i) => (
+              <div className="relative w-24 h-24">
+                {/* Outer rotating square */}
+                <motion.div
+                  className="absolute inset-0 border-2 border-accent"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 3,
+                    ease: "linear",
+                    repeat: Infinity,
+                  }}
+                />
+
+                {/* Inner rotating square - opposite direction */}
+                <motion.div
+                  className="absolute inset-3 border-2 border-foreground/30"
+                  animate={{ rotate: -360 }}
+                  transition={{
+                    duration: 2,
+                    ease: "linear",
+                    repeat: Infinity,
+                  }}
+                />
+
+                {/* Corner accents */}
+                {[0, 1, 2, 3].map((i) => (
                   <motion.div
                     key={i}
-                    className="w-2 h-2 bg-accent"
+                    className="absolute w-2 h-2 bg-accent"
+                    style={{
+                      top: i === 0 || i === 1 ? -4 : "auto",
+                      bottom: i === 2 || i === 3 ? -4 : "auto",
+                      left: i === 0 || i === 2 ? -4 : "auto",
+                      right: i === 1 || i === 3 ? -4 : "auto",
+                    }}
                     animate={{
-                      opacity: [0.2, 1, 0.2],
-                      scale: [0.8, 1, 0.8],
+                      scale: [1, 1.5, 1],
+                      opacity: [1, 0.5, 1],
                     }}
                     transition={{
-                      duration: 0.8,
+                      duration: 1.5,
                       repeat: Infinity,
-                      delay: i * 0.15,
+                      delay: i * 0.2,
                     }}
                   />
                 ))}
+
+                {/* Center pulsing cross */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.div
+                    className="w-1 h-6 bg-accent"
+                    animate={{ scaleY: [1, 0.5, 1] }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                  <motion.div
+                    className="absolute w-6 h-1 bg-accent"
+                    animate={{ scaleX: [1, 0.5, 1] }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0.5,
+                    }}
+                  />
+                </div>
+
+                {/* Orbiting particles */}
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={`orbit-${i}`}
+                    className="absolute w-1 h-1 bg-foreground/50"
+                    animate={{
+                      x: [0, 40, 0, -40, 0],
+                      y: [0, 40, 0, -40, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "linear",
+                      delay: i * 0.66,
+                    }}
+                    style={{
+                      left: "50%",
+                      top: "50%",
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Loading text */}
+              <div className="mt-8 font-mono text-xs tracking-[0.3em] text-center text-muted">
+                LOADING
               </div>
             </motion.div>
           </motion.div>
@@ -119,14 +167,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
       </AnimatePresence>
 
       {/* Page content */}
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-      >
-        {children}
-      </motion.div>
+      {children}
     </>
   );
 }

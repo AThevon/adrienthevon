@@ -4,10 +4,10 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { usePerformance } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
+import { usePageTransition } from "@/hooks/usePageTransition";
 
 const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
@@ -171,6 +171,7 @@ export default function Hero() {
   const t = useTranslations("hero");
   const tNav = useTranslations("nav");
   const tHome = useTranslations("home");
+  const { transitionToPage } = usePageTransition();
 
   const roles = [
     t("roles.creative"),
@@ -321,8 +322,8 @@ export default function Hero() {
             className="mt-16 flex flex-col sm:flex-row gap-6 sm:gap-8"
           >
             {/* Primary button - Glitch Effect */}
-            <a
-              href="/work"
+            <button
+              onClick={() => transitionToPage("/work")}
               className="group relative"
               data-cursor="hover"
             >
@@ -361,11 +362,11 @@ export default function Hero() {
                   />
                 </motion.svg>
               </span>
-            </a>
+            </button>
 
             {/* Secondary button - Magnetic Reveal */}
-            <a
-              href="/contact"
+            <button
+              onClick={() => transitionToPage("/contact")}
               className="group relative overflow-hidden"
               data-cursor="hover"
             >
@@ -409,7 +410,7 @@ export default function Hero() {
               {/* Corner accents */}
               <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-background/50 transition-all duration-300 group-hover:w-5 group-hover:h-5 group-hover:border-background" />
               <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-background/50 transition-all duration-300 group-hover:w-5 group-hover:h-5 group-hover:border-background" />
-            </a>
+            </button>
           </motion.div>
 
           {/* Navigation Dock - appears from below CTAs like macOS dock */}
@@ -624,9 +625,9 @@ export default function Hero() {
               const [isHovered, setIsHovered] = useState(false);
 
               return (
-                <Link
+                <button
                   key={item.key}
-                  href={item.href}
+                  onClick={() => transitionToPage(item.href)}
                   className="group relative flex-1"
                   data-cursor="hover"
                   onMouseEnter={() => setIsHovered(true)}
@@ -673,7 +674,7 @@ export default function Hero() {
                       </div>
                     </div>
                   </motion.div>
-                </Link>
+                </button>
               );
             })}
           </motion.div>

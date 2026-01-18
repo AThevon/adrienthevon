@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { usePageTransition } from "@/hooks/usePageTransition";
 
 const navigationItems = [
   {
@@ -48,6 +48,7 @@ export default function NavigationGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("nav");
   const tHome = useTranslations("home");
+  const { transitionToPage } = usePageTransition();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -103,7 +104,14 @@ export default function NavigationGrid() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Link href={item.href} className="group block" data-cursor="hover">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  transitionToPage(item.href);
+                }}
+                className="group block w-full text-left"
+                data-cursor="hover"
+              >
                 <div className="relative h-64 bg-background border border-foreground/10 overflow-hidden transition-all duration-500 hover:border-foreground/30">
                   {/* Background glow */}
                   <motion.div
@@ -195,7 +203,7 @@ export default function NavigationGrid() {
                     transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
                   />
                 </div>
-              </Link>
+              </button>
             </motion.div>
           ))}
         </div>

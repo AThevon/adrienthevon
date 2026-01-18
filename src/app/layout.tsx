@@ -8,6 +8,7 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import MainNav from "@/components/navigation/MainNav";
 import PageTransition from "@/components/navigation/PageTransition";
 import CursorWrapper from "@/components/effects/CursorWrapper";
+import { PageTransitionProvider } from "@/hooks/usePageTransition";
 
 // Primary sans-serif - Bold geometric font for headings
 const spaceGrotesk = Space_Grotesk({
@@ -104,16 +105,18 @@ export default async function RootLayout({
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} antialiased grain`}
       >
         <NextIntlClientProvider messages={messages}>
-          {/* Global Custom Cursor */}
-          <CursorWrapper />
+          <PageTransitionProvider>
+            {/* Global Custom Cursor */}
+            <CursorWrapper />
 
-          {/* Main Navigation */}
-          <MainNav />
+            {/* Main Navigation */}
+            <MainNav />
 
-          {/* Smooth Scroll + Page Transitions */}
-          <SmoothScrollProvider>
-            <PageTransition>{children}</PageTransition>
-          </SmoothScrollProvider>
+            {/* Smooth Scroll + Page Transitions */}
+            <SmoothScrollProvider>
+              <PageTransition>{children}</PageTransition>
+            </SmoothScrollProvider>
+          </PageTransitionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

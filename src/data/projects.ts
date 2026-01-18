@@ -209,7 +209,7 @@ Une plateforme qui présente mes services, mon approche et mon portfolio de mani
 
 L'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.`,
     tags: ["NEXT.JS", "TAILWIND", "MOTION", "SEO", "ANALYTICS"],
-    skills: ["nextjs", "react", "typescript", "tailwind", "motion", "git", "github", "vercel", "figma"],
+    skills: ["nextjs", "react", "typescript", "tailwind", "motion", "git", "vercel", "figma"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "BLENKDEV",
     link: "https://blenkdev.vercel.app",

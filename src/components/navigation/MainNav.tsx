@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import { usePageTransition } from "@/hooks/usePageTransition";
 
 const menuItems = [
   { key: "home", href: "/" },
@@ -22,6 +23,7 @@ export default function MainNav() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("nav");
+  const { transitionToPage } = usePageTransition();
 
   // Close menu on route change
   useEffect(() => {
@@ -64,8 +66,8 @@ export default function MainNav() {
         <div className="flex items-center justify-between">
           {/* Logo - hidden on homepage */}
           {!isHomepage && (
-            <Link
-              href="/"
+            <button
+              onClick={() => transitionToPage("/")}
               className="relative w-10 h-10 md:w-12 md:h-12 pointer-events-auto"
               data-cursor="hover"
             >
@@ -79,7 +81,7 @@ export default function MainNav() {
                   priority
                 />
               </div>
-            </Link>
+            </button>
           )}
 
           {/* Spacer */}
@@ -175,9 +177,9 @@ export default function MainNav() {
                           },
                         }}
                       >
-                        <Link
-                          href={item.href}
-                          className="group block"
+                        <button
+                          onClick={() => transitionToPage(item.href)}
+                          className="group block w-full text-left"
                           data-cursor="hover"
                         >
                           <div className="flex items-center gap-4 md:gap-6">
@@ -209,7 +211,7 @@ export default function MainNav() {
                               {t(item.key)}
                             </motion.span>
                           </div>
-                        </Link>
+                        </button>
                       </motion.li>
                     );
                   })}
