@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import HoverReveal from "@/components/ui/HoverReveal";
 import TextReveal from "@/components/ui/TextReveal";
 import ScrollImageReveal from "@/components/ui/ScrollImageReveal";
@@ -23,6 +24,8 @@ const LiquidCursor = dynamic(
 export default function WorkPage() {
   const router = useRouter();
   const [viewMode, setViewMode] = useState<"list" | "gallery">("gallery");
+  const t = useTranslations("projects");
+  const tNav = useTranslations("nav");
 
   const handleProjectClick = (project: { id: string }) => {
     router.push(`/work/${project.id}`);
@@ -35,14 +38,14 @@ export default function WorkPage() {
         <CustomCursor />
         <LiquidCursor intensity={0.3} />
 
-        {/* Mode toggle */}
-        <div className="fixed top-8 right-8 z-50 flex items-center gap-4">
+        {/* Mode toggle - positioned below language switcher */}
+        <div className="fixed top-8 right-24 z-40 flex items-center gap-4">
           <button
             onClick={() => setViewMode("list")}
             className="font-mono text-xs text-muted hover:text-foreground transition-colors"
             data-cursor="hover"
           >
-            LIST VIEW
+            {t("listView")}
           </button>
         </div>
 
@@ -51,15 +54,15 @@ export default function WorkPage() {
           href="/"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed top-8 left-8 z-50 font-mono text-sm text-muted hover:text-foreground transition-colors"
+          className="fixed top-8 left-8 z-40 font-mono text-sm text-muted hover:text-foreground transition-colors"
           data-cursor="hover"
         >
-          ← BACK
+          ← {tNav("back")}
         </motion.a>
 
         {/* Title overlay */}
-        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50">
-          <span className="font-mono text-xs text-muted">SELECTED WORK</span>
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-40">
+          <span className="font-mono text-xs text-muted">{t("subtitle")}</span>
         </div>
 
         <HorizontalGallery items={projects} onItemClick={handleProjectClick} />
@@ -90,24 +93,24 @@ export default function WorkPage() {
                   whileHover={{ x: -5 }}
                   data-cursor="hover"
                 >
-                  ← BACK
+                  ← {tNav("back")}
                 </motion.a>
                 <span className="w-16 h-[1px] bg-foreground/20" />
-                <span className="font-mono text-sm text-muted">SELECTED WORK</span>
+                <span className="font-mono text-sm text-muted">{t("subtitle")}</span>
               </div>
 
               {/* Mode toggle */}
               <button
                 onClick={() => setViewMode("gallery")}
-                className="font-mono text-xs text-muted hover:text-accent transition-colors"
+                className="font-mono text-xs text-muted hover:text-accent transition-colors mr-20"
                 data-cursor="hover"
               >
-                GALLERY VIEW →
+                {t("galleryView")}
               </button>
             </motion.div>
 
             <TextReveal className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter">
-              WORK
+              {t("title")}
             </TextReveal>
 
             <motion.p
@@ -116,8 +119,7 @@ export default function WorkPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="mt-8 text-xl text-muted max-w-2xl"
             >
-              A collection of projects that push boundaries, break conventions,
-              and create memorable digital experiences.
+              {t("intro")}
             </motion.p>
           </div>
         </section>
@@ -142,7 +144,7 @@ export default function WorkPage() {
               viewport={{ once: true }}
             >
               <div className="flex items-center gap-4 mb-16">
-                <span className="font-mono text-sm text-muted">FEATURED</span>
+                <span className="font-mono text-sm text-muted">{t("featured")}</span>
                 <span className="flex-1 h-[1px] bg-foreground/10" />
               </div>
             </motion.div>
@@ -171,10 +173,10 @@ export default function WorkPage() {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { value: `${projects.length}`, label: "PROJECTS" },
-                { value: "15+", label: "TECHNOLOGIES" },
-                { value: "100%", label: "PASSION" },
-                { value: "∞", label: "POSSIBILITIES" },
+                { value: `${projects.length}`, label: t("stats.projects") },
+                { value: "15+", label: t("stats.technologies") },
+                { value: "100%", label: t("stats.passion") },
+                { value: "∞", label: t("stats.possibilities") },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}

@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import TextReveal from "@/components/ui/TextReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { getProjectById, getNextProject } from "@/data/projects";
@@ -18,6 +19,8 @@ export default function ProjectPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const slug = params.slug as string;
+  const t = useTranslations("projectPage");
+  const tProject = useTranslations(`projectsData.${slug.replace(/-/g, "")}`);
 
   const project = getProjectById(slug);
 
@@ -32,7 +35,7 @@ export default function ProjectPage() {
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Project not found</p>
+        <p>{t("notFound")}</p>
       </div>
     );
   }
@@ -67,7 +70,7 @@ export default function ProjectPage() {
                 className="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-foreground transition-colors"
                 data-cursor="hover"
               >
-                ← BACK TO WORK
+                {t("backToWork")}
               </motion.a>
               <span className="w-[1px] h-4 bg-foreground/20" />
               <motion.a
@@ -79,7 +82,7 @@ export default function ProjectPage() {
                 style={{ color: project.color }}
                 data-cursor="hover"
               >
-                IMMERSIVE VIEW →
+                {t("immersiveView")}
               </motion.a>
             </div>
 
@@ -88,7 +91,7 @@ export default function ProjectPage() {
                 className="font-mono text-sm"
                 style={{ color: project.color }}
               >
-                {project.category}
+                {tProject("category")}
               </span>
               <span className="w-12 h-[1px] bg-foreground/20" />
               <span className="font-mono text-sm text-muted">{project.year}</span>
@@ -109,7 +112,7 @@ export default function ProjectPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="mt-8 text-xl md:text-2xl text-muted max-w-2xl"
             >
-              {project.description}
+              {tProject("description")}
             </motion.p>
           </div>
 
@@ -120,7 +123,7 @@ export default function ProjectPage() {
             transition={{ delay: 1 }}
             className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
-            <span className="font-mono text-xs text-muted">SCROLL</span>
+            <span className="font-mono text-xs text-muted">{t("scroll")}</span>
             <motion.div
               className="w-[1px] h-12 bg-gradient-to-b from-foreground to-transparent"
               animate={{ scaleY: [0.5, 1, 0.5] }}
@@ -159,7 +162,7 @@ export default function ProjectPage() {
               {/* Placeholder text */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="font-mono text-sm text-muted">
-                  PROJECT VISUAL
+                  {t("projectVisual")}
                 </span>
               </div>
             </motion.div>
@@ -174,22 +177,22 @@ export default function ProjectPage() {
               <div className="col-span-12 md:col-span-4">
                 <div className="sticky top-32 space-y-8">
                   <div>
-                    <h4 className="font-mono text-xs text-muted mb-2">ROLE</h4>
-                    <p className="text-lg">{project.role}</p>
+                    <h4 className="font-mono text-xs text-muted mb-2">{t("role")}</h4>
+                    <p className="text-lg">{tProject("role")}</p>
                   </div>
 
                   <div>
-                    <h4 className="font-mono text-xs text-muted mb-2">CLIENT</h4>
-                    <p className="text-lg">{project.client}</p>
+                    <h4 className="font-mono text-xs text-muted mb-2">{t("client")}</h4>
+                    <p className="text-lg">{tProject.has("client") ? tProject("client") : project.client}</p>
                   </div>
 
                   <div>
-                    <h4 className="font-mono text-xs text-muted mb-2">YEAR</h4>
+                    <h4 className="font-mono text-xs text-muted mb-2">{t("year")}</h4>
                     <p className="text-lg">{project.year}</p>
                   </div>
 
                   <div>
-                    <h4 className="font-mono text-xs text-muted mb-4">STACK</h4>
+                    <h4 className="font-mono text-xs text-muted mb-4">{t("stack")}</h4>
                     <div className="flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
                         <span
@@ -208,7 +211,7 @@ export default function ProjectPage() {
                       className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-background text-sm font-medium hover:bg-foreground transition-colors"
                       data-cursor="hover"
                     >
-                      VIEW LIVE
+                      {t("viewLive")}
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path
                           d="M4 12L12 4M12 4H6M12 4V10"
@@ -224,11 +227,11 @@ export default function ProjectPage() {
               {/* Right column - description */}
               <div className="col-span-12 md:col-span-8">
                 <TextReveal className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
-                  ABOUT THE PROJECT
+                  {t("aboutProject")}
                 </TextReveal>
 
                 <div className="text-lg text-muted leading-relaxed whitespace-pre-line">
-                  {project.longDescription}
+                  {tProject("longDescription")}
                 </div>
               </div>
             </div>
@@ -270,7 +273,7 @@ export default function ProjectPage() {
               viewport={{ once: true }}
               className="text-center"
             >
-              <span className="font-mono text-sm text-muted">NEXT PROJECT</span>
+              <span className="font-mono text-sm text-muted">{t("nextProject")}</span>
 
               <motion.a
                 href={`/work/${nextProject.id}`}

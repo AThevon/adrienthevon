@@ -1,0 +1,302 @@
+{
+  "meta": {
+    "title": "Adrien Thevon - Creative Developer",
+    "description": "Portfolio créatif d'un développeur passionné par les expériences web uniques"
+  },
+  "nav": {
+    "work": "Projets",
+    "lab": "Lab",
+    "about": "À propos",
+    "contact": "Contact",
+    "back": "Retour"
+  },
+  "hero": {
+    "portfolio": "PORTFOLIO — 2025",
+    "portfolioHidden": "enfin, c'est ce qu'on dit...",
+    "currently": "EN CE MOMENT :",
+    "roles": {
+      "creative": "CREATIVE DEVELOPER",
+      "pixel": "PIXEL ARTISAN",
+      "code": "CODE ARTIST",
+      "craft": "WEB CRAFTSMAN"
+    },
+    "cta": {
+      "work": "VOIR MES PROJETS",
+      "contact": "ME CONTACTER"
+    },
+    "hint": "BOUGE TA SOURIS",
+    "hintHidden": "je te vois...",
+    "scroll": "SCROLL"
+  },
+  "projects": {
+    "sectionNumber": "002",
+    "title": "PROJETS",
+    "subtitle": "SÉLECTION",
+    "viewAll": "VOIR TOUS LES PROJETS",
+    "viewProject": "VOIR LE PROJET",
+    "featured": "À LA UNE",
+    "listView": "VUE LISTE",
+    "galleryView": "VUE GALERIE →",
+    "intro": "Une collection de projets qui repoussent les limites, cassent les conventions et créent des expériences digitales mémorables.",
+    "stats": {
+      "projects": "PROJETS",
+      "technologies": "TECHNOS",
+      "passion": "PASSION",
+      "possibilities": "POSSIBILITÉS"
+    }
+  },
+  "skills": {
+    "sectionNumber": "003",
+    "title": "SKILLS",
+    "subtitle": "STACK TECHNIQUE",
+    "hint": "BOUGE LA SOURIS POUR TOURNER",
+    "hoverHint": "SURVOLE POUR EXPLORER",
+    "loading": "CHARGEMENT DE LA MATRICE...",
+    "legend": {
+      "frontend": "FRONTEND",
+      "creative": "CRÉATIF",
+      "animation": "ANIMATION",
+      "design": "DESIGN"
+    }
+  },
+  "timeline": {
+    "sectionNumber": "004",
+    "title": "PARCOURS",
+    "subtitle": "MON CHEMIN",
+    "loading": "CHARGEMENT...",
+    "prev": "← PRÉC",
+    "next": "SUIV →",
+    "events": {
+      "beginning": {
+        "title": "LES DÉBUTS",
+        "description": "Premières lignes de code, premiers bugs, premières nuits blanches."
+      },
+      "deepDive": {
+        "title": "DEEP DIVE",
+        "description": "Plongée dans le monde du web, JavaScript devient mon meilleur pote."
+      },
+      "creativeSpark": {
+        "title": "ÉTINCELLE CRÉATIVE",
+        "description": "Découverte du creative coding. Le code devient art."
+      },
+      "professional": {
+        "title": "PRO MODE",
+        "description": "Premiers clients, premiers vrais projets, premières vraies galères."
+      },
+      "levelUp": {
+        "title": "LEVEL UP",
+        "description": "Three.js, WebGL, shaders... Le rabbit hole ne fait que commencer."
+      },
+      "now": {
+        "title": "MAINTENANT",
+        "description": "Toujours en train d'apprendre, toujours en train de coder, toujours en train de créer."
+      }
+    }
+  },
+  "philosophy": {
+    "title": "PHILOSOPHIE",
+    "subtitle": "MA VISION",
+    "hint": "[ BOUGE TA SOURIS ]",
+    "items": {
+      "craft": {
+        "title": "LE CRAFT, ÇA COMPTE",
+        "description": "Chaque projet est une occasion de repousser les limites. Les détails font toute la différence."
+      },
+      "pixels": {
+        "title": "DES PIXELS AVEC UN BUT",
+        "description": "Les interfaces doivent vivre. Esthétique et fonction en parfait équilibre."
+      },
+      "code": {
+        "title": "LE CODE, C'EST DE L'ART",
+        "description": "Coder c'est s'exprimer. Logique et créativité entrelacées."
+      }
+    },
+    "quote": "Les détails ne sont pas des détails. Ils font le design.",
+    "quoteAuthor": "— CHARLES EAMES"
+  },
+  "about": {
+    "sectionNumber": "005",
+    "title": "À PROPOS",
+    "headline": "JE CRÉE DES EXPÉRIENCES QUI VIVENT & RESPIRENT",
+    "intro": "Un développeur créatif passionné par les expériences web uniques. Je mélange code et design pour créer des interfaces qui inspirent.",
+    "philosophy": "Mon travail existe à l'intersection de la technologie et de l'art. Chaque pixel est intentionnel. Chaque interaction est pensée.",
+    "techStack": "STACK TECHNIQUE",
+    "stats": {
+      "years": "5+ ANS D'XP",
+      "yearsHidden": "à demander à Claude",
+      "projects": "50+ PROJETS LIVRÉS",
+      "projectsHidden": "onglets ChatGPT ouverts",
+      "coffees": "∞ CAFÉS BUS",
+      "coffeesHidden": "toujours vrai"
+    },
+    "cta": "TRAVAILLONS ENSEMBLE",
+    "role": "CREATIVE DEV"
+  },
+  "contact": {
+    "sectionNumber": "006",
+    "title": "CONTACT",
+    "headline": "CRÉONS QUELQUE CHOSE ENSEMBLE",
+    "intro": "Un projet en tête ? Je suis dispo pour du freelance et des collabs.",
+    "cta": "DIS BONJOUR",
+    "connect": "ME SUIVRE",
+    "location": "LOCALISATION",
+    "locationValue": "PARIS, FRANCE",
+    "availability": "DISPO PARTOUT DANS LE MONDE",
+    "copyright": "© {year}",
+    "rights": "TOUS DROITS RÉSERVÉS"
+  },
+  "lab": {
+    "title": "LAB",
+    "intro": "Un terrain de jeu pour mes expérimentations créatives, explorations de shaders et expériences interactives. Bouge ta souris pour interagir.",
+    "experiments": {
+      "ascii": {
+        "title": "PORTRAIT ASCII",
+        "description": "Génération d'art ASCII en temps réel avec distorsion interactive"
+      },
+      "particles": {
+        "title": "TEXTE PARTICULES",
+        "description": "Des milliers de particules formant du texte, se dispersant au survol"
+      },
+      "waves": {
+        "title": "CHAMP DE VAGUES",
+        "description": "Visualisation de vagues sinusoïdales réagissant au mouvement de la souris"
+      },
+      "terrain": {
+        "title": "TERRAIN NOISE",
+        "description": "Génération procédurale de terrain avec du simplex noise"
+      }
+    },
+    "clickExpand": "CLIQUE POUR AGRANDIR",
+    "close": "FERMER ×",
+    "interactHint": "BOUGE TA SOURIS POUR INTERAGIR",
+    "loading": "CHARGEMENT..."
+  },
+  "cursor": {
+    "hero": [],
+    "projects": ["VOIR", "CLIC", "OUVRIR", "ENTRER"],
+    "about": ["LIRE", "SAVOIR", "APPRENDRE", "DÉCOUVRIR"],
+    "noise": ["RESSENS", "TOUCHE", "JOUE", "SENS"],
+    "contact": ["ÉCRIRE", "PARLER", "ENVOYER", "JOINDRE"],
+    "timeline": ["SCROLL", "TEMPS", "PASSÉ", "FUTUR"],
+    "skills": ["STACK", "TECH", "CODE", "OUTILS"]
+  },
+  "projectPage": {
+    "backToWork": "← RETOUR AUX PROJETS",
+    "immersiveView": "VUE IMMERSIVE →",
+    "standardView": "← VUE STANDARD",
+    "allWork": "TOUS LES PROJETS",
+    "scroll": "SCROLL",
+    "scrollToExplore": "SCROLL POUR EXPLORER",
+    "projectVisual": "VISUEL DU PROJET",
+    "role": "RÔLE",
+    "client": "CLIENT",
+    "year": "ANNÉE",
+    "stack": "STACK",
+    "viewLive": "VOIR EN LIGNE",
+    "aboutProject": "À PROPOS DU PROJET",
+    "nextProject": "PROJET SUIVANT",
+    "viewProject": "VOIR LE PROJET →",
+    "technologies": "TECHNOLOGIES",
+    "notFound": "Projet non trouvé"
+  },
+  "projectsData": {
+    "underTheFlow": {
+      "category": "PLATEFORME WEB",
+      "description": "Plateforme de sessions live hip-hop avec une expérience immersive pour les artistes et les fans.",
+      "longDescription": "Under The Flow est une plateforme dédiée aux sessions live de hip-hop.\nLe projet capture l'essence du freestyle et des performances live, offrant une vitrine unique pour les artistes émergents de la scène hip-hop française.\n\nUne expérience web immersive qui met en avant la musique et les artistes avec une direction artistique forte et moderne.",
+      "role": "DÉVELOPPEUR FULL-STACK",
+      "sections": {
+        "intro": {
+          "title": "LA VISION",
+          "content": "Créer une plateforme qui capture l'énergie brute des sessions live hip-hop. Un espace où la musique prend vie à travers le digital."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Transmettre l'authenticité et l'énergie du live à travers une interface web. Créer une expérience immersive sans sacrifier la performance."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Next.js pour la performance et le SEO. Design sombre et contrasté pour mettre en valeur le contenu vidéo. Animations fluides pour renforcer l'immersion."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Une plateforme qui met en lumière la scène hip-hop live française avec une identité visuelle forte et mémorable."
+        }
+      }
+    },
+    "victorDenay": {
+      "category": "PORTFOLIO",
+      "description": "Portfolio créatif pour un vidéaste et photographe professionnel.",
+      "longDescription": "Portfolio sur-mesure pour Victor Denay, vidéaste et photographe.\nUn design épuré qui laisse toute la place au travail visuel de l'artiste, avec des transitions fluides et une navigation intuitive.\n\nL'objectif était de créer un écrin digital qui sublime les créations tout en offrant une expérience de navigation mémorable.",
+      "role": "DÉVELOPPEUR FULL-STACK",
+      "sections": {
+        "intro": {
+          "title": "LE BRIEF",
+          "content": "Un portfolio qui s'efface pour laisser briller le travail. Minimaliste mais impactant, sobre mais mémorable."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Présenter du contenu vidéo et photo de haute qualité sans compromettre les temps de chargement. Créer une galerie fluide et intuitive."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Design mobile-first. Lazy loading intelligent. Transitions soignées entre les projets. Typographie minimaliste."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un portfolio élégant qui met en valeur le travail de Victor tout en offrant une expérience utilisateur premium."
+        }
+      }
+    },
+    "depenseMan": {
+      "category": "WEB APP",
+      "description": "Application de gestion de finances personnelles simple et efficace.",
+      "longDescription": "Dépense Man est une application web progressive (PWA) pour gérer ses finances mensuelles de manière simple et intuitive. Pas de complexité inutile, juste les fonctionnalités essentielles pour suivre ses dépenses.\n\nUne approche minimaliste du budget personnel, accessible sur tous les appareils avec une interface claire et des visualisations pertinentes.",
+      "role": "DÉVELOPPEUR FULL-STACK",
+      "client": "PROJET PERSO",
+      "sections": {
+        "intro": {
+          "title": "LE BESOIN",
+          "content": "Une app de budget sans la complexité des solutions bancaires. Simple, rapide, efficace."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Rendre la gestion de budget agréable. Créer une interface qui donne envie d'être utilisée régulièrement."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "PWA pour l'accès offline. Interface épurée. Visualisations claires des dépenses. Catégorisation intelligente."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Une app que j'utilise au quotidien pour gérer mes finances. Simple, mais qui fait exactement ce qu'on lui demande."
+        }
+      }
+    },
+    "linekut": {
+      "category": "OUTIL CRÉATIF",
+      "description": "Convertisseur d'images en patrons découpables pour scie à chantourner, laser et vinyl.",
+      "longDescription": "Linekut transforme n'importe quelle image en patron prêt à découper. Que ce soit pour la scie à chantourner, la découpe laser, le vinyl ou les stickers, l'outil génère des fichiers optimisés pour chaque technique.\n\nUne PWA qui démocratise la création de patrons de découpe, rendant accessible un processus habituellement complexe.",
+      "role": "DÉVELOPPEUR FRONT-END",
+      "client": "PROJET PERSO",
+      "sections": {
+        "intro": {
+          "title": "L'IDÉE",
+          "content": "Simplifier la création de patrons de découpe. Transformer une photo en fichier prêt à usiner en quelques clics."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Traitement d'image côté client pour la rapidité. Algorithmes de vectorisation et de simplification des contours."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Canvas API pour le traitement d'image. Algorithmes de détection de contours. Export en formats standards (SVG, DXF)."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un outil utilisé par des makers et artisans pour créer rapidement des patrons de découpe personnalisés."
+        }
+      }
+    }
+  }
+}

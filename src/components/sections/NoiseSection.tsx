@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { usePerformance } from "@/hooks";
 
 const NoiseTerrain = dynamic(
@@ -10,27 +11,28 @@ const NoiseTerrain = dynamic(
   { ssr: false }
 );
 
-const philosophyItems = [
-  {
-    number: "01",
-    title: "CRAFT MATTERS",
-    description: "Every project is an opportunity to push boundaries. The details make the difference.",
-  },
-  {
-    number: "02",
-    title: "PIXELS WITH PURPOSE",
-    description: "Interfaces should feel alive. Aesthetics and function in perfect balance.",
-  },
-  {
-    number: "03",
-    title: "CODE IS ART",
-    description: "Writing code is a form of expression. Logic and creativity intertwined.",
-  },
-];
-
 export default function NoiseSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { enable3D } = usePerformance();
+  const t = useTranslations("philosophy");
+
+  const philosophyItems = [
+    {
+      number: "01",
+      title: t("items.craft.title"),
+      description: t("items.craft.description"),
+    },
+    {
+      number: "02",
+      title: t("items.pixels.title"),
+      description: t("items.pixels.description"),
+    },
+    {
+      number: "03",
+      title: t("items.code.title"),
+      description: t("items.code.description"),
+    },
+  ];
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -81,7 +83,7 @@ export default function NoiseSection() {
               viewport={{ once: true }}
               className="font-mono text-sm text-accent mb-4 block"
             >
-              PHILOSOPHY
+              {t("title")}
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 40 }}
@@ -90,7 +92,7 @@ export default function NoiseSection() {
               viewport={{ once: true }}
               className="text-5xl md:text-7xl font-bold tracking-tighter"
             >
-              HOW I <span className="text-accent">THINK</span>
+              {t("subtitle")}
             </motion.h2>
           </motion.div>
         </div>
@@ -142,10 +144,10 @@ export default function NoiseSection() {
               className="mt-24 text-center"
             >
               <blockquote className="text-2xl md:text-3xl font-light text-muted/60 italic">
-                "The details are not the details. They make the design."
+                "{t("quote")}"
               </blockquote>
               <cite className="font-mono text-xs text-accent mt-4 block not-italic">
-                — CHARLES EAMES
+                {t("quoteAuthor")}
               </cite>
             </motion.div>
           </div>
@@ -160,7 +162,7 @@ export default function NoiseSection() {
           viewport={{ once: true }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-xs text-muted/40 z-20"
         >
-          [ MOVE YOUR CURSOR ]
+          {t("hint")}
         </motion.div>
       )}
     </section>

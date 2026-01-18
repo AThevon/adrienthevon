@@ -2,8 +2,9 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { getProjectById, getNextProject } from "@/data/projects";
 
 const CustomCursor = dynamic(
@@ -129,6 +130,8 @@ export default function ImmersiveCaseStudy() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const slug = params.slug as string;
+  const t = useTranslations("projectPage");
+  const tProject = useTranslations(`projectsData.${slug.replace(/-/g, "")}`);
 
   const project = getProjectById(slug);
 
@@ -156,7 +159,7 @@ export default function ImmersiveCaseStudy() {
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Project not found</p>
+        <p>{t("notFound")}</p>
       </div>
     );
   }
@@ -184,7 +187,7 @@ export default function ImmersiveCaseStudy() {
           className="font-mono text-sm text-muted hover:text-foreground transition-colors"
           data-cursor="hover"
         >
-          ← STANDARD VIEW
+          {t("standardView")}
         </a>
         <span className="w-[1px] h-4 bg-foreground/20" />
         <a
@@ -192,7 +195,7 @@ export default function ImmersiveCaseStudy() {
           className="font-mono text-sm text-muted hover:text-foreground transition-colors"
           data-cursor="hover"
         >
-          ALL WORK
+          {t("allWork")}
         </a>
       </motion.nav>
 
@@ -218,7 +221,7 @@ export default function ImmersiveCaseStudy() {
             className="font-mono text-sm mb-8"
             style={{ color: project.color }}
           >
-            {project.category} — {project.year}
+            {tProject("category")} — {project.year}
           </motion.div>
 
           {/* Title with letter reveal */}
@@ -233,7 +236,7 @@ export default function ImmersiveCaseStudy() {
             transition={{ delay: 1.2 }}
             className="mt-8 text-xl text-muted text-center max-w-xl px-8"
           >
-            {project.description}
+            {tProject("description")}
           </motion.p>
 
           {/* Scroll prompt */}
@@ -243,7 +246,7 @@ export default function ImmersiveCaseStudy() {
             transition={{ delay: 1.5 }}
             className="absolute bottom-12 flex flex-col items-center gap-4"
           >
-            <span className="font-mono text-xs text-muted">SCROLL TO EXPLORE</span>
+            <span className="font-mono text-xs text-muted">{t("scrollToExplore")}</span>
             <motion.div
               className="w-6 h-10 border border-foreground/30 rounded-full flex justify-center pt-2"
               animate={{ borderColor: [project.color + "50", project.color, project.color + "50"] }}
@@ -297,7 +300,7 @@ export default function ImmersiveCaseStudy() {
                 viewport={{ once: true, amount: 0.5 }}
                 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8"
               >
-                {section.title}
+                {tProject(`sections.${section.type}.title`)}
               </motion.h2>
 
               <motion.p
@@ -307,7 +310,7 @@ export default function ImmersiveCaseStudy() {
                 viewport={{ once: true, amount: 0.5 }}
                 className="text-xl md:text-2xl text-muted leading-relaxed"
               >
-                {section.content}
+                {tProject(`sections.${section.type}.content`)}
               </motion.p>
             </div>
 
@@ -332,7 +335,7 @@ export default function ImmersiveCaseStudy() {
             viewport={{ once: true }}
             className="text-center"
           >
-            <span className="font-mono text-sm text-muted mb-8 block">TECHNOLOGIES</span>
+            <span className="font-mono text-sm text-muted mb-8 block">{t("technologies")}</span>
             <div className="flex flex-wrap justify-center gap-4 max-w-2xl">
               {project.tags.map((tag, i) => (
                 <motion.span
@@ -373,7 +376,7 @@ export default function ImmersiveCaseStudy() {
             viewport={{ once: true }}
             className="text-center relative z-10"
           >
-            <span className="font-mono text-sm text-muted mb-8 block">NEXT PROJECT</span>
+            <span className="font-mono text-sm text-muted mb-8 block">{t("nextProject")}</span>
 
             <motion.a
               href={`/work/${nextProject.id}/immersive`}
@@ -394,7 +397,7 @@ export default function ImmersiveCaseStudy() {
                 className="font-mono text-sm mt-8 inline-block"
                 style={{ color: nextProject.color }}
               >
-                VIEW PROJECT →
+                {t("viewProject")}
               </motion.span>
             </motion.a>
           </motion.div>

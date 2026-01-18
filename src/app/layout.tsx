@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono, Syne } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getLocale } from "next-intl/server";
 import "./globals.css";
 import SmoothScrollProvider from "@/providers/SmoothScrollProvider";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 // Primary sans-serif - Bold geometric font for headings
 const spaceGrotesk = Space_Grotesk({
@@ -75,17 +78,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} antialiased grain`}
       >
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <NextIntlClientProvider messages={messages}>
+          {/* Language Switcher - Fixed position */}
+          <div className="fixed top-6 right-6 z-50">
+            <LanguageSwitcher />
+          </div>
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

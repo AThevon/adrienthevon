@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import Hero from "@/components/sections/Hero";
 import Projects from "@/components/sections/Projects";
 import About from "@/components/sections/About";
@@ -40,16 +41,17 @@ const Preloader = dynamic(() => import("@/components/effects/Preloader"), {
 
 // Fallback components for reduced performance mode
 function SkillsFallback() {
+  const t = useTranslations("skills");
   return (
     <section className="py-32 px-8 md:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <span className="font-mono text-sm text-muted">003</span>
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
           <span className="w-16 h-[1px] bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">SKILLS</span>
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-12">
-          TECH <span className="text-accent">STACK</span>
+          {t("subtitle").split(" ")[0]} <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {["REACT", "NEXT.JS", "TYPESCRIPT", "THREE.JS", "WEBGL", "GSAP", "MOTION", "TAILWIND", "NODE.JS", "FIGMA", "GLSL", "CANVAS"].map((skill) => (
@@ -64,29 +66,34 @@ function SkillsFallback() {
 }
 
 function TimelineFallback() {
+  const t = useTranslations("timeline");
+  const tEvents = useTranslations("timeline.events");
+
+  const events = [
+    { year: "2019", key: "beginning" },
+    { year: "2020", key: "deepDive" },
+    { year: "2021", key: "creativeSpark" },
+    { year: "2022", key: "professional" },
+    { year: "2023", key: "levelUp" },
+    { year: "2024", key: "now" },
+  ];
+
   return (
     <section className="py-32 px-8 md:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <span className="font-mono text-sm text-muted">004</span>
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
           <span className="w-16 h-[1px] bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">JOURNEY</span>
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-12">
-          MY <span className="text-accent">PATH</span>
+          {t("subtitle").split(" ")[0]} <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
         </h2>
         <div className="space-y-8">
-          {[
-            { year: "2019", title: "THE BEGINNING" },
-            { year: "2020", title: "DEEP DIVE" },
-            { year: "2021", title: "CREATIVE SPARK" },
-            { year: "2022", title: "PROFESSIONAL" },
-            { year: "2023", title: "LEVELING UP" },
-            { year: "2024", title: "NOW" },
-          ].map((event) => (
+          {events.map((event) => (
             <div key={event.year} className="flex items-center gap-8 border-l-2 border-accent pl-8">
               <span className="font-mono text-accent">{event.year}</span>
-              <span className="text-xl font-bold">{event.title}</span>
+              <span className="text-xl font-bold">{tEvents(`${event.key}.title`)}</span>
             </div>
           ))}
         </div>

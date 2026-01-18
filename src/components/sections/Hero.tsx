@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "motion/react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { usePerformance } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
@@ -11,8 +12,6 @@ const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
   { ssr: false }
 );
-
-const roles = ["CREATIVE DEVELOPER", "PIXEL ARTISAN", "CODE ARTIST", "WEB CRAFTSMAN"];
 
 // Floating shapes configuration
 const floatingShapes = [
@@ -126,27 +125,32 @@ function FloatingShape({
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const { enable3D } = usePerformance();
+  const t = useTranslations("hero");
+
+  const roles = [
+    t("roles.creative"),
+    t("roles.pixel"),
+    t("roles.code"),
+    t("roles.craft"),
+  ];
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  // Scale starts immediately but opacity stays at 100% longer
+  // Scale: 0 -> 0.5 (immediate)
+  // Opacity: stays 100% until 0.35, then fades 0.35 -> 0.6
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+  const opacity = useTransform(scrollYProgress, [0.35, 0.6], [1, 0]);
 
-  // Detect first scroll to show CTAs
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20 && !hasScrolled) {
-        setHasScrolled(true);
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasScrolled]);
+  // CTAs fade even later
+  const ctaOpacity = useTransform(scrollYProgress, [0.5, 0.7], [1, 0]);
+
+  // CTAs slide up into view as we scroll (starts hidden below, appears as we scroll)
+  const ctaY = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 100);
@@ -203,8 +207,8 @@ export default function Hero() {
           />
         </div>
 
-        {/* Main content */}
-        <div className="relative z-10 flex flex-col items-center justify-end h-full pb-32">
+        {/* Main content - overflow-hidden clips CTAs when at y:30 (pre-animation) */}
+        <div className="relative z-10 flex flex-col items-center justify-end h-full pb-32 overflow-hidden">
           {/* Top label - positioned at top */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -214,7 +218,7 @@ export default function Hero() {
           >
             <span className="w-12 h-px bg-accent" />
             <span className="font-mono text-xs text-muted tracking-[0.3em]">
-              <DualText visible="PORTFOLIO — 2025" hidden="enfin, c'est ce qu'on dit..." />
+              <DualText visible={t("portfolio")} hidden={t("portfolioHidden")} />
             </span>
             <span className="w-12 h-px bg-accent" />
           </motion.div>
@@ -247,7 +251,7 @@ export default function Hero() {
               >
                 {"//"}
               </motion.span>
-              <span className="text-muted">CURRENTLY:</span>
+              <span className="text-muted">{t("currently")}</span>
               <div className="h-6 overflow-hidden min-w-[180px]">
                 <motion.div
                   animate={{ y: [0, -24, -48, -72, 0] }}
@@ -268,16 +272,14 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* CTA Buttons - Only visible after scroll */}
+          {/* CTA Buttons - Scroll-driven: starts below view, slides up, then fades out */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: hasScrolled ? 1 : 0, y: hasScrolled ? 0 : 30 }}
-            transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
+            style={{ y: ctaY, opacity: ctaOpacity }}
             className="mt-16 flex flex-col sm:flex-row gap-6 sm:gap-8"
           >
             {/* Primary button - Glitch Effect */}
             <a
-              href="#work"
+              href="/work"
               className="group relative"
               data-cursor="hover"
             >
@@ -288,7 +290,7 @@ export default function Hero() {
               {/* Main button */}
               <span className="relative z-10 flex items-center gap-4 px-10 py-5 bg-background border-2 border-foreground font-mono text-sm tracking-[0.2em] transition-all duration-300 group-hover:bg-foreground group-hover:text-background group-hover:border-foreground">
                 <span className="relative">
-                  VIEW WORK
+                  {t("cta.work")}
                   {/* Underline animation */}
                   <motion.span
                     className="absolute -bottom-1 left-0 h-px bg-accent"
@@ -358,7 +360,7 @@ export default function Hero() {
                     />
                   ))}
                 </span>
-                <span>GET IN TOUCH</span>
+                <span>{t("cta.contact")}</span>
               </span>
 
               {/* Corner accents */}
@@ -387,7 +389,7 @@ export default function Hero() {
                 />
               </motion.div>
               <span className="font-mono text-xs text-muted/60">
-                <DualText visible="MOVE YOUR CURSOR" hidden="je vous vois..." />
+                <DualText visible={t("hint")} hidden={t("hintHidden")} />
               </span>
             </motion.div>
           )}
@@ -422,7 +424,7 @@ export default function Hero() {
           <div className="flex flex-col items-center gap-4">
             <div className="w-px h-16 bg-gradient-to-b from-transparent via-foreground/20 to-transparent" />
             <span className="font-mono text-xs text-muted/50 [writing-mode:vertical-lr] rotate-180">
-              SCROLL
+              {t("scroll")}
             </span>
             <div className="w-px h-16 bg-gradient-to-b from-transparent via-foreground/20 to-transparent" />
           </div>

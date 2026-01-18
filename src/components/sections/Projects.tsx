@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform } from "motion/react";
+import { useTranslations } from "next-intl";
 import TextReveal from "@/components/ui/TextReveal";
 import HoverReveal from "@/components/ui/HoverReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
@@ -12,6 +13,7 @@ import { projects } from "@/data/projects";
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const router = useRouter();
+  const t = useTranslations("projects");
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -41,13 +43,13 @@ export default function Projects() {
         {/* Section header */}
         <div className="mb-24">
           <div className="flex items-center gap-4 mb-8">
-            <span className="font-mono text-sm text-muted">002</span>
+            <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
             <span className="w-16 h-[1px] bg-foreground/20" />
-            <span className="font-mono text-sm text-muted">SELECTED WORK</span>
+            <span className="font-mono text-sm text-muted">{t("subtitle")}</span>
           </div>
 
           <TextReveal className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter">
-            FEATURED PROJECTS
+            {t("title")}
           </TextReveal>
         </div>
 
@@ -70,7 +72,7 @@ export default function Projects() {
               href="/work"
               className="group inline-flex items-center gap-4 px-8 py-4 border border-foreground/20 hover:bg-foreground hover:text-background transition-all duration-300"
             >
-              <RollingText>VIEW ALL PROJECTS</RollingText>
+              <RollingText>{t("viewAll")}</RollingText>
               <motion.svg
                 width="20"
                 height="20"

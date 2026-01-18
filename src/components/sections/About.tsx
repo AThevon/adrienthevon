@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import TextReveal from "@/components/ui/TextReveal";
 import DualText from "@/components/ui/DualText";
 import { usePerformance } from "@/hooks";
@@ -12,12 +13,6 @@ const AsciiEffect = dynamic(
   () => import("@/components/experiments/AsciiEffect"),
   { ssr: false }
 );
-
-const stats = [
-  { value: "5+", label: "YEARS EXPERIENCE", hiddenValue: "5+", hiddenLabel: "years googling errors" },
-  { value: "50+", label: "PROJECTS SHIPPED", hiddenValue: "50+", hiddenLabel: "Stack Overflow tabs" },
-  { value: "∞", label: "COFFEES DRUNK", hiddenValue: "∞", hiddenLabel: "still true" },
-];
 
 const skills = [
   { name: "REACT", hidden: "useEffect(🙏, [])" },
@@ -33,6 +28,13 @@ const skills = [
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { enable3D } = usePerformance();
+  const t = useTranslations("about");
+
+  const stats = [
+    { value: "5+", label: t("stats.years"), hiddenValue: "5+", hiddenLabel: t("stats.yearsHidden") },
+    { value: "50+", label: t("stats.projects"), hiddenValue: "50+", hiddenLabel: t("stats.projectsHidden") },
+    { value: "∞", label: t("stats.coffees"), hiddenValue: "∞", hiddenLabel: t("stats.coffeesHidden") },
+  ];
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -60,9 +62,9 @@ export default function About() {
         className="absolute top-8 left-8 md:left-16 z-30"
       >
         <div className="flex items-center gap-4">
-          <span className="font-mono text-sm text-muted">005</span>
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
           <span className="w-16 h-px bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">ABOUT</span>
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
       </motion.div>
 
@@ -118,7 +120,7 @@ export default function About() {
               transition={{ duration: 0.8 }}
             >
               <TextReveal className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 leading-[0.95]">
-                I CREATE EXPERIENCES THAT LIVE & BREATHE
+                {t("headline")}
               </TextReveal>
             </motion.div>
 
@@ -131,8 +133,7 @@ export default function About() {
                 viewport={{ once: true }}
                 className="text-lg text-muted leading-relaxed"
               >
-                A <DualText visible="creative developer" hidden="professional googler" /> with a passion for unique web experiences.
-                I blend code and design to create interfaces that <span className="text-accent">inspire</span>.
+                {t("intro")}
               </motion.p>
 
               <motion.p
@@ -142,8 +143,7 @@ export default function About() {
                 viewport={{ once: true }}
                 className="text-lg text-muted leading-relaxed"
               >
-                My work exists at the intersection of technology and art.
-                Every pixel is <DualText visible="intentional" hidden="eventually..." />. Every interaction is <span className="text-accent">crafted</span>.
+                {t("philosophy")}
               </motion.p>
             </div>
 
@@ -156,7 +156,7 @@ export default function About() {
               className="mb-12"
             >
               <h3 className="font-mono text-xs text-muted mb-4 tracking-wider">
-                TECH STACK
+                {t("techStack")}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill, i) => (
@@ -214,7 +214,7 @@ export default function About() {
                 className="group inline-flex items-center gap-4 font-mono text-sm text-accent hover:text-foreground transition-colors duration-300"
                 data-cursor="hover"
               >
-                <span>LET'S WORK TOGETHER</span>
+                <span>{t("cta")}</span>
                 <motion.span
                   className="inline-block"
                   animate={{ x: [0, 5, 0] }}
@@ -235,7 +235,7 @@ export default function About() {
           x: useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]),
         }}
       >
-        CREATIVE DEV
+        {t("role")}
       </motion.div>
     </section>
   );

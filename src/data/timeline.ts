@@ -1,48 +1,40 @@
 import { COLORS } from "@/lib/constants";
 
 export interface TimelineEvent {
+  key: string;
   year: string;
-  title: string;
-  description: string;
   color: string;
 }
 
-// TODO: Replace with real data
 export const timelineEvents: TimelineEvent[] = [
   {
-    year: "20XX",
-    title: "LOREM IPSUM",
-    description: "Placeholder description for this milestone.",
+    key: "beginning",
+    year: "2019",
     color: COLORS.accent,
   },
   {
-    year: "20XX",
-    title: "DOLOR SIT",
-    description: "Another placeholder event in the timeline.",
+    key: "deepDive",
+    year: "2020",
     color: "#00ff88",
   },
   {
-    year: "20XX",
-    title: "AMET CONSECTETUR",
-    description: "Yet another placeholder milestone.",
+    key: "creativeSpark",
+    year: "2021",
     color: "#8844ff",
   },
   {
-    year: "20XX",
-    title: "ADIPISCING ELIT",
-    description: "Placeholder text for this event.",
+    key: "professional",
+    year: "2022",
     color: "#00ccff",
   },
   {
-    year: "20XX",
-    title: "SED DO EIUSMOD",
-    description: "More placeholder content here.",
+    key: "levelUp",
+    year: "2023",
     color: "#ff0088",
   },
   {
-    year: "20XX",
-    title: "TEMPOR INCIDIDUNT",
-    description: "Final placeholder event.",
+    key: "now",
+    year: "2024",
     color: "#ffcc00",
   },
 ];

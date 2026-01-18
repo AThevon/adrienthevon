@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
+import { useTranslations } from "next-intl";
 import MagneticButton from "@/components/ui/MagneticButton";
 import TextReveal from "@/components/ui/TextReveal";
 import DualText from "@/components/ui/DualText";
@@ -15,6 +16,7 @@ const socials = [
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("contact");
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end end"],
@@ -42,9 +44,9 @@ export default function Contact() {
       {/* Section header */}
       <div className="mb-16">
         <div className="flex items-center gap-4 mb-8">
-          <span className="font-mono text-sm text-muted">004</span>
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
           <span className="w-16 h-px bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">CONTACT</span>
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
       </div>
 
@@ -55,7 +57,7 @@ export default function Contact() {
         {/* Main CTA */}
         <div className="mb-24">
           <TextReveal className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8">
-            LET'S CREATE SOMETHING TOGETHER
+            {t("headline")}
           </TextReveal>
 
           <motion.p
@@ -65,7 +67,7 @@ export default function Contact() {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            Got a project in mind? <DualText visible="I'm available" hidden="I respond... sometimes" /> for freelance work and collaborations.
+            {t("intro")}
           </motion.p>
         </div>
 
@@ -83,7 +85,7 @@ export default function Contact() {
               className="group inline-flex items-center gap-6 text-4xl md:text-6xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
               data-cursor="hover"
             >
-              <span>SAY HELLO</span>
+              <span>{t("cta")}</span>
               <motion.svg
                 width="48"
                 height="48"
@@ -105,7 +107,7 @@ export default function Contact() {
         <div className="grid grid-cols-12 gap-8 pt-16 border-t border-foreground/10">
           {/* Socials */}
           <div className="col-span-12 md:col-span-6">
-            <h4 className="font-mono text-sm text-muted mb-6">CONNECT</h4>
+            <h4 className="font-mono text-sm text-muted mb-6">{t("connect")}</h4>
             <div className="flex flex-wrap gap-6">
               {socials.map((social, index) => (
                 <motion.a
@@ -126,17 +128,17 @@ export default function Contact() {
 
           {/* Location */}
           <div className="col-span-12 md:col-span-3">
-            <h4 className="font-mono text-sm text-muted mb-6">LOCATION</h4>
-            <p className="text-sm">PARIS, FRANCE</p>
-            <p className="text-sm text-muted">AVAILABLE WORLDWIDE</p>
+            <h4 className="font-mono text-sm text-muted mb-6">{t("location")}</h4>
+            <p className="text-sm">{t("locationValue")}</p>
+            <p className="text-sm text-muted">{t("availability")}</p>
           </div>
 
           {/* Copyright */}
           <div className="col-span-12 md:col-span-3 md:text-right">
             <p className="font-mono text-sm text-muted">
-              © {new Date().getFullYear()}
+              {t("copyright", { year: new Date().getFullYear() })}
             </p>
-            <p className="font-mono text-sm text-muted">ALL RIGHTS RESERVED</p>
+            <p className="font-mono text-sm text-muted">{t("rights")}</p>
           </div>
         </div>
       </motion.div>

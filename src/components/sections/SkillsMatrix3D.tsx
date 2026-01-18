@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, Float, Line } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { COLORS } from "@/lib/constants";
 
 const skills = [
@@ -247,18 +248,19 @@ function Scene() {
 
 export default function SkillsMatrix3D() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const t = useTranslations("skills");
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Section header */}
       <div className="absolute top-8 left-8 z-10">
         <div className="flex items-center gap-4 mb-4">
-          <span className="font-mono text-sm text-muted">003</span>
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
           <span className="w-16 h-[1px] bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">SKILLS</span>
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">
-          TECH <span className="text-accent">STACK</span>
+          {t("subtitle").split(" ")[0]} <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
         </h2>
       </div>
 
@@ -269,8 +271,8 @@ export default function SkillsMatrix3D() {
         transition={{ delay: 1 }}
         className="absolute bottom-8 left-8 z-10 font-mono text-xs text-muted"
       >
-        <p>MOVE MOUSE TO ROTATE</p>
-        <p>HOVER TO EXPLORE</p>
+        <p>{t("hint")}</p>
+        <p>{t("hoverHint")}</p>
       </motion.div>
 
       {/* Legend */}
@@ -282,19 +284,19 @@ export default function SkillsMatrix3D() {
       >
         <div className="flex items-center gap-2 mb-1">
           <span className="w-3 h-3 rounded-full bg-[#61dafb]" />
-          <span className="text-muted">FRONTEND</span>
+          <span className="text-muted">{t("legend.frontend")}</span>
         </div>
         <div className="flex items-center gap-2 mb-1">
           <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.accent }} />
-          <span className="text-muted">CREATIVE</span>
+          <span className="text-muted">{t("legend.creative")}</span>
         </div>
         <div className="flex items-center gap-2 mb-1">
           <span className="w-3 h-3 rounded-full bg-[#88ce02]" />
-          <span className="text-muted">ANIMATION</span>
+          <span className="text-muted">{t("legend.animation")}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-[#a259ff]" />
-          <span className="text-muted">DESIGN</span>
+          <span className="text-muted">{t("legend.design")}</span>
         </div>
       </motion.div>
 
@@ -311,7 +313,7 @@ export default function SkillsMatrix3D() {
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-background">
           <span className="font-mono text-sm text-muted animate-pulse">
-            LOADING MATRIX...
+            {t("loading")}
           </span>
         </div>
       )}

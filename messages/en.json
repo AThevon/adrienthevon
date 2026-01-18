@@ -1,0 +1,302 @@
+{
+  "meta": {
+    "title": "Adrien Thevon - Creative Developer",
+    "description": "Creative portfolio of a developer passionate about unique web experiences"
+  },
+  "nav": {
+    "work": "Work",
+    "lab": "Lab",
+    "about": "About",
+    "contact": "Contact",
+    "back": "Back"
+  },
+  "hero": {
+    "portfolio": "PORTFOLIO — 2025",
+    "portfolioHidden": "well, that's what they say...",
+    "currently": "CURRENTLY:",
+    "roles": {
+      "creative": "CREATIVE DEVELOPER",
+      "pixel": "PIXEL ARTISAN",
+      "code": "CODE ARTIST",
+      "craft": "WEB CRAFTSMAN"
+    },
+    "cta": {
+      "work": "VIEW WORK",
+      "contact": "GET IN TOUCH"
+    },
+    "hint": "MOVE YOUR CURSOR",
+    "hintHidden": "I see you...",
+    "scroll": "SCROLL"
+  },
+  "projects": {
+    "sectionNumber": "002",
+    "title": "PROJECTS",
+    "subtitle": "SELECTED WORK",
+    "viewAll": "VIEW ALL PROJECTS",
+    "viewProject": "VIEW PROJECT",
+    "featured": "FEATURED",
+    "listView": "LIST VIEW",
+    "galleryView": "GALLERY VIEW →",
+    "intro": "A collection of projects that push boundaries, break conventions, and create memorable digital experiences.",
+    "stats": {
+      "projects": "PROJECTS",
+      "technologies": "TECHNOLOGIES",
+      "passion": "PASSION",
+      "possibilities": "POSSIBILITIES"
+    }
+  },
+  "skills": {
+    "sectionNumber": "003",
+    "title": "SKILLS",
+    "subtitle": "TECH STACK",
+    "hint": "MOVE MOUSE TO ROTATE",
+    "hoverHint": "HOVER TO EXPLORE",
+    "loading": "LOADING MATRIX...",
+    "legend": {
+      "frontend": "FRONTEND",
+      "creative": "CREATIVE",
+      "animation": "ANIMATION",
+      "design": "DESIGN"
+    }
+  },
+  "timeline": {
+    "sectionNumber": "004",
+    "title": "JOURNEY",
+    "subtitle": "MY PATH",
+    "loading": "LOADING...",
+    "prev": "← PREV",
+    "next": "NEXT →",
+    "events": {
+      "beginning": {
+        "title": "THE BEGINNING",
+        "description": "First lines of code, first bugs, first sleepless nights."
+      },
+      "deepDive": {
+        "title": "DEEP DIVE",
+        "description": "Diving into the web world, JavaScript became my best friend."
+      },
+      "creativeSpark": {
+        "title": "CREATIVE SPARK",
+        "description": "Discovered creative coding. Code becomes art."
+      },
+      "professional": {
+        "title": "PRO MODE",
+        "description": "First clients, first real projects, first real struggles."
+      },
+      "levelUp": {
+        "title": "LEVEL UP",
+        "description": "Three.js, WebGL, shaders... The rabbit hole just keeps going."
+      },
+      "now": {
+        "title": "NOW",
+        "description": "Still learning, still coding, still creating."
+      }
+    }
+  },
+  "philosophy": {
+    "title": "PHILOSOPHY",
+    "subtitle": "HOW I THINK",
+    "hint": "[ MOVE YOUR CURSOR ]",
+    "items": {
+      "craft": {
+        "title": "CRAFT MATTERS",
+        "description": "Every project is an opportunity to push boundaries. The details make the difference."
+      },
+      "pixels": {
+        "title": "PIXELS WITH PURPOSE",
+        "description": "Interfaces should feel alive. Aesthetics and function in perfect balance."
+      },
+      "code": {
+        "title": "CODE IS ART",
+        "description": "Writing code is a form of expression. Logic and creativity intertwined."
+      }
+    },
+    "quote": "The details are not the details. They make the design.",
+    "quoteAuthor": "— CHARLES EAMES"
+  },
+  "about": {
+    "sectionNumber": "005",
+    "title": "ABOUT",
+    "headline": "I CREATE EXPERIENCES THAT LIVE & BREATHE",
+    "intro": "A creative developer passionate about unique web experiences. I blend code and design to create interfaces that inspire.",
+    "philosophy": "My work exists at the intersection of technology and art. Every pixel is intentional. Every interaction is crafted.",
+    "techStack": "TECH STACK",
+    "stats": {
+      "years": "5+ YEARS XP",
+      "yearsHidden": "asking Claude",
+      "projects": "50+ PROJECTS SHIPPED",
+      "projectsHidden": "ChatGPT tabs open",
+      "coffees": "∞ COFFEES DRUNK",
+      "coffeesHidden": "still true"
+    },
+    "cta": "LET'S WORK TOGETHER",
+    "role": "CREATIVE DEV"
+  },
+  "contact": {
+    "sectionNumber": "006",
+    "title": "CONTACT",
+    "headline": "LET'S CREATE SOMETHING TOGETHER",
+    "intro": "Got a project in mind? I'm available for freelance work and collaborations.",
+    "cta": "SAY HELLO",
+    "connect": "CONNECT",
+    "location": "LOCATION",
+    "locationValue": "PARIS, FRANCE",
+    "availability": "AVAILABLE WORLDWIDE",
+    "copyright": "© {year}",
+    "rights": "ALL RIGHTS RESERVED"
+  },
+  "lab": {
+    "title": "LAB",
+    "intro": "A playground for creative experiments, shader explorations, and interactive experiences. Move your cursor to interact.",
+    "experiments": {
+      "ascii": {
+        "title": "ASCII PORTRAIT",
+        "description": "Real-time ASCII art generation with interactive cursor distortion"
+      },
+      "particles": {
+        "title": "PARTICLE TEXT",
+        "description": "Thousands of particles forming text, dispersing on hover"
+      },
+      "waves": {
+        "title": "WAVE FIELD",
+        "description": "Interactive sine wave visualization responding to mouse movement"
+      },
+      "terrain": {
+        "title": "NOISE TERRAIN",
+        "description": "Procedural terrain generation using simplex noise"
+      }
+    },
+    "clickExpand": "CLICK TO EXPAND",
+    "close": "CLOSE ×",
+    "interactHint": "MOVE CURSOR TO INTERACT",
+    "loading": "LOADING..."
+  },
+  "cursor": {
+    "hero": [],
+    "projects": ["VIEW", "CLICK", "OPEN", "ENTER"],
+    "about": ["READ", "KNOW", "LEARN", "MEET"],
+    "noise": ["FEEL", "TOUCH", "PLAY", "SENSE"],
+    "contact": ["WRITE", "TALK", "SEND", "REACH"],
+    "timeline": ["SCROLL", "TIME", "PAST", "FUTURE"],
+    "skills": ["STACK", "TECH", "CODE", "TOOLS"]
+  },
+  "projectPage": {
+    "backToWork": "← BACK TO WORK",
+    "immersiveView": "IMMERSIVE VIEW →",
+    "standardView": "← STANDARD VIEW",
+    "allWork": "ALL WORK",
+    "scroll": "SCROLL",
+    "scrollToExplore": "SCROLL TO EXPLORE",
+    "projectVisual": "PROJECT VISUAL",
+    "role": "ROLE",
+    "client": "CLIENT",
+    "year": "YEAR",
+    "stack": "STACK",
+    "viewLive": "VIEW LIVE",
+    "aboutProject": "ABOUT THE PROJECT",
+    "nextProject": "NEXT PROJECT",
+    "viewProject": "VIEW PROJECT →",
+    "technologies": "TECHNOLOGIES",
+    "notFound": "Project not found"
+  },
+  "projectsData": {
+    "underTheFlow": {
+      "category": "WEB PLATFORM",
+      "description": "Hip-hop live sessions platform with an immersive experience for artists and fans.",
+      "longDescription": "Under The Flow is a platform dedicated to hip-hop live sessions.\nThe project captures the essence of freestyle and live performances, offering a unique showcase for emerging artists on the French hip-hop scene.\n\nAn immersive web experience that highlights music and artists with a strong, modern artistic direction.",
+      "role": "FULL-STACK DEVELOPER",
+      "sections": {
+        "intro": {
+          "title": "THE VISION",
+          "content": "Creating a platform that captures the raw energy of hip-hop live sessions. A space where music comes alive through digital."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Conveying the authenticity and energy of live through a web interface. Creating an immersive experience without sacrificing performance."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Next.js for performance and SEO. Dark, contrasted design to highlight video content. Smooth animations to reinforce immersion."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "A platform that shines a light on the French live hip-hop scene with a strong, memorable visual identity."
+        }
+      }
+    },
+    "victorDenay": {
+      "category": "PORTFOLIO",
+      "description": "Creative portfolio for a professional videographer and photographer.",
+      "longDescription": "Custom portfolio for Victor Denay, videographer and photographer.\nA clean design that gives center stage to the artist's visual work, with smooth transitions and intuitive navigation.\n\nThe goal was to create a digital showcase that elevates the work while offering a memorable browsing experience.",
+      "role": "FULL-STACK DEVELOPER",
+      "sections": {
+        "intro": {
+          "title": "THE BRIEF",
+          "content": "A portfolio that steps back to let the work shine. Minimalist but impactful, subtle but memorable."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Presenting high-quality video and photo content without compromising load times. Creating a smooth, intuitive gallery."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Mobile-first design. Smart lazy loading. Polished transitions between projects. Minimalist typography."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "An elegant portfolio that showcases Victor's work while delivering a premium user experience."
+        }
+      }
+    },
+    "depenseMan": {
+      "category": "WEB APP",
+      "description": "Simple and effective personal finance management application.",
+      "longDescription": "Dépense Man is a progressive web app (PWA) for managing monthly finances in a simple, intuitive way. No unnecessary complexity, just the essential features to track expenses.\n\nA minimalist approach to personal budgeting, accessible on all devices with a clear interface and relevant visualizations.",
+      "role": "FULL-STACK DEVELOPER",
+      "client": "PERSONAL PROJECT",
+      "sections": {
+        "intro": {
+          "title": "THE NEED",
+          "content": "A budget app without the complexity of banking solutions. Simple, fast, effective."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Making budget management enjoyable. Creating an interface people actually want to use regularly."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "PWA for offline access. Clean interface. Clear expense visualizations. Smart categorization."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "An app I use daily to manage my finances. Simple, but does exactly what you ask of it."
+        }
+      }
+    },
+    "linekut": {
+      "category": "CREATIVE TOOL",
+      "description": "Image to cutting pattern converter for scroll saw, laser, and vinyl cutting.",
+      "longDescription": "Linekut transforms any image into a ready-to-cut pattern. Whether for scroll saw, laser cutting, vinyl, or stickers, the tool generates optimized files for each technique.\n\nA PWA that democratizes cutting pattern creation, making an usually complex process accessible.",
+      "role": "FRONT-END DEVELOPER",
+      "client": "PERSONAL PROJECT",
+      "sections": {
+        "intro": {
+          "title": "THE IDEA",
+          "content": "Simplifying cutting pattern creation. Transform a photo into a machine-ready file in just a few clicks."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Client-side image processing for speed. Vectorization algorithms and contour simplification."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Canvas API for image processing. Edge detection algorithms. Export in standard formats (SVG, DXF)."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "A tool used by makers and craftspeople to quickly create custom cutting patterns."
+        }
+      }
+    }
+  }
+}

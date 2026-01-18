@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, Line } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { timelineEvents, type TimelineEvent } from "@/data/timeline";
 import { COLORS } from "@/lib/constants";
 
@@ -432,6 +433,8 @@ export default function Timeline3D() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hasError, setHasError] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const t = useTranslations("timeline");
+  const tEvents = useTranslations("timeline.events");
 
   // Ensure we're on the client before rendering Canvas
   useEffect(() => {
@@ -467,12 +470,18 @@ export default function Timeline3D() {
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="font-mono text-sm text-muted animate-pulse">
-            LOADING TIMELINE...
+            {t("loading")}
           </span>
         </div>
       </section>
     );
   }
+
+  // Get translated event data
+  const getTranslatedEvent = (eventKey: string) => ({
+    title: tEvents(`${eventKey}.title`),
+    description: tEvents(`${eventKey}.description`),
+  });
 
   // Fallback UI if WebGL fails
   if (hasError) {
@@ -483,33 +492,36 @@ export default function Timeline3D() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-8">
-            <span className="font-mono text-sm text-muted">004</span>
+            <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
             <span className="w-16 h-[1px] bg-foreground/20" />
-            <span className="font-mono text-sm text-muted">JOURNEY</span>
+            <span className="font-mono text-sm text-muted">{t("title")}</span>
           </div>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-16">
-            MY <span className="text-accent">PATH</span>
+            {t("subtitle").split(" ")[0]} <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
           </h2>
           <div className="space-y-8">
-            {timelineEvents.map((event, index) => (
-              <motion.div
-                key={event.year}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-start gap-8 border-l-2 pl-8"
-                style={{ borderColor: event.color }}
-              >
-                <span className="font-mono text-2xl" style={{ color: event.color }}>
-                  {event.year}
-                </span>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <p className="text-muted">{event.description}</p>
-                </div>
-              </motion.div>
-            ))}
+            {timelineEvents.map((event, index) => {
+              const translated = getTranslatedEvent(event.key);
+              return (
+                <motion.div
+                  key={event.year}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-start gap-8 border-l-2 pl-8"
+                  style={{ borderColor: event.color }}
+                >
+                  <span className="font-mono text-2xl" style={{ color: event.color }}>
+                    {event.year}
+                  </span>
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">{translated.title}</h3>
+                    <p className="text-muted">{translated.description}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -525,12 +537,12 @@ export default function Timeline3D() {
       {/* Section header */}
       <div className="absolute top-8 left-8 z-20">
         <div className="flex items-center gap-4 mb-4">
-          <span className="font-mono text-sm text-muted">004</span>
+          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
           <span className="w-16 h-[1px] bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">JOURNEY</span>
+          <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">
-          MY <span className="text-accent">PATH</span>
+          {t("subtitle").split(" ")[0]} <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
         </h2>
       </div>
 
@@ -545,10 +557,10 @@ export default function Timeline3D() {
           className="text-2xl font-bold mb-2"
           style={{ color: timelineEvents[activeIndex].color }}
         >
-          {timelineEvents[activeIndex].title}
+          {getTranslatedEvent(timelineEvents[activeIndex].key).title}
         </h3>
         <p className="text-sm text-muted">
-          {timelineEvents[activeIndex].description}
+          {getTranslatedEvent(timelineEvents[activeIndex].key).description}
         </p>
       </motion.div>
 
@@ -560,7 +572,7 @@ export default function Timeline3D() {
           className="font-mono text-sm disabled:opacity-30 hover:text-accent transition-colors"
           data-cursor="hover"
         >
-          ← PREV
+          {t("prev")}
         </button>
 
         <div className="flex gap-2">
@@ -584,7 +596,7 @@ export default function Timeline3D() {
           className="font-mono text-sm disabled:opacity-30 hover:text-accent transition-colors"
           data-cursor="hover"
         >
-          NEXT →
+          {t("next")}
         </button>
       </div>
 
