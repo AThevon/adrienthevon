@@ -13,7 +13,8 @@ export interface Project {
   color: string;
   description: string;
   longDescription: string;
-  tags: string[];
+  tags: string[]; // Tags affichés publiquement
+  skills: string[]; // IDs de skills pour le mapping avec le réseau neuronal
   role: string;
   client: string;
   link: string;
@@ -38,6 +39,7 @@ unique pour les artistes émergents de la scène hip-hop française.
 Une expérience web immersive qui met en avant la musique et les artistes
 avec une direction artistique forte et moderne.`,
     tags: ["NEXT.JS", "TAILWIND", "MOTION", "SUPABASE"],
+    skills: ["nextjs", "react", "typescript", "tailwind", "motion", "postgresql", "vercel", "git", "figma"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "UNDER THE FLOW",
     link: "https://undertheflow.com",
@@ -80,6 +82,7 @@ avec des transitions fluides et une navigation intuitive.
 L'objectif était de créer un écrin digital qui sublime les créations
 tout en offrant une expérience de navigation mémorable.`,
     tags: ["NUXT", "TAILWIND", "MOTION", "THREE.JS", "SUPABASE"],
+    skills: ["typescript", "nuxt", "vue", "tailwind", "motion", "threejs", "postgresql", "figma", "git", "vercel"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "VICTOR DENAY",
     link: "https://victordenay.com",
@@ -122,6 +125,7 @@ juste les fonctionnalités essentielles pour suivre ses dépenses.
 Une approche minimaliste du budget personnel, accessible sur tous les appareils
 avec une interface claire et des visualisations pertinentes.`,
     tags: ["NEXT.JS", "TAILWIND", "PWA", "SUPABASE"],
+    skills: ["nextjs", "react", "typescript", "tailwind", "firebase", "postgresql", "prisma", "vercel", "git"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "PROJET PERSONNEL",
     link: "https://depense-man.vercel.app",
@@ -164,6 +168,7 @@ l'outil génère des fichiers optimisés pour chaque technique.
 Une PWA qui démocratise la création de patrons de découpe,
 rendant accessible un processus habituellement complexe.`,
     tags: ["NEXT.JS", "CANVAS", "PWA", "IMAGE PROCESSING"],
+    skills: ["nextjs", "react", "typescript", "tailwind", "canvas", "html", "css", "git", "vercel", "figma"],
     role: "DÉVELOPPEUR FRONT-END",
     client: "PROJET PERSONNEL",
     link: "https://linekut.vercel.app",
@@ -204,6 +209,7 @@ Une plateforme qui présente mes services, mon approche et mon portfolio de mani
 
 L'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.`,
     tags: ["NEXT.JS", "TAILWIND", "MOTION", "SEO", "ANALYTICS"],
+    skills: ["nextjs", "react", "typescript", "tailwind", "motion", "git", "github", "vercel", "figma"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "BLENKDEV",
     link: "https://blenkdev.vercel.app",

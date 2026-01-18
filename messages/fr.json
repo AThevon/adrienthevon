@@ -66,10 +66,23 @@
   "skills": {
     "sectionNumber": "003",
     "title": "SKILLS",
-    "subtitle": "STACK TECHNIQUE",
+    "subtitle": "RÉSEAU NEURONAL",
+    "description": "Explorez mon réseau neuronal de compétences. Cliquez sur un node pour voir les connexions.",
     "hint": "BOUGE LA SOURIS POUR TOURNER",
     "hoverHint": "SURVOLE POUR EXPLORER",
-    "loading": "CHARGEMENT DE LA MATRICE...",
+    "loading": "CHARGEMENT DU RÉSEAU...",
+    "clickNode": "Cliquez sur un node → Voir les projets",
+    "hoverExplore": "Survolez → Explorer les connexions",
+    "projectsUsing": "PROJETS UTILISANT CETTE COMPÉTENCE",
+    "projectCount": "{count} projet",
+    "projectCount_plural": "{count} projets",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "creative": "Creative",
+      "tools": "Outils",
+      "design": "Design"
+    },
     "legend": {
       "frontend": "FRONTEND",
       "creative": "CRÉATIF",

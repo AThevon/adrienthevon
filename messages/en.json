@@ -66,10 +66,23 @@
   "skills": {
     "sectionNumber": "003",
     "title": "SKILLS",
-    "subtitle": "TECH STACK",
+    "subtitle": "NEURAL NETWORK",
+    "description": "Explore my neural network of skills. Click on a node to see connections.",
     "hint": "MOVE MOUSE TO ROTATE",
     "hoverHint": "HOVER TO EXPLORE",
-    "loading": "LOADING MATRIX...",
+    "loading": "LOADING NETWORK...",
+    "clickNode": "Click node → See projects",
+    "hoverExplore": "Hover → Explore connections",
+    "projectsUsing": "PROJECTS USING THIS SKILL",
+    "projectCount": "{count} project",
+    "projectCount_plural": "{count} projects",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "creative": "Creative",
+      "tools": "Tools",
+      "design": "Design"
+    },
     "legend": {
       "frontend": "FRONTEND",
       "creative": "CREATIVE",

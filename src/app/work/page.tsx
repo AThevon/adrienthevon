@@ -16,7 +16,7 @@ const LiquidCursor = dynamic(
 
 export default function WorkPage() {
   const router = useRouter();
-  const [viewMode, setViewMode] = useState<"list" | "gallery">("gallery");
+  const [viewMode, setViewMode] = useState<"list" | "gallery">("list");
   const t = useTranslations("projects");
   const tNav = useTranslations("nav");
 
