@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { COLORS } from "@/lib/constants";
 
 interface WaveFieldProps {
   color?: string;
@@ -10,7 +11,7 @@ interface WaveFieldProps {
 }
 
 export default function WaveField({
-  color = "#ff4d00",
+  color = COLORS.accent,
   backgroundColor = "transparent",
   waveCount = 20,
   amplitude = 50,

@@ -11,23 +11,25 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
-  const words = ["CREATIVE", "CODER", "BUILDER", "BREAKER"];
+  const words = ["LOADING", "CREATIVE", "DEV"];
 
   useEffect(() => {
-    const duration = 4500; // Slower loading
-    const interval = 40;
+    const duration = 2200; // Faster, more punchy
+    const interval = 30;
     const steps = duration / interval;
     const increment = 100 / steps;
 
     const timer = setInterval(() => {
       setProgress((prev) => {
-        const next = prev + increment + Math.random() * 1.5;
+        // Non-linear progress for more dynamic feel
+        const randomBoost = Math.random() * 3;
+        const next = prev + increment + randomBoost;
         if (next >= 100) {
           clearInterval(timer);
           setTimeout(() => {
             setIsExiting(true);
-            setTimeout(onComplete, 1200);
-          }, 600);
+            setTimeout(onComplete, 800);
+          }, 300);
           return 100;
         }
         return next;
@@ -38,7 +40,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   }, [onComplete]);
 
   const currentWordIndex = Math.min(
-    Math.floor(progress / 25),
+    Math.floor(progress / 34),
     words.length - 1
   );
 

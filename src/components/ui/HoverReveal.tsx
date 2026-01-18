@@ -3,15 +3,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
-
-interface Project {
-  id: string;
-  title: string;
-  category: string;
-  image: string;
-  color: string;
-  [key: string]: unknown;
-}
+import type { Project } from "@/data/projects";
 
 interface HoverRevealProps {
   projects: Project[];
@@ -24,13 +16,10 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setCursorPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    }
+    setCursorPos({
+      x: e.clientX,
+      y: e.clientY,
+    });
   };
 
   return (
@@ -44,27 +33,28 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
         {hoveredIndex !== null && (
           <motion.div
             className="fixed pointer-events-none z-50"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              x: cursorPos.x - 150,
-              y: cursorPos.y - 100,
-            }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
             style={{
-              left: containerRef.current?.getBoundingClientRect().left || 0,
-              top: containerRef.current?.getBoundingClientRect().top || 0,
+              left: cursorPos.x,
+              top: cursorPos.y,
+              x: "-50%",
+              y: "-50%",
+            }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 30,
             }}
           >
-            <div className="relative w-[300px] h-[200px] overflow-hidden">
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(135deg, ${projects[hoveredIndex].color}40 0%, ${projects[hoveredIndex].color}10 100%)`,
-                }}
-              />
+            <motion.div
+              className="relative w-[300px] h-[200px] overflow-hidden"
+              animate={{
+                background: `linear-gradient(135deg, ${projects[hoveredIndex].color}40 0%, ${projects[hoveredIndex].color}10 100%)`,
+              }}
+              transition={{ duration: 0.15 }}
+            >
               {projects[hoveredIndex].image && (
                 <Image
                   src={projects[hoveredIndex].image}
@@ -74,7 +64,7 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
                 />
               )}
               <div className="absolute inset-0 border border-foreground/10" />
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

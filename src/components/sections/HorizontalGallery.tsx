@@ -2,18 +2,11 @@
 
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
-
-interface GalleryItem {
-  id: string;
-  title: string;
-  category: string;
-  color: string;
-  image?: string;
-}
+import type { Project } from "@/data/projects";
 
 interface HorizontalGalleryProps {
-  items: GalleryItem[];
-  onItemClick?: (item: GalleryItem) => void;
+  items: Project[];
+  onItemClick?: (item: Project) => void;
 }
 
 export default function HorizontalGallery({

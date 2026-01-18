@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import { COLORS } from "@/lib/constants";
 
 interface Point {
   x: number;
@@ -19,7 +20,7 @@ interface LiquidCursorProps {
 
 export default function LiquidCursor({
   enabled = true,
-  color = "#ff4d00",
+  color = COLORS.accent,
   maxAge = 80,
   intensity = 0.3,
 }: LiquidCursorProps) {

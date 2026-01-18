@@ -3,7 +3,7 @@
 :root {
   --background: #0a0a0a;
   --foreground: #fafafa;
-  --accent: #ff4d00;
+  --accent: #ffaa00;
   --muted: #888888;
 }
 
@@ -12,8 +12,9 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
 }
 
 * {
@@ -50,6 +51,53 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
   overflow-x: hidden;
+  font-feature-settings: "ss01", "ss02", "cv01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography utilities */
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02";
+}
+
+/* Heading styles - Use display font for impact */
+h1, h2, .heading-xl {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+h3, h4, .heading-md {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Mono text with ligatures */
+.font-mono, code, pre {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-feature-settings: "liga", "calt";
+}
+
+/* Special text treatments */
+.text-gradient {
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px var(--foreground);
+  -webkit-text-fill-color: transparent;
+}
+
+.text-stroke-accent {
+  -webkit-text-stroke: 2px var(--accent);
+  -webkit-text-fill-color: transparent;
 }
 
 ::selection {

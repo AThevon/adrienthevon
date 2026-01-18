@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import Hero from "@/components/sections/Hero";
 import Projects from "@/components/sections/Projects";
@@ -18,14 +18,19 @@ const Timeline3D = dynamic(
   { ssr: false }
 );
 
-// Dynamic imports for heavy components
-const CustomCursor = dynamic(
-  () => import("@/components/effects/CustomCursor"),
+const NoiseSection = dynamic(
+  () => import("@/components/sections/NoiseSection"),
   { ssr: false }
 );
 
-const LiquidCursor = dynamic(
-  () => import("@/components/effects/LiquidCursor"),
+// Dynamic imports for heavy components
+const GlitchCursor = dynamic(
+  () => import("@/components/effects/GlitchCursor"),
+  { ssr: false }
+);
+
+const SectionEffects = dynamic(
+  () => import("@/components/effects/SectionEffects"),
   { ssr: false }
 );
 
@@ -91,23 +96,16 @@ function TimelineFallback() {
 }
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
   const { enable3D, enableCursorEffects, enableAnimations } = usePerformance();
-
-  // Skip preloader if animations are disabled
-  useEffect(() => {
-    if (!enableAnimations && isLoading) {
-      setIsLoading(false);
-    }
-  }, [enableAnimations, isLoading]);
+  const [isLoading, setIsLoading] = useState(enableAnimations);
 
   return (
     <>
       {/* Custom cursor - only on desktop */}
-      {enableCursorEffects && <CustomCursor />}
+      {enableCursorEffects && <GlitchCursor />}
 
-      {/* Liquid cursor effect - only on desktop */}
-      {enableCursorEffects && <LiquidCursor enabled={!isLoading} intensity={0.4} />}
+      {/* Section-based cursor effects - only on desktop */}
+      {enableCursorEffects && <SectionEffects enabled={!isLoading} />}
 
       {/* Preloader - skip if animations disabled */}
       {enableAnimations && isLoading && (
@@ -119,6 +117,7 @@ export default function Home() {
         <Hero />
         <Projects />
         {enable3D ? <SkillsMatrix3D /> : <SkillsFallback />}
+        <NoiseSection />
         {enable3D ? <Timeline3D /> : <TimelineFallback />}
         <About />
         <Contact />

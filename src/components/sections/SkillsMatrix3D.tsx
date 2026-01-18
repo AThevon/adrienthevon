@@ -5,12 +5,13 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text, Float, Line } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "motion/react";
+import { COLORS } from "@/lib/constants";
 
 const skills = [
   { name: "REACT", level: 95, color: "#61dafb", category: "frontend" },
   { name: "NEXT.JS", level: 90, color: "#ffffff", category: "frontend" },
   { name: "TYPESCRIPT", level: 90, color: "#3178c6", category: "frontend" },
-  { name: "THREE.JS", level: 85, color: "#ff4d00", category: "creative" },
+  { name: "THREE.JS", level: 85, color: COLORS.accent, category: "creative" },
   { name: "WEBGL", level: 80, color: "#990000", category: "creative" },
   { name: "GSAP", level: 90, color: "#88ce02", category: "animation" },
   { name: "MOTION", level: 85, color: "#ff0055", category: "animation" },
@@ -77,7 +78,7 @@ function SkillNode({
           color={isHovered ? "#0a0a0a" : skill.color}
           anchorX="center"
           anchorY="middle"
-          font="/fonts/geist-mono.woff"
+          font="https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjOVGa.woff2"
         >
           {skill.name}
         </Text>
@@ -133,7 +134,7 @@ function ConnectionLines({
         <Line
           key={i}
           points={points}
-          color="#ff4d00"
+          color={COLORS.accent}
           lineWidth={1}
           transparent
           opacity={0.3}
@@ -216,7 +217,7 @@ function Scene() {
       {/* Lights */}
       <ambientLight intensity={0.3} />
       <pointLight position={[10, 10, 10]} intensity={1} color="#ffffff" />
-      <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff4d00" />
+      <pointLight position={[-10, -10, -10]} intensity={0.5} color={COLORS.accent} />
 
       {/* Matrix rain background */}
       <MatrixRain />
@@ -257,7 +258,7 @@ export default function SkillsMatrix3D() {
           <span className="font-mono text-sm text-muted">SKILLS</span>
         </div>
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">
-          TECH <span className="text-accent">MATRIX</span>
+          TECH <span className="text-accent">STACK</span>
         </h2>
       </div>
 
@@ -284,7 +285,7 @@ export default function SkillsMatrix3D() {
           <span className="text-muted">FRONTEND</span>
         </div>
         <div className="flex items-center gap-2 mb-1">
-          <span className="w-3 h-3 rounded-full bg-[#ff4d00]" />
+          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.accent }} />
           <span className="text-muted">CREATIVE</span>
         </div>
         <div className="flex items-center gap-2 mb-1">

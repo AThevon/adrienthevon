@@ -7,40 +7,10 @@ import TextReveal from "@/components/ui/TextReveal";
 import HoverReveal from "@/components/ui/HoverReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import RollingText from "@/components/ui/RollingText";
-
-const projects = [
-  {
-    id: "project-alpha",
-    title: "PROJECT ALPHA",
-    category: "WEB EXPERIENCE",
-    image: "",
-    color: "#ff4d00",
-  },
-  {
-    id: "neural-canvas",
-    title: "NEURAL CANVAS",
-    category: "CREATIVE TOOL",
-    image: "",
-    color: "#00ff88",
-  },
-  {
-    id: "void-studio",
-    title: "VOID STUDIO",
-    category: "DESIGN SYSTEM",
-    image: "",
-    color: "#8844ff",
-  },
-  {
-    id: "particle-flow",
-    title: "PARTICLE FLOW",
-    category: "EXPERIMENT",
-    image: "",
-    color: "#ff0088",
-  },
-];
+import { projects } from "@/data/projects";
 
 export default function Projects() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
   const { scrollYProgress } = useScroll({
@@ -50,12 +20,15 @@ export default function Projects() {
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-  const handleProjectClick = (project: typeof projects[0]) => {
+  const handleProjectClick = (project: { id: string }) => {
     router.push(`/work/${project.id}`);
   };
 
+  // Show only first 4 projects on homepage
+  const displayProjects = projects.slice(0, 4);
+
   return (
-    <section ref={sectionRef} id="work" className="py-32 px-8 md:px-16 relative">
+    <section ref={sectionRef} id="work" data-cursor-mode="projects" className="py-32 px-8 md:px-16 relative">
       {/* Subtle background effect */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -74,13 +47,13 @@ export default function Projects() {
           </div>
 
           <TextReveal className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter">
-            PROJECTS THAT PUSH BOUNDARIES
+            FEATURED PROJECTS
           </TextReveal>
         </div>
 
         {/* Projects with hover reveal */}
         <HoverReveal
-          projects={projects}
+          projects={displayProjects}
           onProjectClick={handleProjectClick}
         />
 

@@ -12,15 +12,19 @@ export default function RollingText({
   className = "",
 }: RollingTextProps) {
   return (
-    <div
-      className={`relative overflow-hidden group ${className}`}
+    <motion.div
+      className={`relative overflow-hidden ${className}`}
       data-cursor="hover"
+      initial="idle"
+      whileHover="hover"
     >
       {/* Original text */}
       <motion.span
         className="inline-block"
-        initial={{ y: 0 }}
-        whileHover={{ y: "-100%" }}
+        variants={{
+          idle: { y: 0 },
+          hover: { y: "-100%" },
+        }}
         transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
       >
         {children}
@@ -29,12 +33,14 @@ export default function RollingText({
       {/* Duplicate text for roll effect */}
       <motion.span
         className="absolute left-0 top-0 inline-block"
-        initial={{ y: "100%" }}
-        whileHover={{ y: 0 }}
+        variants={{
+          idle: { y: "100%" },
+          hover: { y: 0 },
+        }}
         transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
       >
         {children}
       </motion.span>
-    </div>
+    </motion.div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import dynamic from "next/dynamic";
 import TextReveal from "@/components/ui/TextReveal";
+import { COLORS } from "@/lib/constants";
 
 const CustomCursor = dynamic(
   () => import("@/components/effects/CustomCursor"),
@@ -48,25 +49,25 @@ const experiments = [
     id: "ascii",
     title: "ASCII PORTRAIT",
     description: "Real-time ASCII art generation with interactive cursor distortion",
-    color: "#00ff88",
+    color: COLORS.secondary.green,
   },
   {
     id: "particles",
     title: "PARTICLE TEXT",
     description: "Thousands of particles forming text, dispersing on hover",
-    color: "#ff4d00",
+    color: COLORS.accent,
   },
   {
     id: "waves",
     title: "WAVE FIELD",
     description: "Interactive sine wave visualization responding to mouse movement",
-    color: "#8844ff",
+    color: COLORS.secondary.purple,
   },
   {
     id: "noise",
     title: "NOISE TERRAIN",
     description: "Procedural terrain generation using simplex noise",
-    color: "#00ccff",
+    color: COLORS.secondary.cyan,
   },
 ];
 
@@ -89,9 +90,9 @@ export default function LabPage() {
           />
         );
       case "waves":
-        return <WaveField color="#8844ff" waveCount={25} amplitude={60} />;
+        return <WaveField color={COLORS.secondary.purple} waveCount={25} amplitude={60} />;
       case "noise":
-        return <NoiseTerrain color="#00ccff" gridSize={30} scale={0.04} />;
+        return <NoiseTerrain color={COLORS.secondary.cyan} gridSize={30} scale={0.04} />;
       default:
         return null;
     }

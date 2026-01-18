@@ -8,6 +8,7 @@ import HoverReveal from "@/components/ui/HoverReveal";
 import TextReveal from "@/components/ui/TextReveal";
 import ScrollImageReveal from "@/components/ui/ScrollImageReveal";
 import HorizontalGallery from "@/components/sections/HorizontalGallery";
+import { projects } from "@/data/projects";
 
 const CustomCursor = dynamic(
   () => import("@/components/effects/CustomCursor"),
@@ -18,59 +19,6 @@ const LiquidCursor = dynamic(
   () => import("@/components/effects/LiquidCursor"),
   { ssr: false }
 );
-
-const projects = [
-  {
-    id: "project-alpha",
-    title: "PROJECT ALPHA",
-    category: "WEB EXPERIENCE",
-    year: "2024",
-    image: "",
-    color: "#ff4d00",
-    description: "An immersive 3D web experience pushing the boundaries of WebGL and real-time graphics.",
-    tags: ["THREE.JS", "WEBGL", "REACT", "GSAP"],
-  },
-  {
-    id: "neural-canvas",
-    title: "NEURAL CANVAS",
-    category: "CREATIVE TOOL",
-    year: "2024",
-    image: "",
-    color: "#00ff88",
-    description: "AI-powered generative art platform for digital artists and creative professionals.",
-    tags: ["AI/ML", "CANVAS", "REACT", "NODE.JS"],
-  },
-  {
-    id: "void-studio",
-    title: "VOID STUDIO",
-    category: "DESIGN SYSTEM",
-    year: "2023",
-    image: "",
-    color: "#8844ff",
-    description: "A comprehensive design system for modern web applications with 100+ components.",
-    tags: ["DESIGN SYSTEM", "REACT", "STORYBOOK", "FIGMA"],
-  },
-  {
-    id: "particle-flow",
-    title: "PARTICLE FLOW",
-    category: "EXPERIMENT",
-    year: "2023",
-    image: "",
-    color: "#ff0088",
-    description: "Real-time particle simulation using GPU compute shaders and WebGPU.",
-    tags: ["WEBGPU", "SHADERS", "CREATIVE CODING"],
-  },
-  {
-    id: "echo-space",
-    title: "ECHO SPACE",
-    category: "AUDIO VISUAL",
-    year: "2023",
-    image: "",
-    color: "#00ccff",
-    description: "Audio-reactive visual experience that transforms sound into stunning visuals.",
-    tags: ["WEB AUDIO", "CANVAS", "MOTION"],
-  },
-];
 
 export default function WorkPage() {
   const router = useRouter();

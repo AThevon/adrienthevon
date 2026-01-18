@@ -6,99 +6,20 @@ import { useRef } from "react";
 import dynamic from "next/dynamic";
 import TextReveal from "@/components/ui/TextReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { getProjectById, getNextProject } from "@/data/projects";
 
 const CustomCursor = dynamic(
   () => import("@/components/effects/CustomCursor"),
   { ssr: false }
 );
 
-const projects = [
-  {
-    id: "project-alpha",
-    title: "PROJECT ALPHA",
-    category: "WEB EXPERIENCE",
-    year: "2024",
-    color: "#ff4d00",
-    description: "An immersive 3D web experience pushing the boundaries of WebGL and real-time graphics.",
-    longDescription: `Project Alpha represents the pinnacle of creative web development.
-    Built with cutting-edge technologies, it delivers an unforgettable user experience
-    that blurs the line between website and art installation.
-
-    The project features real-time 3D graphics, physics simulations, and
-    audio-reactive elements that respond to user interaction.`,
-    tags: ["THREE.JS", "WEBGL", "REACT", "GSAP"],
-    role: "LEAD DEVELOPER",
-    client: "CREATIVE AGENCY X",
-    link: "#",
-  },
-  {
-    id: "neural-canvas",
-    title: "NEURAL CANVAS",
-    category: "CREATIVE TOOL",
-    year: "2024",
-    color: "#00ff88",
-    description: "AI-powered generative art platform for digital artists.",
-    longDescription: `Neural Canvas empowers artists to create unique generative artwork
-    using the latest in machine learning technology. The platform provides intuitive
-    controls while hiding the complexity of AI models behind a beautiful interface.`,
-    tags: ["AI/ML", "CANVAS", "REACT", "NODE.JS"],
-    role: "FULL-STACK DEVELOPER",
-    client: "STARTUP Y",
-    link: "#",
-  },
-  {
-    id: "void-studio",
-    title: "VOID STUDIO",
-    category: "DESIGN SYSTEM",
-    year: "2023",
-    color: "#8844ff",
-    description: "A comprehensive design system for modern web applications.",
-    longDescription: `Void Studio is a meticulously crafted design system that provides
-    developers and designers with a unified language for building consistent,
-    accessible, and beautiful user interfaces.`,
-    tags: ["DESIGN SYSTEM", "REACT", "STORYBOOK", "FIGMA"],
-    role: "DESIGN ENGINEER",
-    client: "TECH COMPANY Z",
-    link: "#",
-  },
-  {
-    id: "particle-flow",
-    title: "PARTICLE FLOW",
-    category: "EXPERIMENT",
-    year: "2023",
-    color: "#ff0088",
-    description: "Real-time particle simulation using GPU compute shaders.",
-    longDescription: `Particle Flow is an experimental project exploring the capabilities
-    of WebGPU for real-time particle simulations. Millions of particles dance across
-    the screen, creating mesmerizing patterns driven by mathematical forces.`,
-    tags: ["WEBGPU", "SHADERS", "CREATIVE CODING"],
-    role: "CREATIVE DEVELOPER",
-    client: "PERSONAL PROJECT",
-    link: "#",
-  },
-  {
-    id: "echo-space",
-    title: "ECHO SPACE",
-    category: "AUDIO VISUAL",
-    year: "2023",
-    color: "#00ccff",
-    description: "Audio-reactive visual experience.",
-    longDescription: `Echo Space transforms sound into stunning visuals in real-time.
-    Using the Web Audio API and custom shaders, every beat and frequency becomes
-    a visual element in an ever-evolving digital canvas.`,
-    tags: ["WEB AUDIO", "CANVAS", "MOTION"],
-    role: "CREATIVE DEVELOPER",
-    client: "MUSIC LABEL",
-    link: "#",
-  },
-];
-
 export default function ProjectPage() {
   const params = useParams();
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
+  const slug = params.slug as string;
 
-  const project = projects.find((p) => p.id === params.slug);
+  const project = getProjectById(slug);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -116,8 +37,7 @@ export default function ProjectPage() {
     );
   }
 
-  const currentIndex = projects.findIndex((p) => p.id === params.slug);
-  const nextProject = projects[(currentIndex + 1) % projects.length];
+  const nextProject = getNextProject(slug);
 
   return (
     <>

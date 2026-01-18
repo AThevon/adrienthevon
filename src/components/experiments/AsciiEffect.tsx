@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
+import { COLORS } from "@/lib/constants";
 
 interface AsciiEffectProps {
   text?: string;
@@ -25,7 +26,6 @@ export default function AsciiEffect({
   const mouseRef = useRef({ x: 0, y: 0 });
   const targetMouseRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number | null>(null);
-  const [dimensions, setDimensions] = useState({ width: 800, height: 400 });
 
   const generateAscii = useCallback(
     (
@@ -40,8 +40,13 @@ export default function AsciiEffect({
       ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, width, height);
 
+      // Calculate text size to fill most of the container
+      // Use container height to determine text size for better fill
+      const textScale = Math.min(width, height) * 0.6;
+      const sourceTextSize = Math.max(textScale, fontSize * 8);
+
       // Setup text rendering
-      ctx.font = `bold ${fontSize * 8}px monospace`;
+      ctx.font = `bold ${sourceTextSize}px monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
@@ -56,12 +61,12 @@ export default function AsciiEffect({
       offCtx.fillStyle = "#000";
       offCtx.fillRect(0, 0, width, height);
       offCtx.fillStyle = "#fff";
-      offCtx.font = `bold ${fontSize * 8}px monospace`;
+      offCtx.font = `bold ${sourceTextSize}px monospace`;
       offCtx.textAlign = "center";
       offCtx.textBaseline = "middle";
 
       const lines = text.split("\n");
-      const lineHeight = fontSize * 10;
+      const lineHeight = sourceTextSize * 1.1;
       const startY = height / 2 - ((lines.length - 1) * lineHeight) / 2;
 
       lines.forEach((line, i) => {
@@ -119,9 +124,9 @@ export default function AsciiEffect({
               );
               const char = ASCII_CHARS[charIndex];
 
-              // Color variation near cursor
-              const hue = (influence * 30 + time * 50) % 360;
-              ctx.fillStyle = `hsl(${hue}, 100%, 60%)`;
+              // Color variation near cursor - use accent color with brightness variation
+              const colorBrightness = 50 + influence * 30;
+              ctx.fillStyle = `hsl(38, 100%, ${colorBrightness}%)`; // Yellow-orange hue (38)
               ctx.fillText(char, charX, charY);
               ctx.fillStyle = color;
               continue;
@@ -153,24 +158,36 @@ export default function AsciiEffect({
 
     const resize = () => {
       const rect = container.getBoundingClientRect();
-      setDimensions({ width: rect.width, height: rect.height });
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      if (rect.width > 0 && rect.height > 0) {
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
     };
 
     resize();
-    window.addEventListener("resize", resize);
 
+    // Debounced resize handler
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resize, 150);
+    };
+    window.addEventListener("resize", handleResize);
+
+    // Use document-level events so canvas can work with pointer-events-none
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      targetMouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Check if mouse is within canvas bounds
+      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        targetMouseRef.current = { x, y };
+      }
     };
 
     if (interactive) {
-      canvas.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mousemove", handleMouseMove, { passive: true });
     }
 
     let startTime = performance.now();
@@ -197,21 +214,22 @@ export default function AsciiEffect({
     animate();
 
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
       if (interactive) {
-        canvas.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mousemove", handleMouseMove);
       }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [generateAscii, interactive, dimensions]);
+  }, [generateAscii, interactive]);
 
   return (
     <div ref={containerRef} className="w-full h-full min-h-[400px] relative">
       <canvas
         ref={canvasRef}
-        className="w-full h-full"
+        className="w-full h-full pointer-events-none"
         style={{ imageRendering: "pixelated" }}
       />
     </div>

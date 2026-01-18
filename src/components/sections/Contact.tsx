@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import TextReveal from "@/components/ui/TextReveal";
+import DualText from "@/components/ui/DualText";
 
 const socials = [
   { name: "GITHUB", url: "#" },
@@ -26,6 +27,7 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
+      data-cursor-mode="contact"
       className="min-h-screen flex flex-col justify-center py-32 px-8 md:px-16 relative overflow-hidden"
     >
       {/* Background accent */}
@@ -41,7 +43,7 @@ export default function Contact() {
       <div className="mb-16">
         <div className="flex items-center gap-4 mb-8">
           <span className="font-mono text-sm text-muted">004</span>
-          <span className="w-16 h-[1px] bg-foreground/20" />
+          <span className="w-16 h-px bg-foreground/20" />
           <span className="font-mono text-sm text-muted">CONTACT</span>
         </div>
       </div>
@@ -53,7 +55,7 @@ export default function Contact() {
         {/* Main CTA */}
         <div className="mb-24">
           <TextReveal className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8">
-            LET&apos;S CREATE SOMETHING EXTRAORDINARY TOGETHER
+            LET'S CREATE SOMETHING TOGETHER
           </TextReveal>
 
           <motion.p
@@ -63,8 +65,7 @@ export default function Contact() {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            Have a project in mind? I&apos;m currently available for freelance
-            work and exciting collaborations.
+            Got a project in mind? <DualText visible="I'm available" hidden="I respond... sometimes" /> for freelance work and collaborations.
           </motion.p>
         </div>
 
@@ -78,11 +79,11 @@ export default function Contact() {
         >
           <MagneticButton strength={0.2}>
             <a
-              href="mailto:hello@yourname.com"
+              href="mailto:hello@adrienthevon.com"
               className="group inline-flex items-center gap-6 text-4xl md:text-6xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
               data-cursor="hover"
             >
-              <span>HELLO@YOURNAME.COM</span>
+              <span>SAY HELLO</span>
               <motion.svg
                 width="48"
                 height="48"

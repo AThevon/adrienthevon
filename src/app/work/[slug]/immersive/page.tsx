@@ -4,169 +4,12 @@ import { useParams, useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
 import { useRef, useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { getProjectById, getNextProject } from "@/data/projects";
 
 const CustomCursor = dynamic(
   () => import("@/components/effects/CustomCursor"),
   { ssr: false }
 );
-
-const projects = [
-  {
-    id: "project-alpha",
-    title: "PROJECT ALPHA",
-    category: "WEB EXPERIENCE",
-    year: "2024",
-    color: "#ff4d00",
-    description: "An immersive 3D web experience pushing the boundaries of WebGL and real-time graphics.",
-    sections: [
-      {
-        type: "intro",
-        title: "THE VISION",
-        content: "To create something that transcends the ordinary. A digital experience that feels alive, breathing, responding to every movement.",
-      },
-      {
-        type: "challenge",
-        title: "THE CHALLENGE",
-        content: "How do you make pixels feel organic? How do you create emotion from code? These were the questions that drove this project.",
-      },
-      {
-        type: "process",
-        title: "THE PROCESS",
-        content: "Months of experimentation. Thousands of iterations. Pushing WebGL to its limits while maintaining 60fps across devices.",
-      },
-      {
-        type: "result",
-        title: "THE RESULT",
-        content: "An award-winning experience that redefined what's possible on the web. Featured on Awwwards, FWA, and CSS Design Awards.",
-      },
-    ],
-    tags: ["THREE.JS", "WEBGL", "REACT", "GSAP"],
-  },
-  {
-    id: "neural-canvas",
-    title: "NEURAL CANVAS",
-    category: "CREATIVE TOOL",
-    year: "2024",
-    color: "#00ff88",
-    description: "AI-powered generative art platform for digital artists.",
-    sections: [
-      {
-        type: "intro",
-        title: "THE IDEA",
-        content: "Art meets artificial intelligence. A tool that amplifies human creativity rather than replacing it.",
-      },
-      {
-        type: "challenge",
-        title: "THE COMPLEXITY",
-        content: "Making AI accessible without dumbing it down. Preserving artistic intent while leveraging machine learning.",
-      },
-      {
-        type: "process",
-        title: "THE BUILD",
-        content: "Custom neural networks trained on millions of artworks. Real-time generation with intuitive controls.",
-      },
-      {
-        type: "result",
-        title: "THE IMPACT",
-        content: "Used by over 50,000 artists worldwide. Generating millions of unique artworks every month.",
-      },
-    ],
-    tags: ["AI/ML", "CANVAS", "REACT", "NODE.JS"],
-  },
-  {
-    id: "void-studio",
-    title: "VOID STUDIO",
-    category: "DESIGN SYSTEM",
-    year: "2023",
-    color: "#8844ff",
-    description: "A comprehensive design system for modern web applications.",
-    sections: [
-      {
-        type: "intro",
-        title: "THE NEED",
-        content: "Consistency at scale. A design language that speaks clearly across hundreds of interfaces.",
-      },
-      {
-        type: "challenge",
-        title: "THE PUZZLE",
-        content: "Flexibility vs consistency. Enabling creativity while maintaining brand coherence.",
-      },
-      {
-        type: "process",
-        title: "THE CRAFT",
-        content: "Token-based architecture. Themeable components. Documentation that developers actually want to read.",
-      },
-      {
-        type: "result",
-        title: "THE OUTCOME",
-        content: "Adopted by 12 product teams. Reduced design-to-dev handoff time by 60%.",
-      },
-    ],
-    tags: ["DESIGN SYSTEM", "REACT", "STORYBOOK", "FIGMA"],
-  },
-  {
-    id: "particle-flow",
-    title: "PARTICLE FLOW",
-    category: "EXPERIMENT",
-    year: "2023",
-    color: "#ff0088",
-    description: "Real-time particle simulation using GPU compute shaders.",
-    sections: [
-      {
-        type: "intro",
-        title: "THE CURIOSITY",
-        content: "What if we could render millions of particles in real-time? What patterns would emerge?",
-      },
-      {
-        type: "challenge",
-        title: "THE LIMITS",
-        content: "Browser APIs. GPU memory. Frame budgets. Every constraint became an opportunity.",
-      },
-      {
-        type: "process",
-        title: "THE EXPLORATION",
-        content: "WebGPU compute shaders. Spatial hashing. Emergent behaviors from simple rules.",
-      },
-      {
-        type: "result",
-        title: "THE BEAUTY",
-        content: "5 million particles dancing at 60fps. Organic patterns from mathematical precision.",
-      },
-    ],
-    tags: ["WEBGPU", "SHADERS", "CREATIVE CODING"],
-  },
-  {
-    id: "echo-space",
-    title: "ECHO SPACE",
-    category: "AUDIO VISUAL",
-    year: "2023",
-    color: "#00ccff",
-    description: "Audio-reactive visual experience.",
-    sections: [
-      {
-        type: "intro",
-        title: "THE SYNESTHESIA",
-        content: "Sound has color. Rhythm has shape. Music has dimension.",
-      },
-      {
-        type: "challenge",
-        title: "THE LATENCY",
-        content: "Audio analysis in real-time. Visual response with zero perceptible delay.",
-      },
-      {
-        type: "process",
-        title: "THE SYNTHESIS",
-        content: "FFT analysis. Custom shaders. A visual language that speaks in frequencies.",
-      },
-      {
-        type: "result",
-        title: "THE EXPERIENCE",
-        content: "Featured at 3 music festivals. Transformed how audiences experience live performances.",
-      },
-    ],
-    tags: ["WEB AUDIO", "CANVAS", "MOTION"],
-  },
-];
 
 // Letter by letter reveal component
 function LetterReveal({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) {
@@ -285,8 +128,9 @@ export default function ImmersiveCaseStudy() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const slug = params.slug as string;
 
-  const project = projects.find((p) => p.id === params.slug);
+  const project = getProjectById(slug);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -317,8 +161,7 @@ export default function ImmersiveCaseStudy() {
     );
   }
 
-  const currentIndex = projects.findIndex((p) => p.id === params.slug);
-  const nextProject = projects[(currentIndex + 1) % projects.length];
+  const nextProject = getNextProject(slug);
 
   return (
     <>
