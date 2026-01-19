@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import Image from "next/image";
 import type { Project } from "@/data/projects";
+import { useDeviceDetect } from "@/hooks";
 
 interface HorizontalGalleryProps {
   items: Project[];
@@ -19,6 +20,7 @@ export default function HorizontalGallery({
   const [scrollWidth, setScrollWidth] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const { isMobile } = useDeviceDetect();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -37,8 +39,9 @@ export default function HorizontalGallery({
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollWidth]);
   const springX = useSpring(x, { stiffness: 200, damping: 25 });
 
-  // Parallax for background elements
-  const bgX = useTransform(scrollYProgress, [0, 1], [0, -scrollWidth * 0.5]);
+  // Parallax for background elements - reduce intensity on mobile
+  const parallaxIntensity = isMobile ? 0.3 : 0.5;
+  const bgX = useTransform(scrollYProgress, [0, 1], [0, -scrollWidth * parallaxIntensity]);
 
   // Track mouse for hover effects
   useEffect(() => {
@@ -49,6 +52,85 @@ export default function HorizontalGallery({
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  // Mobile: simple horizontal scroll with snap
+  if (isMobile) {
+    return (
+      <section className="relative min-h-screen py-24">
+        <div className="w-full h-[calc(100vh-12rem)] overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide">
+          <div className="flex h-full gap-6 px-6">
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                className="relative shrink-0 w-[85vw] h-full snap-center cursor-pointer"
+                onClick={() => onItemClick?.(item)}
+              >
+                {/* Simple card for mobile */}
+                <div className="relative w-full h-full bg-background border border-foreground/10 overflow-hidden rounded-lg">
+                  {/* Background glow */}
+                  <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                      background: `radial-gradient(circle at 50% 50%, ${item.color}, transparent 70%)`,
+                    }}
+                  />
+
+                  {/* Image */}
+                  <div className="relative w-full h-3/5 p-4">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-contain"
+                      sizes="85vw"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-background to-transparent">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="font-mono text-xs text-muted">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-xs text-muted">
+                        {item.category}
+                      </span>
+                    </div>
+                    <h3
+                      className="text-2xl font-bold mb-2"
+                      style={{ color: item.color }}
+                    >
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-muted line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Accent line */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-1"
+                    style={{ backgroundColor: item.color }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator for mobile */}
+        <div className="flex justify-center gap-2 mt-6">
+          {items.map((_, index) => (
+            <div
+              key={index}
+              className="w-2 h-2 rounded-full bg-foreground/20"
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop: vertical scroll with horizontal transform
   return (
     <section
       ref={containerRef}

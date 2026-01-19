@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { COLORS } from "@/lib/constants";
+import { useDeviceDetect } from "@/hooks";
 
 interface Point {
   x: number;
@@ -24,6 +25,9 @@ export default function LiquidCursor({
   maxAge = 80,
   intensity = 0.3,
 }: LiquidCursorProps) {
+  // All hooks must be called before any conditional returns
+  const { isMobile } = useDeviceDetect();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointsRef = useRef<Point[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -144,7 +148,8 @@ export default function LiquidCursor({
     };
   }, [enabled, color, maxAge, intensity, addPoint]);
 
-  if (!enabled) return null;
+  // Disable on mobile devices or if not enabled
+  if (isMobile || !enabled) return null;
 
   return (
     <canvas

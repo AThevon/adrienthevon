@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import type { Project } from "@/data/projects";
+import { useDeviceDetect } from "@/hooks";
 
 interface HoverRevealProps {
   projects: Project[];
@@ -14,6 +15,8 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
+  const { isMobile } = useDeviceDetect();
 
   const handleMouseMove = (e: React.MouseEvent) => {
     setCursorPos({
@@ -21,6 +24,40 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
       y: e.clientY,
     });
   };
+
+  // Touch handlers for mobile long-press
+  const handleTouchStart = useCallback((e: React.TouchEvent, index: number) => {
+    const touch = e.touches[0];
+    if (touch) {
+      setCursorPos({
+        x: touch.clientX,
+        y: touch.clientY,
+      });
+    }
+
+    const timer = setTimeout(() => {
+      setHoveredIndex(index);
+    }, 500); // 500ms long-press threshold
+    setLongPressTimer(timer);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+    setHoveredIndex(null);
+  }, [longPressTimer]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      setCursorPos({
+        x: touch.clientX,
+        y: touch.clientY,
+      });
+    }
+  }, []);
 
   return (
     <div
@@ -67,8 +104,8 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
               }}
             />
 
-            {/* Main container with tech frame */}
-            <div className="relative w-[320px] h-[220px]">
+            {/* Main container with tech frame - responsive sizing */}
+            <div className="relative w-[80vw] max-w-[320px] h-auto aspect-320/220 md:w-[320px] md:h-[220px]">
               {/* Corner brackets - static */}
               <div className="absolute inset-0 pointer-events-none">
                 {[0, 1, 2, 3].map((i) => (
@@ -219,8 +256,11 @@ export default function HoverReveal({ projects, onProjectClick }: HoverRevealPro
               delay: index * 0.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
+            onMouseEnter={!isMobile ? () => setHoveredIndex(index) : undefined}
+            onMouseLeave={!isMobile ? () => setHoveredIndex(null) : undefined}
+            onTouchStart={isMobile ? (e) => handleTouchStart(e, index) : undefined}
+            onTouchEnd={isMobile ? handleTouchEnd : undefined}
+            onTouchMove={isMobile ? handleTouchMove : undefined}
             onClick={() => onProjectClick?.(project)}
             data-cursor="hover"
             data-project-preview="true"

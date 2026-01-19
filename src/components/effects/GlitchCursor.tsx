@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { COLORS } from "@/lib/constants";
+import { useDeviceDetect } from "@/hooks";
 
 type SectionType = "hero" | "projects" | "about" | "noise" | "contact" | "timeline" | "skills" | "default";
 
@@ -36,6 +37,9 @@ const sectionColors: Record<SectionType, string> = {
 const glitchChars = "!@#$%^&*()_+-=[]{}|;':\",./<>?`~▓▒░█▄▀■□▪▫●○◐◑◒◓◔◕◖◗";
 
 export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
+  // All hooks must be called before any conditional returns
+  const { isMobile } = useDeviceDetect();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -100, y: -100 });
   const targetMouseRef = useRef({ x: -100, y: -100 });
@@ -446,7 +450,8 @@ export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
     };
   }, [enabled, currentSection, detectSection, checkHovering, checkHoveringProject]);
 
-  if (!enabled) return null;
+  // Disable on mobile devices or if not enabled
+  if (isMobile || !enabled) return null;
 
   return (
     <canvas

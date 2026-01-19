@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { COLORS } from "@/lib/constants";
+import { usePerformance } from "@/hooks";
 
 type SectionType = "hero" | "projects" | "about" | "noise" | "contact" | "timeline" | "skills" | "default";
 
@@ -117,6 +118,9 @@ const sectionConfig: Record<SectionType, {
 };
 
 export default function SectionEffects({ enabled = true }: SectionEffectsProps) {
+  // All hooks must be called before any conditional returns
+  const { enableParticles, particleMultiplier } = usePerformance();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
@@ -124,6 +128,15 @@ export default function SectionEffects({ enabled = true }: SectionEffectsProps) 
   const animationRef = useRef<number | null>(null);
   const [currentSection, setCurrentSection] = useState<SectionType>("default");
   const timeRef = useRef(0);
+
+  // Adjust particle count based on performance multiplier
+  const getAdjustedConfig = useCallback((section: SectionType) => {
+    const config = sectionConfig[section];
+    return {
+      ...config,
+      particleCount: Math.round(config.particleCount * particleMultiplier),
+    };
+  }, [particleMultiplier]);
 
   const detectSection = useCallback((y: number): SectionType => {
     const sections = document.querySelectorAll("section[data-cursor-mode]");
@@ -202,7 +215,7 @@ export default function SectionEffects({ enabled = true }: SectionEffectsProps) 
         particlesRef.current = [];
       }
 
-      const config = sectionConfig[section as SectionType];
+      const config = getAdjustedConfig(section as SectionType);
 
       // Spawn particles based on movement
       if (speed > 3 && config.effect !== "none") {
@@ -330,7 +343,7 @@ export default function SectionEffects({ enabled = true }: SectionEffectsProps) 
 
       ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
 
-      const config = sectionConfig[currentSection];
+      const config = getAdjustedConfig(currentSection);
 
       if (config.effect === "none") {
         animationRef.current = requestAnimationFrame(animate);
@@ -490,7 +503,8 @@ export default function SectionEffects({ enabled = true }: SectionEffectsProps) 
     };
   }, [enabled, currentSection, detectSection, createParticle]);
 
-  if (!enabled) return null;
+  // Disable if particles are not enabled (mobile/reduced-motion) or if not enabled
+  if (!enableParticles || !enabled) return null;
 
   return (
     <canvas

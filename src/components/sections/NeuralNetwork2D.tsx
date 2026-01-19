@@ -505,7 +505,7 @@ export default function NeuralNetwork2D() {
           <span className="w-16 h-px bg-foreground/20" />
           <span className="font-mono text-sm text-muted">{t("title")}</span>
         </div>
-        <h2 className="text-xl md:text-3xl font-bold tracking-tighter">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter">
           {t("subtitle").split(" ")[0]}{" "}
           <span className="text-accent">{t("subtitle").split(" ").slice(1).join(" ")}</span>
         </h2>

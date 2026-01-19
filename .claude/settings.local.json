@@ -14,7 +14,8 @@
       "Bash(do echo \"$img:\")",
       "Bash(done)",
       "Bash(npm run lint)",
-      "Bash(npm run lint:*)"
+      "Bash(npm run lint:*)",
+      "Bash(grep:*)"
     ]
   }
 }

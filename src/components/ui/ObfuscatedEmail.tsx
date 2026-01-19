@@ -33,8 +33,10 @@ export default function ObfuscatedEmail({
           ];
         })
         .join("");
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplayText(obfuscated);
     } else {
+       
       setDisplayText(realEmail);
     }
   }, [isRevealed, realEmail]);

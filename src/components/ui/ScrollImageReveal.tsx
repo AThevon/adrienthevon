@@ -42,6 +42,7 @@ export default function ScrollImageReveal({
   const scale = useTransform(scrollYProgress, [0.3, 0.7], [1.2, 1]);
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
 
   return (
     <motion.div
@@ -78,7 +79,7 @@ export default function ScrollImageReveal({
       {(title || subtitle) && (
         <motion.div
           className="absolute bottom-8 left-8 right-8"
-          style={{ opacity: useTransform(scrollYProgress, [0.3, 0.5], [0, 1]) }}
+          style={{ opacity: textOpacity }}
         >
           {subtitle && (
             <span className="font-mono text-sm text-accent mb-2 block">

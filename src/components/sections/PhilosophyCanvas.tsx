@@ -361,7 +361,7 @@ export default function PhilosophyCanvas() {
             </motion.div>
 
             <motion.h2
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
+              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8"
               style={{ color: principles[0].color }}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -371,7 +371,7 @@ export default function PhilosophyCanvas() {
             </motion.h2>
 
             <motion.p
-              className="text-lg md:text-2xl text-muted max-w-3xl mx-auto leading-relaxed"
+              className="text-base md:text-xl lg:text-2xl text-muted max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -415,7 +415,7 @@ export default function PhilosophyCanvas() {
             </motion.div>
 
             <motion.h2
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
+              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8"
               style={{ color: principles[1].color }}
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -425,7 +425,7 @@ export default function PhilosophyCanvas() {
             </motion.h2>
 
             <motion.p
-              className="text-lg md:text-2xl text-muted max-w-3xl leading-relaxed mb-8"
+              className="text-base md:text-xl lg:text-2xl text-muted max-w-3xl leading-relaxed mb-8"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -476,7 +476,7 @@ export default function PhilosophyCanvas() {
             </motion.div>
 
             <motion.h2
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
+              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8"
               style={{ color: principles[2].color }}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -486,7 +486,7 @@ export default function PhilosophyCanvas() {
             </motion.h2>
 
             <motion.p
-              className="text-lg md:text-2xl text-muted max-w-3xl mx-auto leading-relaxed"
+              className="text-base md:text-xl lg:text-2xl text-muted max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -541,7 +541,7 @@ export default function PhilosophyCanvas() {
             </motion.div>
 
             <motion.h2
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
+              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8"
               style={{ color: principles[3].color }}
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -551,7 +551,7 @@ export default function PhilosophyCanvas() {
             </motion.h2>
 
             <motion.p
-              className="text-lg md:text-2xl text-muted max-w-3xl leading-relaxed mb-12"
+              className="text-base md:text-xl lg:text-2xl text-muted max-w-3xl leading-relaxed mb-12"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}

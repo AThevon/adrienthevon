@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { COLORS } from "@/lib/constants";
+import { useDeviceDetect } from "@/hooks";
 
 interface AsciiEffectProps {
   text?: string;
@@ -9,6 +10,7 @@ interface AsciiEffectProps {
   color?: string;
   backgroundColor?: string;
   interactive?: boolean;
+  resolution?: number; // Characters per row (lower = better performance)
 }
 
 // ASCII characters from dark to light
@@ -16,11 +18,18 @@ const ASCII_CHARS = " .:-=+*#%@";
 
 export default function AsciiEffect({
   text = "CREATIVE\nCODER",
-  fontSize = 10,
+  fontSize: propFontSize,
   color = "#fafafa",
   backgroundColor = "transparent",
   interactive = true,
+  resolution: propResolution,
 }: AsciiEffectProps) {
+  const { isMobile } = useDeviceDetect();
+
+  // Auto-adjust resolution and font size based on device
+  const resolution = propResolution ?? (isMobile ? 15 : 30);
+  const fontSize = propFontSize ?? (isMobile ? 8 : 10);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });

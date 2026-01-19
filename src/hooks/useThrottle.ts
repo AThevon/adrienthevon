@@ -8,6 +8,7 @@ export function useThrottle<T extends (...args: unknown[]) => void>(
   const lastArgs = useRef<unknown[] | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+   
   return useCallback(
     ((...args: unknown[]) => {
       const now = Date.now();
@@ -41,6 +42,7 @@ export function useRAFThrottle<T extends (...args: unknown[]) => void>(
   const rafRef = useRef<number | null>(null);
   const argsRef = useRef<unknown[] | null>(null);
 
+   
   return useCallback(
     ((...args: unknown[]) => {
       argsRef.current = args;

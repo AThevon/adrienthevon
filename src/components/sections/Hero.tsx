@@ -4,10 +4,11 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { usePerformance } from "@/hooks";
+import { usePerformance, useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
 import { usePageTransition } from "@/hooks/usePageTransition";
+import { NavigationDockMobile } from "@/components/ui/NavigationDock.mobile";
 
 const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
@@ -168,6 +169,7 @@ export default function Hero() {
   const [isReady, setIsReady] = useState(false);
   const [particleKey, setParticleKey] = useState(0);
   const { enable3D } = usePerformance();
+  const { isMobile } = useDeviceDetect();
   const t = useTranslations("hero");
   const tNav = useTranslations("nav");
   const tHome = useTranslations("home");
@@ -413,11 +415,12 @@ export default function Hero() {
             </button>
           </motion.div>
 
-          {/* Navigation Dock - appears from below CTAs like macOS dock */}
-          <motion.div
-            style={{ y: contentY, opacity: contentOpacity }}
-            className="mt-8 w-screen px-4 flex items-end justify-center gap-2"
-          >
+          {/* Navigation Dock - desktop only, mobile uses drawer */}
+          {!isMobile && (
+            <motion.div
+              style={{ y: contentY, opacity: contentOpacity }}
+              className="mt-8 w-screen px-4 flex items-end justify-center gap-2"
+            >
             {navigationItems.map((item, index) => {
               // Unique 3D artifact for each page
               const renderArtifact = (isHovered: boolean) => {
@@ -678,7 +681,11 @@ export default function Hero() {
               );
             })}
           </motion.div>
+          )}
         </div>
+
+        {/* Mobile Navigation Drawer - only on mobile */}
+        {isMobile && <NavigationDockMobile items={navigationItems} />}
 
         {/* Side decorations */}
         <motion.div

@@ -126,7 +126,7 @@ export default function WorkPage() {
                   viewport={{ once: true }}
                   className="text-center"
                 >
-                  <div className="text-5xl md:text-7xl font-bold mb-2" style={{ color: '#ffaa00' }}>
+                  <div className="text-4xl md:text-5xl lg:text-7xl font-bold mb-2" style={{ color: '#ffaa00' }}>
                     {stat.value}
                   </div>
                   <div className="font-mono text-xs text-muted">{stat.label}</div>

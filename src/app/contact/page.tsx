@@ -31,7 +31,7 @@ export default function ContactPage() {
   const t = useTranslations("contact");
 
   return (
-    <main className="relative min-h-screen px-8 md:px-16 py-32 md:py-20">
+    <main className="relative min-h-screen px-8 md:px-16 py-24 md:py-32">
       {/* Animated grid background */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div
@@ -87,7 +87,7 @@ export default function ContactPage() {
 
         {/* Subtitle */}
         <motion.p
-          className="text-xl md:text-2xl text-muted max-w-2xl mx-auto"
+          className="text-base md:text-xl lg:text-2xl text-muted max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -150,7 +150,7 @@ export default function ContactPage() {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative h-48 md:h-56 border-2 border-foreground/20 overflow-hidden"
+                className="group relative h-56 md:h-56 lg:h-64 border-2 border-foreground/20 overflow-hidden"
                 initial={{ opacity: 0, y: 30, rotateX: -15 }}
                 animate={{ opacity: 1, y: 0, rotateX: 0 }}
                 transition={{

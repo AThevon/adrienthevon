@@ -71,7 +71,7 @@ export default function About() {
       {/* Main layout - Split screen */}
       <div className="relative min-h-screen flex flex-col lg:flex-row">
         {/* Left side - ASCII Art (full height on desktop) */}
-        <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-screen lg:sticky lg:top-0">
+        <div className="relative w-full lg:w-1/2 h-[30vh] md:h-[40vh] lg:h-screen lg:sticky lg:top-0">
           {/* ASCII container with better visibility */}
           {enable3D && (
             <motion.div
@@ -131,7 +131,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
-                className="text-lg text-muted leading-relaxed"
+                className="text-base md:text-lg text-muted leading-relaxed"
               >
                 {t("intro")}
               </motion.p>
@@ -141,7 +141,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="text-lg text-muted leading-relaxed"
+                className="text-base md:text-lg text-muted leading-relaxed"
               >
                 {t("philosophy")}
               </motion.p>
