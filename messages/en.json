@@ -164,13 +164,27 @@
   "contact": {
     "sectionNumber": "006",
     "title": "CONTACT",
-    "headline": "LET'S CREATE SOMETHING TOGETHER",
-    "intro": "Got a project in mind? I'm available for freelance work and collaborations.",
+    "subtitle": "LET'S CREATE SOMETHING TOGETHER",
+    "headline": "LET'S TALK",
+    "intro": "Got a cool project? An idea to explore? Something interesting to share? Always down to chat.",
     "cta": "SAY HELLO",
     "connect": "CONNECT",
     "location": "LOCATION",
-    "locationValue": "PARIS, FRANCE",
+    "locationValue": "TOULOUSE, FRANCE",
     "availability": "AVAILABLE WORLDWIDE",
+    "emailTitle": "EMAIL",
+    "emailSubtitle": "For professional opportunities",
+    "formTitle": "OR SEND ME A MESSAGE",
+    "form": {
+      "name": "NAME",
+      "email": "EMAIL",
+      "subject": "SUBJECT",
+      "message": "MESSAGE",
+      "submit": "SEND",
+      "sending": "SENDING...",
+      "success": "Message sent successfully! I'll get back to you soon.",
+      "error": "Error sending message. Please try again or contact me directly via email."
+    },
     "copyright": "© {year}",
     "rights": "ALL RIGHTS RESERVED"
   },
@@ -330,13 +344,13 @@
     "blenkdev": {
       "category": "WEB AGENCY",
       "description": "Showcase website for a freelance web development agency specialized in custom solutions.",
-      "longDescription": "BlenkDev is the showcase website for my freelance web development activity.\nA platform that presents my services, approach and portfolio in a clear and professional manner.\n\nThe goal: inspire trust and demonstrate my expertise through a modern visual identity and detailed case studies.",
+      "longDescription": "BlenkDev is the showcase website for freelance web development activity.\nA platform that presents services, approach and portfolio in a clear and professional manner.\n\nThe goal: inspire trust and demonstrate expertise through a modern visual identity and detailed case studies.",
       "role": "FULL-STACK DEVELOPER",
       "client": "BLENKDEV",
       "sections": {
         "intro": {
           "title": "THE MISSION",
-          "content": "Create a professional online presence for my freelance activity. A website that inspires trust and demonstrates my technical expertise."
+          "content": "Create a professional online presence for freelance activity. A website that inspires trust and demonstrates technical expertise."
         },
         "challenge": {
           "title": "THE CHALLENGE",

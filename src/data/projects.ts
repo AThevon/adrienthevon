@@ -204,10 +204,10 @@ rendant accessible un processus habituellement complexe.`,
     date: "2024-05", // Mai 2024
     color: "#fdbb00", // Jaune (couleur officielle de l'agence)
     description: "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
-    longDescription: `BlenkDev est le site vitrine de mon activité freelance en développement web.
-Une plateforme qui présente mes services, mon approche et mon portfolio de manière claire et professionnelle.
+    longDescription: `BlenkDev est le site vitrine d'une activité freelance en développement web.
+Une plateforme qui présente des services, approches et portfolio de manière claire et professionnelle.
 
-L'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.`,
+L'objectif : inspirer confiance et démontrer expertise à travers une identité visuelle moderne et des études de cas détaillées.`,
     tags: ["NEXT.JS", "TAILWIND", "MOTION", "SEO", "ANALYTICS"],
     skills: ["nextjs", "react", "typescript", "tailwind", "motion", "git", "vercel", "figma"],
     role: "DÉVELOPPEUR FULL-STACK",
@@ -218,12 +218,12 @@ L'objectif : inspirer confiance et démontrer mon expertise à travers une ident
       {
         type: "intro",
         title: "LA MISSION",
-        content: "Créer une présence en ligne professionnelle pour mon activité freelance. Un site qui inspire confiance et démontre mon expertise technique.",
+        content: "Créer une présence en ligne professionnelle pour une activité freelance. Un site qui inspire confiance et démontre expertise technique.",
       },
       {
         type: "challenge",
         title: "LE DÉFI",
-        content: "Se démarquer dans un marché saturé en mettant en avant mes compétences uniques et mon approche centrée sur le client.",
+        content: "Se démarquer dans un marché saturé en mettant en avant compétences uniques et approche centrée sur le client.",
       },
       {
         type: "process",

@@ -164,13 +164,27 @@
   "contact": {
     "sectionNumber": "006",
     "title": "CONTACT",
-    "headline": "CRÉONS QUELQUE CHOSE ENSEMBLE",
-    "intro": "Un projet en tête ? Je suis dispo pour du freelance et des collabs.",
+    "subtitle": "CRÉONS QUELQUE CHOSE ENSEMBLE",
+    "headline": "DISCUTONS",
+    "intro": "Un projet cool ? Une idée à explorer ? Partager des trucs intéressants ? Je suis toujours chaud pour échanger.",
     "cta": "DIS BONJOUR",
     "connect": "ME SUIVRE",
     "location": "LOCALISATION",
-    "locationValue": "PARIS, FRANCE",
-    "availability": "DISPO PARTOUT DANS LE MONDE",
+    "locationValue": "TOULOUSE, FRANCE",
+    "availability": "DISPONIBLE PARTOUT",
+    "emailTitle": "EMAIL",
+    "emailSubtitle": "Pour les opportunités pro",
+    "formTitle": "OU ENVOIE-MOI UN MESSAGE",
+    "form": {
+      "name": "NOM",
+      "email": "EMAIL",
+      "subject": "SUJET",
+      "message": "MESSAGE",
+      "submit": "ENVOYER",
+      "sending": "ENVOI EN COURS...",
+      "success": "Message envoyé avec succès ! Je te réponds rapidement.",
+      "error": "Erreur lors de l'envoi. Réessaye ou contacte-moi directement par email."
+    },
     "copyright": "© {year}",
     "rights": "TOUS DROITS RÉSERVÉS"
   },
@@ -330,13 +344,13 @@
     "blenkdev": {
       "category": "AGENCE WEB",
       "description": "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
-      "longDescription": "BlenkDev est le site vitrine de mon activité freelance en développement web.\nUne plateforme qui présente mes services, mon approche et mon portfolio de manière claire et professionnelle.\n\nL'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.",
+      "longDescription": "BlenkDev est le site vitrine d'une activité freelance en développement web.\nUne plateforme qui présente des services, approches et portfolio de manière claire et professionnelle.\n\nL'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.",
       "role": "DÉVELOPPEUR FULL-STACK",
       "client": "BLENKDEV",
       "sections": {
         "intro": {
           "title": "LA MISSION",
-          "content": "Créer une présence en ligne professionnelle pour mon activité freelance. Un site qui inspire confiance et démontre mon expertise technique."
+          "content": "Créer une présence en ligne professionnelle pour une activité freelance. Un site qui inspire confiance."
         },
         "challenge": {
           "title": "LE DÉFI",

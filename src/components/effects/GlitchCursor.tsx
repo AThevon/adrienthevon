@@ -65,6 +65,7 @@ export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
   }[]>([]);
 
   const [currentSection, setCurrentSection] = useState<SectionType>("default");
+  const [isHoveringProject, setIsHoveringProject] = useState(false);
 
   const detectSection = useCallback((y: number): SectionType => {
     const sections = document.querySelectorAll("section[data-cursor-mode]");
@@ -90,6 +91,14 @@ export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
       (element as HTMLElement).dataset?.cursor === "hover" ||
       element.closest("[data-cursor='hover']")
     );
+  }, []);
+
+  const checkHoveringProject = useCallback((): boolean => {
+    // Check if a project preview is visible in the DOM
+    const previewActive = document.querySelector("[data-project-preview-active='true']");
+    const projectItem = document.querySelector("[data-project-preview='true']:hover");
+
+    return !!(previewActive || projectItem);
   }, []);
 
   useEffect(() => {
@@ -167,6 +176,12 @@ export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
       }
 
       isHoveringRef.current = checkHovering(e.clientX, e.clientY);
+
+      // Check if hovering a project (no coords needed, checks DOM)
+      const hoveringProject = checkHoveringProject();
+      if (hoveringProject !== isHoveringProject) {
+        setIsHoveringProject(hoveringProject);
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
@@ -429,7 +444,7 @@ export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [enabled, currentSection, detectSection, checkHovering]);
+  }, [enabled, currentSection, detectSection, checkHovering, checkHoveringProject]);
 
   if (!enabled) return null;
 
@@ -437,7 +452,7 @@ export default function GlitchCursor({ enabled = true }: GlitchCursorProps) {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-[9999]"
-      style={{ mixBlendMode: "difference" }}
+      style={{ mixBlendMode: isHoveringProject ? "normal" : "difference" }}
     />
   );
 }
