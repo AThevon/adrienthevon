@@ -8,7 +8,6 @@ import { usePerformance, useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
 import { usePageTransition } from "@/hooks/usePageTransition";
-import { NavigationDockMobile } from "@/components/ui/NavigationDock.mobile";
 
 const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
@@ -683,9 +682,6 @@ export default function Hero() {
           </motion.div>
           )}
         </div>
-
-        {/* Mobile Navigation Drawer - only on mobile */}
-        {isMobile && <NavigationDockMobile items={navigationItems} />}
 
         {/* Side decorations */}
         <motion.div

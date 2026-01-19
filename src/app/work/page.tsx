@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import HoverReveal from "@/components/ui/HoverReveal";
 import HorizontalGallery from "@/components/sections/HorizontalGallery";
 import { projects } from "@/data/projects";
+import { useScrollDirection, useDeviceDetect } from "@/hooks";
 
 const LiquidCursor = dynamic(
   () => import("@/components/effects/LiquidCursor"),
@@ -19,17 +20,26 @@ export default function WorkPage() {
   const [viewMode, setViewMode] = useState<"list" | "gallery">("list");
   const t = useTranslations("projects");
   const tNav = useTranslations("nav");
+  const scrollDirection = useScrollDirection();
+  const { isMobile } = useDeviceDetect();
 
   const handleProjectClick = (project: { id: string }) => {
     router.push(`/work/${project.id}`);
   };
+
+  // Hide header on scroll down (mobile only)
+  const shouldHideHeader = isMobile && scrollDirection === "down";
 
   // Gallery view - immersive horizontal scroll
   if (viewMode === "gallery") {
     return (
       <main className="min-h-screen">
         {/* Page header - fixed like the global header */}
-        <div className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2">
+        <motion.div
+          className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2"
+          animate={{ y: shouldHideHeader ? -100 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
           {/* Back button */}
           <motion.a
             href="/"
@@ -57,7 +67,7 @@ export default function WorkPage() {
               <path d="M2 6H10M10 6L7 3M10 6L7 9" stroke="currentColor" strokeWidth="1" />
             </svg>
           </button>
-        </div>
+        </motion.div>
 
         <HorizontalGallery items={projects} onItemClick={handleProjectClick} />
       </main>
@@ -68,7 +78,11 @@ export default function WorkPage() {
   return (
     <main className="min-h-screen">
       {/* Page header - fixed like gallery view */}
-      <div className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2">
+      <motion.div
+        className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2"
+        animate={{ y: shouldHideHeader ? -100 : 0 }}
+        transition={{ duration: 0.3 }}
+      >
         {/* Back button */}
         <motion.a
           href="/"
@@ -96,7 +110,7 @@ export default function WorkPage() {
             <path d="M2 6H10M10 6L7 3M10 6L7 9" stroke="currentColor" strokeWidth="1" />
           </svg>
         </button>
-      </div>
+      </motion.div>
 
         {/* Projects list with hover reveal */}
         <section className="pt-40 pb-32 px-8 md:px-16">

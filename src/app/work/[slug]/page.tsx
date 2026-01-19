@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import TextReveal from "@/components/ui/TextReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { getProjectById, getNextProject } from "@/data/projects";
+import { useScrollDirection, useDeviceDetect } from "@/hooks";
 
 // Letter by letter reveal component that respects word boundaries
 function LetterReveal({ text, delay = 0 }: { text: string; delay?: number }) {
@@ -61,6 +62,8 @@ export default function ProjectPage() {
   const slug = params.slug as string;
   const t = useTranslations("projectPage");
   const tProject = useTranslations(`projectsData.${kebabToCamel(slug)}`);
+  const scrollDirection = useScrollDirection();
+  const { isMobile } = useDeviceDetect();
 
   const project = getProjectById(slug);
 
@@ -74,6 +77,9 @@ export default function ProjectPage() {
 
   // Gradient opacity that fades drastically as you scroll
   const gradientOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+
+  // Hide back button on scroll down (mobile only)
+  const shouldHideBackButton = isMobile && scrollDirection === "down";
 
   if (!project) {
     return (
@@ -111,9 +117,12 @@ export default function ProjectPage() {
           {/* Back button */}
           <motion.a
             href="/work"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{
+              opacity: 1,
+              y: shouldHideBackButton ? -100 : 0
+            }}
+            transition={{ duration: 0.3 }}
             className="fixed top-24 left-8 z-40 font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
             data-cursor="hover"
           >

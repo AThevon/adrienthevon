@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { usePageTransition } from "@/hooks/usePageTransition";
+import { useScrollDirection, useDeviceDetect } from "@/hooks";
 
 const menuItems = [
   { key: "home", href: "/" },
@@ -24,6 +25,8 @@ export default function MainNav() {
   const pathname = usePathname();
   const t = useTranslations("nav");
   const { transitionToPage } = usePageTransition();
+  const scrollDirection = useScrollDirection();
+  const { isMobile } = useDeviceDetect();
 
   // Close menu on route change
   useEffect(() => {
@@ -54,14 +57,20 @@ export default function MainNav() {
 
   const isHomepage = pathname === "/";
 
+  // Hide navbar on scroll down (mobile only)
+  const shouldHideNav = isMobile && scrollDirection === "down" && !isOpen;
+
   return (
     <>
       {/* Fixed Header */}
       <motion.header
         className="fixed top-0 left-0 right-0 z-50 px-8 py-6 md:px-16 pointer-events-none"
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        animate={{
+          opacity: 1,
+          y: shouldHideNav ? -100 : 0
+        }}
+        transition={{ duration: 0.3 }}
       >
         <div className="flex items-center justify-between">
           {/* Logo - hidden on homepage */}
