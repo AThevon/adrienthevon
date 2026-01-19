@@ -72,6 +72,7 @@
     "hoverHint": "SURVOLE POUR EXPLORER",
     "loading": "CHARGEMENT DU RÉSEAU...",
     "clickNode": "Cliquez sur un node → Voir les projets",
+    "tapNode": "Touchez un node → Voir les projets",
     "hoverExplore": "Survolez → Explorer les connexions",
     "projectsUsing": "PROJETS UTILISANT CETTE COMPÉTENCE",
     "projectCount": "{count} projet",
@@ -95,6 +96,7 @@
     "title": "PARCOURS",
     "subtitle": "MON CHEMIN",
     "loading": "CHARGEMENT...",
+    "current": "Actuel",
     "prev": "← PRÉC",
     "next": "SUIV →",
     "events": {

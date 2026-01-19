@@ -247,7 +247,7 @@ export default function StaticNetwork() {
             />
 
             {/* Main container */}
-            <div className="relative h-full bg-background/95 backdrop-blur-xl rounded-t-3xl border-t-2 border-foreground/10 flex flex-col overflow-hidden">
+            <div className="relative h-full bg-background/95 backdrop-blur-xl rounded-t-3xl border-t-2 border-foreground/10 flex flex-col">
               {/* Header with gradient accent */}
               <div
                 className="relative flex items-center justify-between p-6 shrink-0 border-b border-foreground/10"

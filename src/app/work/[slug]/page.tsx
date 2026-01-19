@@ -132,7 +132,7 @@ export default function ProjectPage() {
           </motion.div>
 
           {/* Title with letter reveal */}
-          <h1 className="text-6xl md:text-8xl lg:text-[10vw] xl:text-[8vw] font-bold tracking-tighter text-center px-8 max-w-[90vw] leading-[0.9] break-normal">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-[8vw] font-bold tracking-tighter text-center px-4 md:px-8 max-w-full leading-[0.9] wrap-break-word">
             <LetterReveal text={project.title} delay={0.5} />
           </h1>
 

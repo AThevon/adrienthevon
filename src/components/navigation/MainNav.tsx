@@ -89,7 +89,10 @@ export default function MainNav() {
 
           {/* Right side - Language Switcher + Menu Button */}
           <div className="flex items-center gap-3 pointer-events-auto">
-            <LanguageSwitcher />
+            {/* Language Switcher - hidden on mobile, shown in menu instead */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -216,6 +219,17 @@ export default function MainNav() {
                     );
                   })}
                 </motion.ul>
+
+                {/* Language Switcher - mobile only */}
+                <motion.div
+                  className="mt-12 md:hidden flex justify-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <LanguageSwitcher />
+                </motion.div>
 
                 {/* Footer info */}
                 <motion.div

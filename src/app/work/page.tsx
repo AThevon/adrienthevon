@@ -29,27 +29,27 @@ export default function WorkPage() {
     return (
       <main className="min-h-screen">
         {/* Page header - fixed like the global header */}
-        <div className="fixed top-24 left-0 right-0 z-30 w-full px-8 py-1 flex items-center justify-between">
+        <div className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2">
           {/* Back button */}
           <motion.a
             href="/"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
+            className="font-mono text-xs md:text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-3 md:px-4 py-2"
             data-cursor="hover"
           >
             ← {tNav("back")}
           </motion.a>
 
-          {/* Title */}
-          <span className="font-mono text-xs text-muted bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2">
+          {/* Title - hidden on small mobile */}
+          <span className="hidden sm:block font-mono text-xs text-muted bg-background/80 backdrop-blur-sm border border-foreground/10 px-3 md:px-4 py-2 whitespace-nowrap">
             {t("subtitle")}
           </span>
 
-          {/* Mode toggle */}
+          {/* Mode toggle - hidden on mobile */}
           <button
             onClick={() => setViewMode("list")}
-            className="font-mono text-xs text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2 flex items-center gap-2"
+            className="hidden md:flex font-mono text-xs text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2 items-center gap-2"
             data-cursor="hover"
           >
             {t("listView")}
@@ -68,27 +68,27 @@ export default function WorkPage() {
   return (
     <main className="min-h-screen">
       {/* Page header - fixed like gallery view */}
-      <div className="fixed top-24 left-0 right-0 z-30 w-full px-8 py-1 flex items-center justify-between">
+      <div className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2">
         {/* Back button */}
         <motion.a
           href="/"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
+          className="font-mono text-xs md:text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-3 md:px-4 py-2"
           data-cursor="hover"
         >
           ← {tNav("back")}
         </motion.a>
 
-        {/* Title */}
-        <span className="font-mono text-xs text-muted bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2">
+        {/* Title - hidden on small mobile */}
+        <span className="hidden sm:block font-mono text-xs text-muted bg-background/80 backdrop-blur-sm border border-foreground/10 px-3 md:px-4 py-2 whitespace-nowrap">
           {t("subtitle")}
         </span>
 
-        {/* Mode toggle */}
+        {/* Mode toggle - hidden on mobile */}
         <button
           onClick={() => setViewMode("gallery")}
-          className="font-mono text-xs text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2 flex items-center gap-2"
+          className="hidden md:flex font-mono text-xs text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2 items-center gap-2"
           data-cursor="hover"
         >
           {t("galleryView")}

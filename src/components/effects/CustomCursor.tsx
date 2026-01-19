@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useSpring, useMotionValue, AnimatePresence } from "motion/react";
+import { useDeviceDetect } from "@/hooks";
 
 interface CursorState {
   isHovering: boolean;
@@ -10,6 +11,9 @@ interface CursorState {
 }
 
 export default function CustomCursor() {
+  // All hooks must be called before any conditional returns
+  const { isMobile } = useDeviceDetect();
+
   const cursorRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<CursorState>({
     isHovering: false,
@@ -76,6 +80,9 @@ export default function CustomCursor() {
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [handleMouseMove, handleMouseOver, handleMouseLeave]);
+
+  // Disable on mobile devices (no cursor needed on touch devices)
+  if (isMobile) return null;
 
   const { isHovering, isVisible, cursorType } = state;
 

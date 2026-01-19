@@ -72,6 +72,7 @@
     "hoverHint": "HOVER TO EXPLORE",
     "loading": "LOADING NETWORK...",
     "clickNode": "Click node → See projects",
+    "tapNode": "Tap node → See projects",
     "hoverExplore": "Hover → Explore connections",
     "projectsUsing": "PROJECTS USING THIS SKILL",
     "projectCount": "{count} project",
@@ -95,6 +96,7 @@
     "title": "JOURNEY",
     "subtitle": "MY PATH",
     "loading": "LOADING...",
+    "current": "Current",
     "prev": "← PREV",
     "next": "NEXT →",
     "events": {
