@@ -11,12 +11,34 @@ interface DeviceInfo {
 }
 
 export function useDeviceDetect(): DeviceInfo {
-  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>({
-    isMobile: false,
-    isTablet: false,
-    isDesktop: true,
-    isTouchDevice: false,
-    isLowPowerMode: false,
+  // Initialize with undefined to match SSR/Client
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>(() => {
+    // Only run on client
+    if (typeof window === 'undefined') {
+      return {
+        isMobile: false,
+        isTablet: false,
+        isDesktop: true,
+        isTouchDevice: false,
+        isLowPowerMode: false,
+      };
+    }
+
+    // Initialize immediately on client to avoid hydration mismatch
+    const width = window.innerWidth;
+    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    const isLowPowerMode =
+      (navigator as unknown as { deviceMemory?: number }).deviceMemory !== undefined &&
+      (navigator as unknown as { deviceMemory?: number }).deviceMemory! < 4 ||
+      navigator.hardwareConcurrency < 4;
+
+    return {
+      isMobile: width < 768,
+      isTablet: width >= 768 && width < 1024,
+      isDesktop: width >= 1024,
+      isTouchDevice,
+      isLowPowerMode,
+    };
   });
 
   useEffect(() => {
