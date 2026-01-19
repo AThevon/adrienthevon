@@ -189,7 +189,7 @@ export default function Hero() {
   // Only fade out content, no scale down
   const opacity = useTransform(scrollYProgress, [0.35, 0.6], [1, 0]);
 
-  // CTAs and cards appear together when scrolling
+  // Navigation Dock appears when scrolling (slides up from bottom)
   const contentY = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
 
@@ -253,7 +253,7 @@ export default function Hero() {
         </div>
 
         {/* Main content - overflow-hidden clips CTAs when at y:30 (pre-animation) */}
-        <div className="relative z-10 w-full flex flex-col items-center justify-end h-full pb-16 overflow-hidden">
+        <div className="relative z-10 w-full flex flex-col items-center h-full pb-16 overflow-hidden">
           {/* Top label - positioned at top */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -281,12 +281,15 @@ export default function Hero() {
             </motion.h1>
           )}
 
+          {/* Spacer to push content to bottom but keep it visible */}
+          <div className="flex-1" />
+
           {/* Rolling roles with enhanced styling */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.5 }}
-            className="relative mt-8"
+            transition={{ duration: 1, delay: 1.2 }}
+            className="relative mb-32"
           >
             <div className="flex items-center gap-6 font-mono text-sm">
               <motion.span
@@ -317,108 +320,11 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* CTA Buttons - Scroll-driven: starts below view, slides up */}
-          <motion.div
-            style={{ y: contentY, opacity: contentOpacity }}
-            className="mt-16 flex flex-col sm:flex-row gap-6 sm:gap-8"
-          >
-            {/* Primary button - Glitch Effect */}
-            <button
-              onClick={() => transitionToPage("/work")}
-              className="group relative"
-              data-cursor="hover"
-            >
-              {/* Glitch layers */}
-              <span className="absolute inset-0 bg-accent translate-x-1 translate-y-1 transition-transform duration-300 group-hover:translate-x-2 group-hover:translate-y-2" />
-              <span className="absolute inset-0 border-2 border-accent -translate-x-1 -translate-y-1 transition-transform duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2" />
-
-              {/* Main button */}
-              <span className="relative z-10 flex items-center gap-4 px-10 py-5 bg-background border-2 border-foreground font-mono text-sm tracking-[0.2em] transition-all duration-300 group-hover:bg-foreground group-hover:text-background group-hover:border-foreground">
-                <span className="relative">
-                  {t("cta.work")}
-                  {/* Underline animation */}
-                  <motion.span
-                    className="absolute -bottom-1 left-0 h-px bg-accent"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </span>
-                <motion.svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                >
-                  <motion.path
-                    d="M4 10H16M16 10L11 5M16 10L11 15"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1, delay: 2 }}
-                  />
-                </motion.svg>
-              </span>
-            </button>
-
-            {/* Secondary button - Magnetic Reveal */}
-            <button
-              onClick={() => transitionToPage("/contact")}
-              className="group relative overflow-hidden"
-              data-cursor="hover"
-            >
-              {/* Background fill animation */}
-              <motion.span
-                className="absolute inset-0 bg-accent origin-left"
-                initial={{ scaleX: 1 }}
-                whileHover={{ scaleX: 0 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              />
-              <motion.span
-                className="absolute inset-0 bg-foreground origin-right"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
-              />
-
-              {/* Content */}
-              <span className="relative z-10 flex items-center gap-4 px-10 py-5 font-mono text-sm tracking-[0.2em] text-background transition-colors duration-300">
-                {/* Animated dots */}
-                <span className="flex gap-1">
-                  {[0, 1, 2].map((i) => (
-                    <motion.span
-                      key={i}
-                      className="w-1.5 h-1.5 rounded-full bg-current"
-                      animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0.5, 1, 0.5],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        delay: i * 0.2,
-                      }}
-                    />
-                  ))}
-                </span>
-                <span>{t("cta.contact")}</span>
-              </span>
-
-              {/* Corner accents */}
-              <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-background/50 transition-all duration-300 group-hover:w-5 group-hover:h-5 group-hover:border-background" />
-              <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-background/50 transition-all duration-300 group-hover:w-5 group-hover:h-5 group-hover:border-background" />
-            </button>
-          </motion.div>
-
           {/* Navigation Dock - desktop only, mobile uses drawer */}
           {!isMobile && (
             <motion.div
               style={{ y: contentY, opacity: contentOpacity }}
-              className="mt-8 w-screen px-4 flex items-end justify-center gap-2"
+              className="mt-4 w-screen px-4 flex items-end justify-center gap-2"
             >
             {navigationItems.map((item, index) => {
               // Unique 3D artifact for each page
