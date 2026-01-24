@@ -367,6 +367,31 @@
           "content": "A showcase website that converts visitors into potential clients and reflects my professional identity."
         }
       }
+    },
+    "wt": {
+      "category": "CLI TOOL",
+      "description": "Git worktree manager with GitHub CLI, fzf and Claude AI integration.",
+      "longDescription": "WT (Worktree Tiger) is a CLI tool that radically simplifies Git branch management through worktrees.\nStop juggling branches like a circus act.\n\nThe tool integrates GitHub CLI for managing PRs and issues, fzf for fuzzy navigation, and Claude AI for intelligent assistance (fix CI, review PRs, problem solving).",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE IDEA",
+          "content": "Make Git worktree management as simple as switching branches. A powerful yet intuitive CLI."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Create a smooth terminal user experience. Integrate multiple tools (git, gh, fzf, claude) in a coherent way."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "100% Shell/Bash for portability. Fuzzy navigation with fzf. Native GitHub CLI integration. Claude assistant for complex tasks."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "An open source tool distributed via Homebrew that makes worktree management a breeze."
+        }
+      }
     }
   }
 }
