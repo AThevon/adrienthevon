@@ -63,11 +63,12 @@ npm run lint     # Linting
 
 ## Projets présentés
 
-- **Under The Flow** (2024) - Plateforme de sessions live hip-hop
-- **Victor Denay** (2024) - Portfolio vidéaste/photographe
-- **Dépense Man** (2024) - App de gestion de finances (PWA)
-- **Linekut** (2024) - Convertisseur d'images en patrons découpables
+- **WT** (2026) - Git worktree manager CLI avec intégration GitHub et Claude AI
+- **Linekut** (2025) - Convertisseur d'images en patrons découpables
+- **Dépense Man** (2025) - App de gestion de finances (PWA)
+- **Under The Flow** (2025) - Plateforme de sessions live hip-hop
 - **BlenkDev** (2024) - Site vitrine agence freelance
+- **Victor Denay** (2024) - Portfolio vidéaste/photographe
 
 ## Status
 
