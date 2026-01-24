@@ -25,6 +25,48 @@ export interface Project {
 
 const allProjects: Project[] = [
   {
+    id: "wt",
+    title: "WT",
+    category: "CLI TOOL",
+    year: "2026",
+    date: "2026-01", // Janvier 2026
+    color: "#FF6B35", // Orange tigre
+    description: "Git worktree manager avec intégration GitHub CLI, fzf et Claude AI.",
+    longDescription: `WT (Worktree Tiger) est un outil CLI qui simplifie radicalement la gestion des branches Git via les worktrees.
+Fini le jonglage entre les branches comme un numéro de cirque.
+
+L'outil intègre GitHub CLI pour gérer les PRs et issues, fzf pour la navigation fuzzy,
+et Claude AI pour l'assistance intelligente (fix CI, review PRs, résolution de problèmes).`,
+    tags: ["SHELL", "CLI", "GIT", "FZF", "CLAUDE AI"],
+    skills: ["git", "github"],
+    role: "CRÉATEUR & DÉVELOPPEUR",
+    client: "OPEN SOURCE",
+    link: "https://github.com/AThevon/wt",
+    image: "/images/projects/wt-tiger-medium.png",
+    sections: [
+      {
+        type: "intro",
+        title: "L'IDÉE",
+        content: "Rendre la gestion des worktrees Git aussi simple que de changer de branche. Un CLI puissant mais intuitif.",
+      },
+      {
+        type: "challenge",
+        title: "LE DÉFI",
+        content: "Créer une expérience utilisateur fluide en terminal. Intégrer plusieurs outils (git, gh, fzf, claude) de manière cohérente.",
+      },
+      {
+        type: "process",
+        title: "LE PROCESS",
+        content: "100% Shell/Bash pour la portabilité. Navigation fuzzy avec fzf. Intégration native GitHub CLI. Assistant Claude pour les tâches complexes.",
+      },
+      {
+        type: "result",
+        title: "LE RÉSULTAT",
+        content: "Un outil open source distribué via Homebrew qui transforme la gestion des worktrees en jeu d'enfant.",
+      },
+    ],
+  },
+  {
     id: "under-the-flow",
     title: "UNDER THE FLOW",
     category: "WEB PLATFORM",
