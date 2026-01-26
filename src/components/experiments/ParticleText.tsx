@@ -20,6 +20,7 @@ interface ParticleTextProps {
   particleGap?: number;
   color?: string;
   mouseRadius?: number;
+  onReady?: () => void;
 }
 
 export default function ParticleText({
@@ -29,6 +30,7 @@ export default function ParticleText({
   particleGap = 4,
   color = COLORS.accent,
   mouseRadius = 100,
+  onReady,
 }: ParticleTextProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -39,8 +41,25 @@ export default function ParticleText({
 
   const initParticles = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-      const offscreen = new OffscreenCanvas(width, height);
-      const offCtx = offscreen.getContext("2d");
+      // Use regular canvas as fallback for browsers that don't support OffscreenCanvas
+      let offCtx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null = null;
+
+      if (typeof OffscreenCanvas !== 'undefined') {
+        try {
+          const offscreen = new OffscreenCanvas(width, height);
+          offCtx = offscreen.getContext("2d");
+        } catch {
+          // Fallback to regular canvas
+        }
+      }
+
+      if (!offCtx) {
+        const fallbackCanvas = document.createElement('canvas');
+        fallbackCanvas.width = width;
+        fallbackCanvas.height = height;
+        offCtx = fallbackCanvas.getContext("2d");
+      }
+
       if (!offCtx) return;
 
       offCtx.fillStyle = "#fff";
@@ -79,8 +98,13 @@ export default function ParticleText({
       }
 
       particlesRef.current = particles;
+
+      // Notify parent that particles are ready
+      if (particles.length > 0 && onReady) {
+        onReady();
+      }
     },
-    [text, fontSize, particleGap, particleSize]
+    [text, fontSize, particleGap, particleSize, onReady]
   );
 
   useEffect(() => {

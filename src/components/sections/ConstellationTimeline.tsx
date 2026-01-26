@@ -464,7 +464,7 @@ export default function ConstellationTimeline() {
   return (
     <section
       data-cursor-mode="timeline"
-      className="fixed inset-0 w-full h-screen overflow-hidden bg-[#0a0a0a]"
+      className="fixed inset-0 w-full h-dvh overflow-hidden bg-[#0a0a0a]"
     >
       {/* Canvas */}
       <canvas

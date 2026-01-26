@@ -33,7 +33,7 @@ export default function WorkPage() {
   // Gallery view - immersive horizontal scroll
   if (viewMode === "gallery") {
     return (
-      <main className="min-h-screen">
+      <main className="min-h-dvh">
         {/* Page header - fixed like the global header */}
         <motion.div
           className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2"
@@ -76,7 +76,7 @@ export default function WorkPage() {
 
   // List view - classic scrolling
   return (
-    <main className="min-h-screen">
+    <main className="min-h-dvh">
       {/* Page header - fixed like gallery view */}
       <motion.div
         className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2"

@@ -8,6 +8,7 @@ import { usePerformance, useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
 import { usePageTransition } from "@/hooks/usePageTransition";
+import HeroMobile from "./HeroMobile";
 
 const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
@@ -166,6 +167,8 @@ function FloatingShape({
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
+  const [particlesReady, setParticlesReady] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
   const [particleKey, setParticleKey] = useState(0);
   const { enable3D } = usePerformance();
   const { isMobile } = useDeviceDetect();
@@ -202,20 +205,41 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Show fallback after timeout if particles aren't ready
+  useEffect(() => {
+    if (particlesReady) {
+      setShowFallback(false);
+      return;
+    }
+
+    const fallbackTimer = setTimeout(() => {
+      if (!particlesReady) {
+        setShowFallback(true);
+      }
+    }, 2000);
+
+    return () => clearTimeout(fallbackTimer);
+  }, [particlesReady]);
+
+  // Use dedicated mobile component
+  if (isMobile) {
+    return <HeroMobile />;
+  }
+
   return (
     <section
       ref={containerRef}
       data-cursor-mode="hero"
-      className="relative min-h-[120vh] flex flex-col items-center justify-start pt-[30vh]"
+      className="relative min-h-[120dvh] flex flex-col items-center justify-start pt-[30dvh]"
     >
       {/* Sticky hero content */}
       <motion.div
-        className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden"
+        className="sticky top-0 h-dvh w-full flex flex-col items-center justify-center overflow-hidden"
         style={{ opacity }}
       >
         {/* Particle Text Background - Upper portion only */}
         {enable3D && isReady && (
-          <div key={particleKey} className="absolute top-0 left-0 right-0 h-[65vh] z-0 pointer-events-none">
+          <div key={particleKey} className="absolute top-0 left-0 right-0 h-[65dvh] z-0 pointer-events-none">
             <ParticleText
               text={"ADRIEN\nTHEVON"}
               fontSize={160}
@@ -223,8 +247,24 @@ export default function Hero() {
               particleGap={4}
               color={COLORS.accent}
               mouseRadius={150}
+              onReady={() => setParticlesReady(true)}
             />
           </div>
+        )}
+
+        {/* Fallback title when particles fail to load after timeout */}
+        {enable3D && showFallback && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="absolute top-0 left-0 right-0 h-[65dvh] z-1 flex items-center justify-center pointer-events-none"
+          >
+            <h1 className="text-[10vw] font-bold tracking-tighter leading-[0.85] text-center">
+              <span className="block text-accent">ADRIEN</span>
+              <span className="block text-accent/60">THEVON</span>
+            </h1>
+          </motion.div>
         )}
 
         {/* Floating shapes layer */}
@@ -630,7 +670,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Spacer for scroll effect */}
-      <div className="h-[20vh]" />
+      <div className="h-[20dvh]" />
     </section>
   );
 }

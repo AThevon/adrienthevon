@@ -58,8 +58,8 @@ export default function PhilosophyStatic() {
       </div>
 
       {/* Section 1: MAGIC IN MOTION */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl text-center relative"
             style={{
@@ -129,8 +129,8 @@ export default function PhilosophyStatic() {
       </section>
 
       {/* Section 2: FULL STACK SOUL */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl relative"
             style={{
@@ -215,8 +215,8 @@ export default function PhilosophyStatic() {
       </section>
 
       {/* Section 3: OBSESSED, NOT OBLIGATED */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl text-center relative"
             style={{
@@ -297,8 +297,8 @@ export default function PhilosophyStatic() {
       </section>
 
       {/* Section 4: HUMAN > PROTOCOL */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl relative"
             style={{

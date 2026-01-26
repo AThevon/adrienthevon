@@ -30,7 +30,7 @@ export default function Contact() {
       ref={sectionRef}
       id="contact"
       data-cursor-mode="contact"
-      className="min-h-screen flex flex-col justify-center py-32 px-8 md:px-16 relative overflow-hidden"
+      className="min-h-dvh flex flex-col justify-center py-24 lg:py-32 px-6 md:px-16 relative overflow-hidden"
     >
       {/* Background accent */}
       <motion.div

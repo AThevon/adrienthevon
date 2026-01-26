@@ -24,7 +24,7 @@ export default function SkillsPage() {
   return (
     <>
       {!isMobile && <CustomCursor />}
-      <main className="relative min-h-screen">
+      <main className="relative min-h-dvh">
         {isMobile ? <StaticNetwork /> : <NeuralNetwork2D />}
       </main>
     </>

@@ -61,7 +61,7 @@ export default function NavigationGrid() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen py-32 px-8 md:px-16"
+      className="relative min-h-dvh py-24 lg:py-32 px-6 md:px-16"
     >
       <motion.div
         style={{ opacity, scale }}

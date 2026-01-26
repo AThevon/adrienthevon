@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { useDeviceDetect } from "@/hooks";
 import ObfuscatedEmail from "@/components/ui/ObfuscatedEmail";
 
 const socialLinks = [
@@ -29,9 +30,10 @@ const socialLinks = [
 
 export default function ContactPage() {
   const t = useTranslations("contact");
+  const { isMobile } = useDeviceDetect();
 
   return (
-    <main className="relative min-h-screen px-8 md:px-16 py-24 md:py-32">
+    <main className="relative min-h-dvh px-6 md:px-16 py-20 md:py-32">
       {/* Animated grid background */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div
@@ -102,19 +104,23 @@ export default function ContactPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          {/* Glow effect */}
-          <motion.div
-            className="absolute -inset-4 bg-accent/10 blur-3xl -z-10"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          {/* Glow effect - simplified on mobile for performance */}
+          {isMobile ? (
+            <div className="absolute -inset-4 bg-accent/15 rounded-full -z-10" />
+          ) : (
+            <motion.div
+              className="absolute -inset-4 bg-accent/10 blur-3xl -z-10"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          )}
 
           <div className="mb-6 font-mono text-sm text-accent tracking-[0.3em]">
             [ {t("emailTitle")} ]
@@ -174,38 +180,48 @@ export default function ContactPage() {
                   transition={{ duration: 0.4 }}
                 />
 
-                {/* Rotating border effect */}
-                <motion.div
-                  className="absolute -inset-px opacity-0 group-hover:opacity-100"
-                  style={{
-                    background: `conic-gradient(from 0deg, ${link.color}, transparent, ${link.color})`,
-                  }}
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                />
-                <div className="absolute inset-[2px] bg-background" />
+                {/* Rotating border effect - disabled on mobile */}
+                {!isMobile && (
+                  <>
+                    <motion.div
+                      className="absolute -inset-px opacity-0 group-hover:opacity-100"
+                      style={{
+                        background: `conic-gradient(from 0deg, ${link.color}, transparent, ${link.color})`,
+                      }}
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    />
+                    <div className="absolute inset-[2px] bg-background" />
+                  </>
+                )}
 
                 {/* Content */}
                 <div className="relative h-full flex flex-col items-center justify-center p-6 text-center gap-3">
-                  {/* Logo SVG */}
-                  <motion.div
-                    style={{ color: link.color }}
-                    className="opacity-80 group-hover:opacity-100"
-                    animate={{
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    {link.icon}
-                  </motion.div>
+                  {/* Logo SVG - simplified animation on mobile */}
+                  {isMobile ? (
+                    <div style={{ color: link.color }} className="opacity-80">
+                      {link.icon}
+                    </div>
+                  ) : (
+                    <motion.div
+                      style={{ color: link.color }}
+                      className="opacity-80 group-hover:opacity-100"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      {link.icon}
+                    </motion.div>
+                  )}
 
                   {/* Name */}
                   <h3
@@ -236,8 +252,8 @@ export default function ContactPage() {
                     ↗
                   </motion.div>
 
-                  {/* Particles effect on hover */}
-                  {[...Array(4)].map((_, idx) => (
+                  {/* Particles effect on hover - disabled on mobile */}
+                  {!isMobile && [...Array(4)].map((_, idx) => (
                     <motion.div
                       key={idx}
                       className="absolute w-1 h-1 rounded-full opacity-0 group-hover:opacity-100"

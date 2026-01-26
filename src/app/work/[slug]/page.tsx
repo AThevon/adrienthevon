@@ -83,7 +83,7 @@ export default function ProjectPage() {
 
   if (!project) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <p>{t("notFound")}</p>
       </div>
     );
@@ -111,9 +111,9 @@ export default function ProjectPage() {
         />
       </motion.div>
 
-      <main ref={containerRef} className="min-h-screen relative">
+      <main ref={containerRef} className="min-h-dvh relative">
         {/* Hero - Immersive style */}
-        <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
+        <section className="h-dvh flex flex-col justify-center items-center relative overflow-hidden">
           {/* Back button */}
           <motion.a
             href="/work"

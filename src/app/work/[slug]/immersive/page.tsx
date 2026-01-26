@@ -163,7 +163,7 @@ export default function ImmersiveCaseStudy() {
 
   if (!project) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <p>{t("notFound")}</p>
       </div>
     );
@@ -209,7 +209,7 @@ export default function ImmersiveCaseStudy() {
 
       <main ref={containerRef}>
         {/* Hero section - full screen */}
-        <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden snap-start">
+        <section className="h-dvh flex flex-col justify-center items-center relative overflow-hidden snap-start">
           {/* Background gradient */}
           <div
             className="absolute inset-0 opacity-20"
@@ -271,7 +271,7 @@ export default function ImmersiveCaseStudy() {
         {project.sections.map((section, index) => (
           <section
             key={index}
-            className="min-h-screen flex flex-col justify-center items-center relative snap-start px-8"
+            className="min-h-dvh flex flex-col justify-center items-center relative snap-start px-8"
           >
             {/* Section number */}
             <motion.div
@@ -333,7 +333,7 @@ export default function ImmersiveCaseStudy() {
         ))}
 
         {/* Tags section */}
-        <section className="min-h-[50vh] flex flex-col justify-center items-center relative snap-start px-8 py-24">
+        <section className="min-h-[50dvh] flex flex-col justify-center items-center relative snap-start px-8 py-24">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -362,7 +362,7 @@ export default function ImmersiveCaseStudy() {
         </section>
 
         {/* Next project section */}
-        <section className="h-screen flex flex-col justify-center items-center relative snap-start overflow-hidden">
+        <section className="h-dvh flex flex-col justify-center items-center relative snap-start overflow-hidden">
           {/* Background */}
           <motion.div
             initial={{ scale: 1.2 }}

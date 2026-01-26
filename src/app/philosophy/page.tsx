@@ -17,7 +17,7 @@ export default function PhilosophyPage() {
   const { isMobile } = useDeviceDetect();
 
   return (
-    <main className="relative min-h-screen">
+    <main className="relative min-h-dvh">
       {isMobile ? <PhilosophyStatic /> : <PhilosophyCanvas />}
     </main>
   );

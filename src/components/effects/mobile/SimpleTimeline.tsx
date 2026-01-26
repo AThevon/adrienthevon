@@ -16,7 +16,7 @@ export default function SimpleTimeline() {
   });
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-background">
+    <div ref={containerRef} className="relative min-h-dvh bg-background">
       {/* Header - Static on mobile, sticky on desktop */}
       <div className="relative md:sticky md:top-24 left-0 right-0 z-10 px-8 py-6 pt-28 md:pt-6 md:bg-background/80 md:backdrop-blur-sm md:border-b md:border-foreground/10">
         <div className="flex items-center gap-4 mb-2">

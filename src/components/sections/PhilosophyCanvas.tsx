@@ -338,12 +338,12 @@ export default function PhilosophyCanvas() {
       {/* Fixed Canvas Background */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 w-full h-screen pointer-events-none"
+        className="fixed inset-0 w-full h-dvh pointer-events-none"
       />
 
       {/* Section 1: MAGIC IN MOTION - Liquid */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl text-center"
             style={{
@@ -396,8 +396,8 @@ export default function PhilosophyCanvas() {
       </section>
 
       {/* Section 2: FULL STACK SOUL - Matrix */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl"
             style={{
@@ -457,8 +457,8 @@ export default function PhilosophyCanvas() {
       </section>
 
       {/* Section 3: OBSESSED, NOT OBLIGATED - Pulse */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl text-center"
             style={{
@@ -522,8 +522,8 @@ export default function PhilosophyCanvas() {
       </section>
 
       {/* Section 4: HUMAN > PROTOCOL - Network */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl"
             style={{
