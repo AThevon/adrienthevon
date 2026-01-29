@@ -338,12 +338,12 @@ export default function PhilosophyCanvas() {
       {/* Fixed Canvas Background */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 w-full h-screen pointer-events-none"
+        className="fixed inset-0 w-full h-dvh pointer-events-none"
       />
 
       {/* Section 1: MAGIC IN MOTION - Liquid */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl text-center"
             style={{
@@ -396,8 +396,8 @@ export default function PhilosophyCanvas() {
       </section>
 
       {/* Section 2: FULL STACK SOUL - Matrix */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl"
             style={{
@@ -457,8 +457,8 @@ export default function PhilosophyCanvas() {
       </section>
 
       {/* Section 3: OBSESSED, NOT OBLIGATED - Pulse */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl text-center"
             style={{
@@ -495,26 +495,81 @@ export default function PhilosophyCanvas() {
             </motion.p>
 
             <motion.div
-              className="mt-12 inline-block"
+              className="mt-16 inline-block"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
             >
-              <div className="relative">
+              {/* Stylized geometric pattern - concentric rotating diamonds */}
+              <div className="relative w-48 h-48 md:w-64 md:h-64">
+                {/* Outer diamond */}
                 <motion.div
-                  className="text-9xl md:text-[12rem] font-bold opacity-10"
-                  style={{ color: principles[2].color }}
+                  className="absolute inset-0 border-2"
+                  style={{
+                    borderColor: principles[2].color,
+                    transform: "rotate(45deg)",
+                  }}
                   animate={{
-                    scale: [1, 1.05, 1],
+                    rotate: [45, 135, 45],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                {/* Middle diamond */}
+                <motion.div
+                  className="absolute inset-4 md:inset-6 border-2"
+                  style={{
+                    borderColor: `${principles[2].color}80`,
+                    transform: "rotate(45deg)",
+                  }}
+                  animate={{
+                    rotate: [45, -45, 45],
+                    scale: [0.9, 1, 0.9],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                {/* Inner diamond */}
+                <motion.div
+                  className="absolute inset-8 md:inset-12 border-2"
+                  style={{
+                    borderColor: `${principles[2].color}50`,
+                    transform: "rotate(45deg)",
+                  }}
+                  animate={{
+                    rotate: [45, 225, 45],
+                    scale: [0.8, 1.05, 0.8],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                {/* Center glow dot */}
+                <motion.div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 md:w-6 md:h-6 rounded-full"
+                  style={{
+                    backgroundColor: principles[2].color,
+                    boxShadow: `0 0 30px ${principles[2].color}, 0 0 60px ${principles[2].color}50`,
+                  }}
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.8, 1, 0.8],
                   }}
                   transition={{
                     duration: 2,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                >
-                  ❤️
-                </motion.div>
+                />
               </div>
             </motion.div>
           </motion.div>
@@ -522,8 +577,8 @@ export default function PhilosophyCanvas() {
       </section>
 
       {/* Section 4: HUMAN > PROTOCOL - Network */}
-      <section className="relative h-[150vh] flex items-center justify-center">
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center px-8 md:px-16">
+      <section className="relative h-[150dvh] flex items-center justify-center">
+        <div className="sticky top-0 h-dvh w-full flex items-center justify-center px-8 md:px-16">
           <motion.div
             className="max-w-5xl"
             style={{

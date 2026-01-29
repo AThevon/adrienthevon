@@ -1,16 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { useEffect } from "react";
+import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import TextReveal from "@/components/ui/TextReveal";
 import DualText from "@/components/ui/DualText";
 import { usePerformance } from "@/hooks";
-import { COLORS } from "@/lib/constants";
 
-const AsciiEffect = dynamic(
-  () => import("@/components/experiments/AsciiEffect"),
+const TerminalAbout = dynamic(
+  () => import("@/components/experiments/TerminalAbout"),
   { ssr: false }
 );
 
@@ -23,150 +21,128 @@ const skills = [
   { name: "GSAP", hidden: "timeline spaghetti" },
   { name: "SHADERS", hidden: "ctrl+c ctrl+v" },
   { name: "CANVAS", hidden: "ctx.clearRect()" },
+  { name: "NODE.JS", hidden: "npm i everything" },
 ];
 
 export default function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { enable3D } = usePerformance();
+  const { enableAnimations } = usePerformance();
   const t = useTranslations("about");
 
+  // Disable scroll on this page
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+
+    // Store original styles
+    const originalHtmlOverflow = html.style.overflow;
+    const originalBodyOverflow = body.style.overflow;
+
+    // Disable scroll
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+
+    return () => {
+      // Restore on unmount
+      html.style.overflow = originalHtmlOverflow;
+      body.style.overflow = originalBodyOverflow;
+    };
+  }, []);
+
   const stats = [
-    { value: "5+", label: t("stats.years"), hiddenValue: "5+", hiddenLabel: t("stats.yearsHidden") },
-    { value: "50+", label: t("stats.projects"), hiddenValue: "50+", hiddenLabel: t("stats.projectsHidden") },
-    { value: "∞", label: t("stats.coffees"), hiddenValue: "∞", hiddenLabel: t("stats.coffeesHidden") },
+    { value: "4+", label: t("stats.years") },
+    { value: "20+", label: t("stats.projects") },
+    { value: "∞", label: t("stats.coffees") },
   ];
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const asciiScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.9]);
-  const asciiOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
     <section
-      ref={sectionRef}
       id="about"
       data-cursor-mode="about"
-      className="relative min-h-screen bg-background overflow-hidden"
+      data-lenis-prevent
+      className="relative h-dvh bg-background overflow-hidden pt-20 lg:pt-24"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-linear-to-b from-transparent via-accent/5 to-transparent" />
-
-      {/* Section number - floating */}
+      {/* Section header */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="absolute top-8 left-8 md:left-16 z-30"
+        className="absolute top-24 lg:top-28 left-6 md:left-16 z-30"
       >
         <div className="flex items-center gap-4">
-          <span className="font-mono text-sm text-muted">{t("sectionNumber")}</span>
-          <span className="w-16 h-px bg-foreground/20" />
-          <span className="font-mono text-sm text-muted">{t("title")}</span>
+          <span className="font-mono text-xs lg:text-sm text-muted">{t("sectionNumber")}</span>
+          <span className="w-8 lg:w-16 h-px bg-foreground/20" />
+          <span className="font-mono text-xs lg:text-sm text-muted">{t("title")}</span>
         </div>
       </motion.div>
 
-      {/* Main layout - Split screen */}
-      <div className="relative min-h-screen flex flex-col lg:flex-row">
-        {/* Left side - ASCII Art (full height on desktop) */}
-        <div className="relative w-full lg:w-1/2 h-[30vh] md:h-[40vh] lg:h-screen lg:sticky lg:top-0">
-          {/* ASCII container with better visibility */}
-          {enable3D && (
+      {/* Main layout - Split screen on desktop, stacked on mobile */}
+      <div className="relative h-full flex flex-col lg:flex-row">
+        {/* Left side - Terminal (hidden on mobile, show compact version) */}
+        <div className="hidden lg:flex relative w-1/2 h-full items-center justify-center">
+          {enableAnimations ? (
             <motion.div
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ scale: asciiScale, opacity: asciiOpacity }}
-            >
-              {/* Glow effect behind ASCII */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[80%] h-[80%] bg-accent/10 blur-3xl rounded-full" />
-              </div>
-
-              {/* ASCII Effect */}
-              <div className="relative w-full h-full">
-                <AsciiEffect
-                  text="DEV"
-                  fontSize={18}
-                  color={COLORS.accent}
-                  interactive
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {/* Fallback pattern for non-3D */}
-          {!enable3D && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-[20vw] lg:text-[15vw] font-bold text-accent/10 tracking-tighter">
-                DEV
-              </div>
-            </div>
-          )}
-
-          {/* Decorative frame */}
-          <div className="absolute top-12 left-12 w-24 h-24 border-l-2 border-t-2 border-accent/30" />
-          <div className="absolute bottom-12 right-12 w-24 h-24 border-r-2 border-b-2 border-accent/30" />
-        </div>
-
-        {/* Right side - Content */}
-        <div className="relative w-full lg:w-1/2 flex items-center py-32 lg:py-0">
-          <div className="w-full px-8 md:px-16 lg:px-20">
-            {/* Main heading */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="w-full h-full"
             >
-              <TextReveal className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 leading-[0.95]">
-                {t("headline")}
-              </TextReveal>
+              <TerminalAbout />
             </motion.div>
-
-            {/* Description */}
-            <div className="space-y-6 mb-12">
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="text-base md:text-lg text-muted leading-relaxed"
-              >
-                {t("intro")}
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="text-base md:text-lg text-muted leading-relaxed"
-              >
-                {t("philosophy")}
-              </motion.p>
+          ) : (
+            <div className="text-[10vw] font-bold text-accent/10 tracking-tighter">
+              DEV
             </div>
+          )}
+
+          {/* Corner accents - desktop only */}
+          <div className="absolute top-12 left-12 w-20 h-20 border-l-2 border-t-2 border-accent/30 pointer-events-none" />
+          <div className="absolute bottom-12 right-12 w-20 h-20 border-r-2 border-b-2 border-accent/30 pointer-events-none" />
+        </div>
+
+        {/* Content - Full width on mobile, half on desktop */}
+        <div className="relative w-full lg:w-1/2 h-full flex items-center py-4 lg:py-0">
+          <div className="w-full px-6 md:px-12 lg:px-16">
+            {/* Tagline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-5 lg:mb-8"
+            >
+              <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold tracking-tighter leading-[1.1] mb-2 lg:mb-4">
+                {t("tagline")}
+              </h2>
+              <p className="text-sm lg:text-base text-muted max-w-md">
+                {t("oneliner")}
+              </p>
+            </motion.div>
 
             {/* Skills grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
-              className="mb-12"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6 lg:mb-8"
             >
-              <h3 className="font-mono text-xs text-muted mb-4 tracking-wider">
-                {t("techStack")}
-              </h3>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="font-mono text-xs text-muted tracking-wider">
+                  {t("techStack")}
+                </span>
+                <span className="flex-1 h-px bg-foreground/10" />
+              </div>
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill, i) => (
                   <motion.span
                     key={skill.name}
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + i * 0.05 }}
+                    transition={{ delay: 0.3 + i * 0.03 }}
                     viewport={{ once: true }}
-                    className="px-3 py-1.5 bg-foreground/5 border border-foreground/10 font-mono text-xs text-foreground/70 hover:border-accent hover:text-accent transition-colors duration-300"
+                    className="group px-3 py-1.5 bg-foreground/5 border border-foreground/10 font-mono text-xs text-foreground/70 hover:border-accent hover:text-accent transition-all duration-300 cursor-default"
+                    data-cursor="hover"
                   >
                     <DualText visible={skill.name} hidden={skill.hidden} />
                   </motion.span>
@@ -178,46 +154,75 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
               viewport={{ once: true }}
-              className="grid grid-cols-3 gap-8 pt-8 border-t border-foreground/10"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="grid grid-cols-3 gap-4 lg:gap-6 pt-6 border-t border-foreground/10"
             >
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
                   viewport={{ once: true }}
-                  className="group"
+                  transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
                 >
-                  <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-2">
-                    <DualText visible={stat.value} hidden={stat.hiddenValue} />
+                  <div className="text-xl md:text-2xl lg:text-4xl font-bold text-foreground mb-0.5 lg:mb-1">
+                    {stat.value}
                   </div>
-                  <div className="font-mono text-[10px] md:text-xs text-muted tracking-wider">
-                    <DualText visible={stat.label} hidden={stat.hiddenLabel} />
+                  <div className="font-mono text-[9px] md:text-[10px] lg:text-xs text-muted tracking-wider">
+                    {stat.label}
                   </div>
                 </motion.div>
               ))}
             </motion.div>
 
-            {/* CTA */}
+            {/* Quick links */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
               viewport={{ once: true }}
-              className="mt-12"
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="mt-6 lg:mt-8 flex flex-wrap gap-4 lg:gap-6"
             >
               <a
-                href="#contact"
-                className="group inline-flex items-center gap-4 font-mono text-sm text-accent hover:text-foreground transition-colors duration-300"
+                href="https://github.com/adrienthevon"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent transition-colors duration-300"
+                data-cursor="hover"
+              >
+                <span>GITHUB</span>
+                <motion.span
+                  className="inline-block"
+                  whileHover={{ x: 3, y: -3 }}
+                >
+                  ↗
+                </motion.span>
+              </a>
+              <a
+                href="https://linkedin.com/in/adrienthevon"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent transition-colors duration-300"
+                data-cursor="hover"
+              >
+                <span>LINKEDIN</span>
+                <motion.span
+                  className="inline-block"
+                  whileHover={{ x: 3, y: -3 }}
+                >
+                  ↗
+                </motion.span>
+              </a>
+              <a
+                href="/contact"
+                className="group inline-flex items-center gap-2 font-mono text-sm text-accent hover:text-foreground transition-colors duration-300"
                 data-cursor="hover"
               >
                 <span>{t("cta")}</span>
                 <motion.span
                   className="inline-block"
-                  animate={{ x: [0, 5, 0] }}
+                  animate={{ x: [0, 4, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
                   →
@@ -228,15 +233,10 @@ export default function About() {
         </div>
       </div>
 
-      {/* Large background text */}
-      <motion.div
-        className="absolute bottom-0 left-0 font-bold text-[25vw] leading-none text-foreground/2 pointer-events-none select-none overflow-hidden whitespace-nowrap"
-        style={{
-          x: useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]),
-        }}
-      >
-        {t("role")}
-      </motion.div>
+      {/* Large background text - fixed, hidden on mobile */}
+      <div className="hidden lg:block absolute bottom-0 left-0 font-bold text-[15vw] leading-none text-foreground/[0.02] pointer-events-none select-none whitespace-nowrap">
+        CREATIVE DEVELOPER
+      </div>
     </section>
   );
 }

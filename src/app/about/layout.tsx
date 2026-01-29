@@ -7,14 +7,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: `${t("title")} - Adrien Thevon`,
-    description: t("headline"),
+    description: t("oneliner"),
     openGraph: {
       title: `${t("title")} - Adrien Thevon`,
-      description: t("headline"),
+      description: t("oneliner"),
     },
     twitter: {
       title: `${t("title")} - Adrien Thevon`,
-      description: t("headline"),
+      description: t("oneliner"),
     },
   };
 }

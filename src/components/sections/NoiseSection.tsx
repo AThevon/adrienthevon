@@ -43,11 +43,11 @@ export default function NoiseSection() {
   const contentY = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
 
   return (
-    <section ref={sectionRef} data-cursor-mode="noise" className="relative min-h-[150vh] overflow-hidden">
+    <section ref={sectionRef} data-cursor-mode="noise" className="relative min-h-[150dvh] overflow-hidden">
       {/* Noise Terrain Background */}
       {enable3D && (
         <motion.div
-          className="sticky top-0 left-0 w-full h-screen z-0"
+          className="sticky top-0 left-0 w-full h-dvh z-0"
           style={{ opacity: terrainOpacity }}
         >
           <NoiseTerrain
@@ -65,13 +65,13 @@ export default function NoiseSection() {
 
       {/* Fallback background for non-3D */}
       {!enable3D && (
-        <div className="sticky top-0 left-0 w-full h-screen z-0 bg-gradient-to-b from-background via-accent/5 to-background" />
+        <div className="sticky top-0 left-0 w-full h-dvh z-0 bg-gradient-to-b from-background via-accent/5 to-background" />
       )}
 
       {/* Content floating above */}
-      <div className="relative z-10 -mt-[100vh]">
+      <div className="relative z-10 -mt-[100dvh]">
         {/* Section header */}
-        <div className="h-screen flex items-center justify-center">
+        <div className="h-dvh flex items-center justify-center">
           <motion.div
             className="text-center"
             style={{ y: contentY }}
@@ -98,7 +98,7 @@ export default function NoiseSection() {
         </div>
 
         {/* Philosophy items */}
-        <div className="min-h-screen flex items-center py-32 px-8 md:px-16">
+        <div className="min-h-dvh flex items-center py-32 px-8 md:px-16">
           <div className="max-w-6xl mx-auto w-full">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               {philosophyItems.map((item, index) => (

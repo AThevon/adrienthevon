@@ -14,11 +14,13 @@ const PhilosophyStatic = dynamic(
 );
 
 export default function PhilosophyPage() {
-  const { isMobile } = useDeviceDetect();
+  const { isMobile, isHydrated } = useDeviceDetect();
+
+  const isMobileReady = isHydrated && isMobile;
 
   return (
-    <main className="relative min-h-screen">
-      {isMobile ? <PhilosophyStatic /> : <PhilosophyCanvas />}
+    <main className="relative min-h-dvh">
+      {isMobileReady ? <PhilosophyStatic /> : <PhilosophyCanvas />}
     </main>
   );
 }

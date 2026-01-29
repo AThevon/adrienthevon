@@ -9,7 +9,7 @@ const About = dynamic(
 
 export default function AboutPage() {
   return (
-    <main className="relative min-h-screen pt-24">
+    <main className="relative h-dvh overflow-hidden">
       <About />
     </main>
   );

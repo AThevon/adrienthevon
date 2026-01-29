@@ -148,20 +148,27 @@
   "about": {
     "sectionNumber": "005",
     "title": "À PROPOS",
-    "headline": "JE CRÉE DES EXPÉRIENCES QUI VIVENT & RESPIRENT",
-    "intro": "Un développeur créatif passionné par les expériences web uniques. Je mélange code et design pour créer des interfaces qui inspirent.",
-    "philosophy": "Mon travail existe à l'intersection de la technologie et de l'art. Chaque pixel est intentionnel. Chaque interaction est pensée.",
+    "tagline": "Obsédé par les détails qui font la diff.",
+    "oneliner": "Dev créatif basé à Toulouse. Je build des trucs qui ont du caractère.",
     "techStack": "STACK TECHNIQUE",
     "stats": {
-      "years": "5+ ANS D'XP",
+      "years": "ANNÉES D'XP",
       "yearsHidden": "à demander à Claude",
-      "projects": "50+ PROJETS LIVRÉS",
+      "projects": "PROJETS LIVRÉS",
       "projectsHidden": "onglets ChatGPT ouverts",
-      "coffees": "∞ CAFÉS BUS",
+      "coffees": "CAFÉS BUS",
       "coffeesHidden": "toujours vrai"
     },
-    "cta": "TRAVAILLONS ENSEMBLE",
-    "role": "CREATIVE DEV"
+    "cta": "ME CONTACTER",
+    "terminal": {
+      "journey": {
+        "2022": "Découverte du code, React 101",
+        "2023": "Premier diplôme, première app pro",
+        "2024": "Airbus × Three.js, configurateur 3D",
+        "2025": "Mission US, image processing",
+        "2026": "Tools maker, creative mode"
+      }
+    }
   },
   "contact": {
     "sectionNumber": "006",

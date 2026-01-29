@@ -17,16 +17,22 @@ const SectionEffects = dynamic(
 export default function Home() {
   const { enableAnimations, enableCursorEffects } = usePerformance();
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     // Check if preloader has already been shown this session
     const hasSeenPreloader = sessionStorage.getItem("hasSeenPreloader");
 
     if (!hasSeenPreloader && enableAnimations) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
     }
-  }, [enableAnimations]);
+  }, [enableAnimations, isMounted]);
 
   const handlePreloaderComplete = () => {
     setIsLoading(false);
@@ -37,12 +43,12 @@ export default function Home() {
   return (
     <>
       {/* Preloader - only on first load of the session */}
-      {enableAnimations && isLoading && (
+      {isMounted && enableAnimations && isLoading && (
         <Preloader onComplete={handlePreloaderComplete} />
       )}
 
       {/* Geometry particles cursor - only on homepage */}
-      {enableCursorEffects && <SectionEffects enabled={!isLoading} />}
+      {isMounted && enableCursorEffects && <SectionEffects enabled={!isLoading} />}
 
       {/* Main content */}
       <main className="relative">

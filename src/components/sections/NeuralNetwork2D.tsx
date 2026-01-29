@@ -550,7 +550,7 @@ export default function NeuralNetwork2D() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-32 right-8 w-[360px] h-[calc(100vh-160px)] z-20 pointer-events-auto"
+            className="fixed top-32 right-8 w-[360px] h-[calc(100dvh-160px)] z-20 pointer-events-auto"
           >
             {/* Glowing backdrop */}
             <div
@@ -603,7 +603,7 @@ export default function NeuralNetwork2D() {
 
               {/* Projects list - scrollable */}
               <div
-                className="flex-1 min-h-0 max-h-[calc(100vh-280px)] overflow-y-scroll p-5"
+                className="flex-1 min-h-0 max-h-[calc(100dvh-280px)] overflow-y-scroll p-5"
                 style={{ overscrollBehavior: 'contain' }}
                 onWheel={(e) => e.stopPropagation()}
               >

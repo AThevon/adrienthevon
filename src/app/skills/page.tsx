@@ -19,13 +19,15 @@ const CustomCursor = dynamic(
 );
 
 export default function SkillsPage() {
-  const { isMobile } = useDeviceDetect();
+  const { isMobile, isHydrated } = useDeviceDetect();
+
+  const isMobileReady = isHydrated && isMobile;
 
   return (
     <>
-      {!isMobile && <CustomCursor />}
-      <main className="relative min-h-screen">
-        {isMobile ? <StaticNetwork /> : <NeuralNetwork2D />}
+      {!isMobileReady && <CustomCursor />}
+      <main className="relative min-h-dvh">
+        {isMobileReady ? <StaticNetwork /> : <NeuralNetwork2D />}
       </main>
     </>
   );

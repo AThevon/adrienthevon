@@ -3,17 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "motion/react";
-import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import HoverReveal from "@/components/ui/HoverReveal";
 import HorizontalGallery from "@/components/sections/HorizontalGallery";
 import { projects } from "@/data/projects";
 import { useScrollDirection, useDeviceDetect } from "@/hooks";
-
-const LiquidCursor = dynamic(
-  () => import("@/components/effects/LiquidCursor"),
-  { ssr: false }
-);
 
 export default function WorkPage() {
   const router = useRouter();
@@ -21,19 +15,19 @@ export default function WorkPage() {
   const t = useTranslations("projects");
   const tNav = useTranslations("nav");
   const scrollDirection = useScrollDirection();
-  const { isMobile } = useDeviceDetect();
+  const { isMobile, isHydrated } = useDeviceDetect();
 
   const handleProjectClick = (project: { id: string }) => {
     router.push(`/work/${project.id}`);
   };
 
-  // Hide header on scroll down (mobile only)
-  const shouldHideHeader = isMobile && scrollDirection === "down";
+  // Hide header on scroll down (mobile only, after hydration)
+  const shouldHideHeader = isHydrated && isMobile && scrollDirection === "down";
 
   // Gallery view - immersive horizontal scroll
   if (viewMode === "gallery") {
     return (
-      <main className="min-h-screen">
+      <main className="min-h-dvh">
         {/* Page header - fixed like the global header */}
         <motion.div
           className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2"
@@ -76,7 +70,7 @@ export default function WorkPage() {
 
   // List view - classic scrolling
   return (
-    <main className="min-h-screen">
+    <main className="min-h-dvh">
       {/* Page header - fixed like gallery view */}
       <motion.div
         className="fixed top-24 left-0 right-0 z-30 w-full px-4 md:px-8 py-1 flex items-center justify-between gap-2"

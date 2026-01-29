@@ -55,8 +55,8 @@ export default function HorizontalGallery({
   // Mobile: simple horizontal scroll with snap
   if (isMobile) {
     return (
-      <section className="relative min-h-screen py-24">
-        <div className="w-full h-[calc(100vh-12rem)] overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide">
+      <section className="relative min-h-dvh py-24">
+        <div className="w-full h-[calc(100dvh-12rem)] overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide">
           <div className="flex h-full gap-6 px-6">
             {items.map((item, index) => (
               <div
@@ -138,7 +138,7 @@ export default function HorizontalGallery({
       style={{ height: `${items.length * 60}vh` }}
     >
       {/* Sticky container */}
-      <div className="sticky top-24 h-[calc(100vh-6rem)] overflow-hidden">
+      <div className="sticky top-24 h-[calc(100dvh-6rem)] overflow-hidden">
         {/* Background parallax layer */}
         <motion.div
           className="absolute inset-0 pointer-events-none"
@@ -165,7 +165,7 @@ export default function HorizontalGallery({
           {items.map((item, index) => (
             <motion.div
               key={item.id}
-              className="relative shrink-0 w-[75vw] md:w-[55vw] h-[70vh] cursor-pointer"
+              className="relative shrink-0 w-[75vw] md:w-[55vw] h-[70dvh] cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => onItemClick?.(item)}

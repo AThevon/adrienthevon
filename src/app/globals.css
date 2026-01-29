@@ -17,12 +17,17 @@
   --font-display: var(--font-display);
 }
 
-* {
-  cursor: none;
+/* Hide cursor on desktop only - custom cursor replaces it */
+@media (min-width: 768px) and (hover: hover) {
+  * {
+    cursor: none;
+  }
 }
 
 html {
   scroll-behavior: auto;
+  min-height: 100dvh;
+  background: var(--background);
 }
 
 html.lenis,
@@ -54,6 +59,18 @@ body {
   font-feature-settings: "ss01", "ss02", "cv01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 767px) {
+  * {
+    cursor: auto !important;
+  }
+
+  html, body {
+    overscroll-behavior-y: none;
+  }
 }
 
 /* Typography utilities */

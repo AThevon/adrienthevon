@@ -238,7 +238,7 @@ export default function StaticNetwork() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 right-0 max-h-[60vh] z-20 pointer-events-auto"
+            className="fixed bottom-0 left-0 right-0 max-h-[60dvh] z-20 pointer-events-auto"
           >
             {/* Glowing backdrop */}
             <div
