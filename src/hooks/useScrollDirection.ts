@@ -1,39 +1,42 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useScrollDirection() {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
-    let ticking = false;
-
     const updateScrollDirection = () => {
       const scrollY = window.scrollY;
+      const threshold = 50; // Larger threshold for mobile stability
 
-      if (Math.abs(scrollY - lastScrollY) < 10) {
-        // Ignore small scroll changes
-        ticking = false;
+      if (Math.abs(scrollY - lastScrollY.current) < threshold) {
+        ticking.current = false;
         return;
       }
 
-      setScrollDirection(scrollY > lastScrollY ? "down" : "up");
-      setLastScrollY(scrollY);
-      ticking = false;
+      const direction = scrollY > lastScrollY.current ? "down" : "up";
+      setScrollDirection(direction);
+      lastScrollY.current = scrollY;
+      ticking.current = false;
     };
 
     const onScroll = () => {
-      if (!ticking) {
+      if (!ticking.current) {
         window.requestAnimationFrame(updateScrollDirection);
-        ticking = true;
+        ticking.current = true;
       }
     };
 
-    window.addEventListener("scroll", onScroll);
+    // Initialize lastScrollY
+    lastScrollY.current = window.scrollY;
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => window.removeEventListener("scroll", onScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return scrollDirection;
 }

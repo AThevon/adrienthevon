@@ -26,7 +26,7 @@ export default function MainNav() {
   const t = useTranslations("nav");
   const { transitionToPage } = usePageTransition();
   const scrollDirection = useScrollDirection();
-  const { isMobile } = useDeviceDetect();
+  const { isMobile, isHydrated } = useDeviceDetect();
 
   // Close menu on route change
   useEffect(() => {
@@ -57,8 +57,8 @@ export default function MainNav() {
 
   const isHomepage = pathname === "/";
 
-  // Hide navbar on scroll down (mobile only)
-  const shouldHideNav = isMobile && scrollDirection === "down" && !isOpen;
+  // Don't hide navbar on mobile - keep it always visible for accessibility
+  const shouldHideNav = false;
 
   return (
     <>

@@ -49,9 +49,9 @@ export default function About() {
   }, []);
 
   const stats = [
-    { value: "4+", label: t("stats.years"), hiddenValue: "∞", hiddenLabel: t("stats.yearsHidden") },
-    { value: "20+", label: t("stats.projects"), hiddenValue: "20+", hiddenLabel: t("stats.projectsHidden") },
-    { value: "∞", label: t("stats.coffees"), hiddenValue: "∞", hiddenLabel: t("stats.coffeesHidden") },
+    { value: "4+", label: t("stats.years") },
+    { value: "20+", label: t("stats.projects") },
+    { value: "∞", label: t("stats.coffees") },
   ];
 
   return (
@@ -165,14 +165,12 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
-                  className="group cursor-default"
-                  data-cursor="hover"
                 >
-                  <div className="text-xl md:text-2xl lg:text-4xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-0.5 lg:mb-1">
-                    <DualText visible={stat.value} hidden={stat.hiddenValue} />
+                  <div className="text-xl md:text-2xl lg:text-4xl font-bold text-foreground mb-0.5 lg:mb-1">
+                    {stat.value}
                   </div>
                   <div className="font-mono text-[9px] md:text-[10px] lg:text-xs text-muted tracking-wider">
-                    <DualText visible={stat.label} hidden={stat.hiddenLabel} />
+                    {stat.label}
                   </div>
                 </motion.div>
               ))}
