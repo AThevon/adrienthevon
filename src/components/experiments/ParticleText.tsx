@@ -36,6 +36,7 @@ export default function ParticleText({
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number | null>(null);
+  const readyCalledRef = useRef(false);
   const lastFrameTime = useRef(0);
   const mouseRadiusSq = mouseRadius * mouseRadius;
 
@@ -98,13 +99,8 @@ export default function ParticleText({
       }
 
       particlesRef.current = particles;
-
-      // Notify parent that particles are ready
-      if (particles.length > 0 && onReady) {
-        onReady();
-      }
     },
-    [text, fontSize, particleGap, particleSize, onReady]
+    [text, fontSize, particleGap, particleSize]
   );
 
   useEffect(() => {
@@ -244,6 +240,34 @@ export default function ParticleText({
       }
       ctx.fill();
 
+      // Visual check: verify pixels were actually rendered
+      if (!readyCalledRef.current && onReady && particles.length > 0) {
+        const sampleX = Math.floor(width * 0.3);
+        const sampleY = Math.floor(height * 0.3);
+        const sampleW = Math.floor(width * 0.4);
+        const sampleH = Math.floor(height * 0.4);
+
+        try {
+          const imageData = ctx.getImageData(sampleX, sampleY, sampleW, sampleH);
+          const data = imageData.data;
+          let hasPixels = false;
+          for (let i = 3; i < data.length; i += 160) {
+            if (data[i] > 0) {
+              hasPixels = true;
+              break;
+            }
+          }
+          if (hasPixels) {
+            readyCalledRef.current = true;
+            onReady();
+          }
+        } catch {
+          // getImageData can fail (CORS, etc.) — call onReady as safety fallback
+          readyCalledRef.current = true;
+          onReady();
+        }
+      }
+
       animationRef.current = requestAnimationFrame(animate);
     };
 
@@ -256,7 +280,7 @@ export default function ParticleText({
       if (mouseMoveRAF) cancelAnimationFrame(mouseMoveRAF);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [initParticles, mouseRadius, mouseRadiusSq, color]);
+  }, [initParticles, mouseRadius, mouseRadiusSq, color, onReady]);
 
   return (
     <canvas
