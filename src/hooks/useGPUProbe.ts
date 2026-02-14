@@ -86,6 +86,7 @@ export function useGPUProbe(): GPUProbeResult {
       const cached = sessionStorage.getItem(SESSION_KEY);
       if (cached) {
         const parsed = JSON.parse(cached) as Omit<GPUProbeResult, "isProbing">;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setResult({ ...parsed, isProbing: false });
         return;
       }
