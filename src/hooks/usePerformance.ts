@@ -2,27 +2,22 @@
 
 import { useReducedMotion } from "./useReducedMotion";
 import { useDeviceDetect } from "./useDeviceDetect";
+import { useGPUProbe } from "./useGPUProbe";
 
 interface PerformanceConfig {
-  // Should heavy 3D effects be enabled?
   enable3D: boolean;
-  // Should particle effects be enabled?
   enableParticles: boolean;
-  // Should shader effects be enabled?
   enableShaders: boolean;
-  // Should smooth scroll be enabled?
   enableSmoothScroll: boolean;
-  // Should cursor effects be enabled?
   enableCursorEffects: boolean;
-  // Particle count multiplier (0-1)
   particleMultiplier: number;
-  // Should animations be enabled?
   enableAnimations: boolean;
 }
 
 export function usePerformance(): PerformanceConfig {
   const reducedMotion = useReducedMotion();
   const { isMobile, isTablet, isLowPowerMode } = useDeviceDetect();
+  const { canRender, tier } = useGPUProbe();
 
   // If user prefers reduced motion, disable most effects
   if (reducedMotion) {
@@ -44,8 +39,34 @@ export function usePerformance(): PerformanceConfig {
       enableParticles: false,
       enableShaders: false,
       enableSmoothScroll: true,
-      enableCursorEffects: false, // No cursor on mobile
+      enableCursorEffects: false,
       particleMultiplier: 0,
+      enableAnimations: true,
+    };
+  }
+
+  // GPU probe: can't render canvas at all
+  if (!canRender) {
+    return {
+      enable3D: false,
+      enableParticles: false,
+      enableShaders: false,
+      enableSmoothScroll: true,
+      enableCursorEffects: true,
+      particleMultiplier: 0,
+      enableAnimations: true,
+    };
+  }
+
+  // GPU probe: low performance tier
+  if (tier === "low") {
+    return {
+      enable3D: true,
+      enableParticles: true,
+      enableShaders: true,
+      enableSmoothScroll: true,
+      enableCursorEffects: true,
+      particleMultiplier: 0.3,
       enableAnimations: true,
     };
   }
@@ -57,7 +78,7 @@ export function usePerformance(): PerformanceConfig {
       enableParticles: true,
       enableShaders: true,
       enableSmoothScroll: true,
-      enableCursorEffects: false, // Usually touch devices
+      enableCursorEffects: false,
       particleMultiplier: 0.5,
       enableAnimations: true,
     };
