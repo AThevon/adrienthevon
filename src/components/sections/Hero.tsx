@@ -16,6 +16,11 @@ const ParticleText = dynamic(
   { ssr: false }
 );
 
+const StrokeRevealTitle = dynamic(
+  () => import("@/components/ui/StrokeRevealTitle"),
+  { ssr: false }
+);
+
 // Navigation items configuration
 export const navigationItems = [
   {
@@ -250,19 +255,11 @@ export default function Hero() {
           </div>
         )}
 
-        {/* Fallback title when particles fail to load after timeout */}
-        {enable3D && showFallback && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="absolute top-0 left-0 right-0 h-[65dvh] z-1 flex items-center justify-center pointer-events-none"
-          >
-            <h1 className="text-[10vw] font-bold tracking-tighter leading-[0.85] text-center">
-              <span className="block text-accent">ADRIEN</span>
-              <span className="block text-accent/60">THEVON</span>
-            </h1>
-          </motion.div>
+        {/* SVG Stroke Reveal fallback — shown when Canvas can't render or particles timeout */}
+        {(!enable3D || showFallback) && (
+          <div className="absolute top-0 left-0 right-0 h-[65dvh] z-1 flex items-center justify-center pointer-events-none">
+            <StrokeRevealTitle delay={0.3} />
+          </div>
         )}
 
         {/* Floating shapes layer */}
@@ -305,19 +302,6 @@ export default function Hero() {
             </span>
             <span className="w-12 h-px bg-accent" />
           </motion.div>
-
-          {/* Fallback title for non-3D */}
-          {!enable3D && (
-            <motion.h1
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: 1, ease: [0.33, 1, 0.68, 1] }}
-              className="text-[12vw] md:text-[10vw] font-bold tracking-tighter leading-[0.85] text-center mb-8"
-            >
-              <span className="block">ADRIEN</span>
-              <span className="block text-accent">THEVON</span>
-            </motion.h1>
-          )}
 
           {/* Spacer to push content to bottom but keep it visible */}
           <div className="flex-1" />
