@@ -255,7 +255,7 @@ export default function Hero() {
           </div>
         )}
 
-        {/* SVG Stroke Reveal fallback — shown when Canvas can't render or particles timeout */}
+        {/* Cinematic title fallback — shown when Canvas can't render or particles timeout */}
         {(!enable3D || showFallback) && (
           <div className="absolute top-0 left-0 right-0 h-[65dvh] z-1 flex items-center justify-center pointer-events-none">
             <StrokeRevealTitle delay={0.3} />

@@ -166,3 +166,32 @@ h3, h4, .heading-md {
 .glitch:hover {
   animation: glitch 0.3s ease infinite;
 }
+
+/* Cinematic gradient text for fallback hero title */
+@keyframes cinematic-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.cinematic-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--foreground) 0%,
+    var(--foreground) 30%,
+    var(--accent) 50%,
+    var(--foreground) 70%,
+    var(--foreground) 100%
+  );
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: cinematic-sweep 8s ease-in-out infinite;
+}
