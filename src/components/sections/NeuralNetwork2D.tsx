@@ -542,135 +542,216 @@ export default function NeuralNetwork2D() {
         ))}
       </motion.div>
 
-      {/* Projects Panel - Redesigned */}
+      {/* Skill Detail Panel */}
       <AnimatePresence>
         {selectedSkill && selectedSkill.projectIds && selectedSkill.projectIds.length > 0 && (
           <motion.aside
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-32 right-8 w-[360px] h-[calc(100dvh-160px)] z-20 pointer-events-auto"
+            initial={{ opacity: 0, x: 40, filter: "blur(12px)" }}
+            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, x: 30, filter: "blur(8px)" }}
+            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            className="fixed top-28 right-6 w-[340px] max-h-[calc(100dvh-140px)] z-20 pointer-events-auto"
           >
-            {/* Glowing backdrop */}
-            <div
-              className="absolute inset-0 blur-2xl opacity-20 rounded-3xl"
-              style={{ backgroundColor: selectedSkill.color }}
-            />
+            {/* Animated gradient border */}
+            <div className="absolute -inset-px rounded-2xl overflow-hidden">
+              <motion.div
+                className="absolute inset-0"
+                style={{
+                  background: `conic-gradient(from 0deg, ${selectedSkill.color}40, transparent 40%, transparent 60%, ${selectedSkill.color}25, transparent)`,
+                }}
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
 
             {/* Main container */}
-            <div className="relative h-full bg-background/90 backdrop-blur-xl rounded-2xl border border-foreground/10 flex flex-col overflow-hidden">
-              {/* Header with gradient accent */}
-              <div
-                className="relative h-28 flex items-end p-6 shrink-0"
-                style={{
-                  background: `linear-gradient(135deg, ${selectedSkill.color}15 0%, transparent 70%)`
-                }}
-              >
-                {/* Close button */}
+            <div className="relative h-full bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl border border-white/[0.06] flex flex-col overflow-hidden">
+              {/* Header */}
+              <div className="relative p-5 pb-4 shrink-0">
+                {/* Subtle gradient wash */}
+                <div
+                  className="absolute inset-0 opacity-[0.07] rounded-t-2xl"
+                  style={{
+                    background: `radial-gradient(ellipse at 30% 0%, ${selectedSkill.color}, transparent 70%)`,
+                  }}
+                />
+
+                {/* Close */}
                 <button
                   onClick={() => setSelectedSkillId(null)}
-                  className="absolute top-5 right-5 w-8 h-8 rounded-full flex items-center justify-center hover:bg-foreground/10 transition-all hover:rotate-90"
+                  className="absolute top-4 right-4 w-7 h-7 rounded-lg flex items-center justify-center text-white/30 hover:text-white/80 hover:bg-white/[0.06] transition-all hover:rotate-90 duration-300"
                   aria-label="Close"
                 >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </button>
 
-                {/* Skill name with icon and color indicator */}
-                <div className="flex items-center gap-3">
-                  {/* Icon with color background */}
-                  <div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: `${selectedSkill.color}20` }}
+                {/* Skill identity */}
+                <div className="relative flex items-center gap-3.5">
+                  <motion.div
+                    className="relative w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: `${selectedSkill.color}12` }}
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", damping: 15, stiffness: 300, delay: 0.05 }}
                   >
-                    <img
-                      src={getSkillLogoUrl(selectedSkill.id, 'white')}
-                      alt={selectedSkill.name}
-                      className="w-8 h-8"
-                      style={{ filter: 'brightness(0) invert(1)' }}
+                    {/* Breathing ring */}
+                    <motion.div
+                      className="absolute inset-0 rounded-xl border"
+                      style={{ borderColor: `${selectedSkill.color}30` }}
+                      animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.2, 0.5] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     />
-                  </div>
-                  <div>
-                    <div className="font-mono text-xs text-muted/70 uppercase tracking-wider mb-1">
+                    <img
+                      src={getSkillLogoUrl(selectedSkill.id, getSkillLogoColor(selectedSkill.id))}
+                      alt={selectedSkill.name}
+                      className="w-6 h-6"
+                      style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }}
+                    />
+                  </motion.div>
+
+                  <div className="min-w-0">
+                    <motion.div
+                      className="font-mono text-[10px] uppercase tracking-[0.15em] mb-0.5"
+                      style={{ color: `${selectedSkill.color}99` }}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
                       {t(`categories.${selectedSkill.category}`)}
-                    </div>
-                    <h3 className="text-2xl font-bold tracking-tight">{selectedSkill.name}</h3>
+                    </motion.div>
+                    <motion.h3
+                      className="text-lg font-bold tracking-tight leading-tight"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.12 }}
+                    >
+                      {selectedSkill.name}
+                    </motion.h3>
                   </div>
                 </div>
+
+                {/* Connections count */}
+                {selectedSkill.connections && selectedSkill.connections.length > 0 && (
+                  <motion.div
+                    className="flex items-center gap-2 mt-3.5 font-mono text-[10px] text-white/30"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <circle cx="3" cy="3" r="1.5" stroke="currentColor" strokeWidth="1" />
+                      <circle cx="9" cy="9" r="1.5" stroke="currentColor" strokeWidth="1" />
+                      <path d="M4.2 4.2L7.8 7.8" stroke="currentColor" strokeWidth="1" strokeDasharray="2 1" />
+                    </svg>
+                    <span>{selectedSkill.connections.length} connections</span>
+                  </motion.div>
+                )}
+
+                {/* Divider */}
+                <motion.div
+                  className="mt-4 h-px"
+                  style={{
+                    background: `linear-gradient(90deg, ${selectedSkill.color}30, transparent)`,
+                  }}
+                  initial={{ scaleX: 0, originX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.4, delay: 0.15 }}
+                />
               </div>
 
-              {/* Projects list - scrollable */}
+              {/* Projects list */}
               <div
-                className="flex-1 min-h-0 max-h-[calc(100dvh-280px)] overflow-y-scroll p-5"
+                className="flex-1 min-h-0 overflow-y-auto px-5 pb-5"
                 style={{ overscrollBehavior: 'contain' }}
                 onWheel={(e) => e.stopPropagation()}
               >
-                <div className="font-mono text-xs text-muted/60 uppercase tracking-wider mb-4 px-1">
+                <motion.div
+                  className="font-mono text-[10px] text-white/25 uppercase tracking-[0.2em] mb-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
                   {selectedSkill.projectIds.length > 1
                     ? t("projectCount_plural", { count: selectedSkill.projectIds.length })
                     : t("projectCount", { count: selectedSkill.projectIds.length })
                   }
-                </div>
+                </motion.div>
 
                 <div className="space-y-2">
-                {selectedSkill.projectIds.map((projectId, index) => {
-                  const project = getProjectById(projectId);
-                  if (!project) return null;
+                  {selectedSkill.projectIds.map((projectId, index) => {
+                    const project = getProjectById(projectId);
+                    if (!project) return null;
 
-                  return (
-                    <motion.a
-                      key={projectId}
-                      href={`/work/${projectId}`}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="group block relative p-5 rounded-xl hover:bg-foreground/5 transition-all cursor-pointer overflow-hidden"
-                      data-cursor="hover"
-                    >
-                      {/* Hover accent line */}
-                      <motion.div
-                        className="absolute left-0 top-0 bottom-0 w-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ backgroundColor: project.color }}
-                      />
-
-                      {/* Project year tag */}
-                      <div className="font-mono text-xs text-muted/50 mb-2">
-                        {project.year}
-                      </div>
-
-                      {/* Project title */}
-                      <div className="flex items-start justify-between gap-2">
-                        <h5 className="font-bold text-base group-hover:translate-x-1 transition-transform">
-                          {project.title}
-                        </h5>
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0"
-                        >
-                          <path
-                            d="M4 12L12 4M12 4H6M12 4V10"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </div>
-
-                      {/* Project category */}
-                      <div
-                        className="font-mono text-xs mt-1.5 opacity-70"
-                        style={{ color: project.color }}
+                    return (
+                      <motion.a
+                        key={projectId}
+                        href={`/work/${projectId}`}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 + index * 0.06, type: "spring", damping: 20, stiffness: 200 }}
+                        className="group relative block p-4 rounded-xl border border-white/[0.04] hover:border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 cursor-pointer overflow-hidden"
+                        data-cursor="hover"
                       >
-                        {tProject(`${kebabToCamel(projectId)}.category`)}
-                      </div>
-                    </motion.a>
-                  );
-                })}
+                        {/* Hover shimmer */}
+                        <div
+                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"
+                          style={{
+                            background: `linear-gradient(135deg, transparent 30%, ${project.color}08 50%, transparent 70%)`,
+                          }}
+                        />
+
+                        {/* Left accent */}
+                        <motion.div
+                          className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full"
+                          style={{ backgroundColor: project.color }}
+                          initial={{ scaleY: 0 }}
+                          whileHover={{ scaleY: 1 }}
+                          transition={{ duration: 0.2 }}
+                        />
+
+                        <div className="relative">
+                          {/* Top row: year + arrow */}
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="font-mono text-[10px] text-white/25 tracking-wider">
+                              {project.year}
+                            </span>
+                            <motion.svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 14 14"
+                              fill="none"
+                              className="text-white/20 group-hover:text-white/60 transition-colors"
+                              initial={false}
+                              animate={{ x: 0 }}
+                              whileHover={{ x: 2 }}
+                            >
+                              <path
+                                d="M3 11L11 3M11 3H5.5M11 3V8.5"
+                                stroke="currentColor"
+                                strokeWidth="1.2"
+                                strokeLinecap="round"
+                              />
+                            </motion.svg>
+                          </div>
+
+                          {/* Title */}
+                          <h5 className="font-semibold text-sm tracking-tight text-white/90 group-hover:text-white transition-colors">
+                            {project.title}
+                          </h5>
+
+                          {/* Category */}
+                          <span
+                            className="inline-block font-mono text-[10px] mt-1.5 tracking-wider opacity-60"
+                            style={{ color: project.color }}
+                          >
+                            {tProject(`${kebabToCamel(projectId)}.category`)}
+                          </span>
+                        </div>
+                      </motion.a>
+                    );
+                  })}
                 </div>
               </div>
             </div>

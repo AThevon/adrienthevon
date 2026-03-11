@@ -1,9 +1,16 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import { motion } from "motion/react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useDeviceDetect } from "@/hooks";
 import ObfuscatedEmail from "@/components/ui/ObfuscatedEmail";
+
+const FallingPattern = dynamic(
+  () => import("@/components/effects/FallingPattern"),
+  { ssr: false }
+);
 
 const socialLinks = [
   {
@@ -28,285 +35,379 @@ const socialLinks = [
   },
 ];
 
+// --- Magnetic letter that reacts to mouse proximity ---
+function MagneticLetter({
+  char,
+  index,
+  mouseX,
+  containerRef,
+}: {
+  char: string;
+  index: number;
+  mouseX: number;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const letterRef = useRef<HTMLSpanElement>(null);
+  const [offset, setOffset] = useState({ x: 0, y: 0, rotate: 0, scale: 1 });
+
+  useEffect(() => {
+    const el = letterRef.current;
+    const container = containerRef.current;
+    if (!el || !container || char === " ") return;
+
+    const rect = el.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const dx = mouseX - centerX;
+    const dist = Math.abs(dx);
+    const maxDist = 200;
+
+    if (dist < maxDist) {
+      const force = 1 - dist / maxDist;
+      const easedForce = force * force; // Quadratic ease for snappier falloff
+      setOffset({
+        x: dx * easedForce * 0.15,
+        y: -easedForce * 18,
+        rotate: dx * easedForce * 0.08,
+        scale: 1 + easedForce * 0.2,
+      });
+    } else {
+      setOffset({ x: 0, y: 0, rotate: 0, scale: 1 });
+    }
+  }, [mouseX, char, containerRef]);
+
+  if (char === " ") {
+    return <span className="inline-block w-[0.3em]">{"\u00A0"}</span>;
+  }
+
+  const isActive = offset.scale > 1.05;
+
+  return (
+    <motion.span
+      ref={letterRef}
+      className="inline-block cursor-default select-none"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{
+        opacity: 1,
+        y: offset.y,
+        x: offset.x,
+        rotate: offset.rotate,
+        scale: offset.scale,
+      }}
+      transition={{
+        opacity: { delay: 0.15 + index * 0.04, duration: 0.5 },
+        y: { type: "spring", stiffness: 300, damping: 20 },
+        x: { type: "spring", stiffness: 300, damping: 20 },
+        rotate: { type: "spring", stiffness: 200, damping: 15 },
+        scale: { type: "spring", stiffness: 300, damping: 20 },
+      }}
+      style={{
+        color: isActive ? "#ffaa00" : undefined,
+        textShadow: isActive
+          ? "0 0 40px rgba(255,170,0,0.4), 0 0 80px rgba(255,170,0,0.15)"
+          : "none",
+        willChange: "transform",
+      }}
+    >
+      {char}
+    </motion.span>
+  );
+}
+
+// --- Creative magnetic title ---
+function CreativeTitle({ text }: { text: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mouseX, setMouseX] = useState(-1000);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMouseX(e.clientX);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const chars = text.split("");
+
+  return (
+    <div ref={containerRef} className="overflow-hidden mb-8">
+      <h1 className="text-6xl md:text-8xl lg:text-[12rem] font-bold leading-none">
+        {chars.map((char, i) => (
+          <MagneticLetter
+            key={i}
+            char={char}
+            index={i}
+            mouseX={mouseX}
+            containerRef={containerRef}
+          />
+        ))}
+      </h1>
+    </div>
+  );
+}
+
 export default function ContactPage() {
   const t = useTranslations("contact");
   const { isMobile, isHydrated } = useDeviceDetect();
 
-  // Use isHydrated to avoid hydration mismatch
   const isMobileReady = isHydrated && isMobile;
 
   return (
-    <main className="relative min-h-dvh px-6 md:px-16 pt-20 pb-8 md:py-32">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "50px 50px",
-          }}
+    <>
+      {/* Fixed background — stays in place while content scrolls */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <FallingPattern
+          color="#ffaa00"
+          backgroundColor="#0a0a0a"
+          duration={120}
+          className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent_20%,#0a0a0a_80%)]"
         />
       </div>
 
-      <div className="relative max-w-5xl mx-auto text-center space-y-16 md:space-y-20">
-        {/* Section number */}
-        <motion.div
-          className="font-mono text-xs md:text-sm text-accent mb-8 tracking-[0.3em]"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          [ {t("sectionNumber")} ]
-        </motion.div>
-
-        {/* Main title with split animation */}
-        <div className="overflow-hidden mb-8">
-          <motion.h1
-            className="text-6xl md:text-8xl lg:text-[12rem] font-bold leading-none"
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            transition={{ delay: 0.1, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+      <main className="relative z-10 min-h-dvh px-6 md:px-16 pt-20 pb-8 md:py-32">
+        <div className="relative max-w-5xl mx-auto text-center space-y-16 md:space-y-20">
+          {/* Section number */}
+          <motion.div
+            className="font-mono text-xs md:text-sm text-accent mb-8 tracking-[0.3em]"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            {t("headline").split("").map((char, i) => (
-              <motion.span
-                key={i}
-                className="inline-block"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 0.2 + i * 0.05,
-                  duration: 0.5,
-                }}
-                whileHover={{
-                  y: -10,
-                  color: "#ff4d00",
-                  transition: { duration: 0.2 },
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
-          </motion.h1>
-        </div>
+            [ {t("sectionNumber")} ]
+          </motion.div>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-base md:text-xl lg:text-2xl text-muted max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          {t("intro")}
-        </motion.p>
-
-        {/* Email - Hero element with glow */}
-        <motion.div
-          className="relative"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-        >
-          {/* Glow effect - simplified on mobile for performance */}
+          {/* Main title — magnetic hover effect */}
           {isMobileReady ? (
-            <div className="absolute -inset-4 bg-accent/15 rounded-full -z-10" />
+            <div className="overflow-hidden mb-8">
+              <motion.h1
+                className="text-6xl md:text-8xl font-bold leading-none"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+              >
+                {t("headline")}
+              </motion.h1>
+            </div>
           ) : (
-            <motion.div
-              className="absolute -inset-4 bg-accent/10 blur-3xl -z-10"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <CreativeTitle text={t("headline")} />
           )}
 
-          <div className="mb-6 font-mono text-sm text-accent tracking-[0.3em]">
-            [ {t("emailTitle")} ]
-          </div>
-          <ObfuscatedEmail user="athevon.pro" domain="gmail.com" />
-        </motion.div>
+          {/* Subtitle */}
+          <motion.p
+            className="text-base md:text-xl lg:text-2xl text-muted max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {t("intro")}
+          </motion.p>
 
-        {/* Divider with accent */}
-        <motion.div
-          className="relative h-px bg-foreground/10 max-w-md mx-auto"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
-        >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-accent" />
-        </motion.div>
-
-        {/* Social links - Creative cards */}
-        <motion.div
-          className="max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-        >
-          <div className="font-mono text-sm text-accent tracking-[0.3em] mb-8 text-center">
-            [ {t("connect")} ]
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {socialLinks.map((link, i) => (
-              <motion.a
-                key={link.name}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative h-56 md:h-56 lg:h-64 border-2 border-foreground/20 overflow-hidden"
-                initial={{ opacity: 0, y: 30, rotateX: -15 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          {/* Email - Hero element with glow */}
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+          >
+            {isMobileReady ? (
+              <div className="absolute -inset-4 bg-accent/15 rounded-full -z-10" />
+            ) : (
+              <motion.div
+                className="absolute -inset-4 bg-accent/10 blur-3xl -z-10"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
                 transition={{
-                  delay: 1 + i * 0.15,
-                  type: "spring",
-                  stiffness: 100,
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
-                whileHover={{
-                  scale: 1.03,
-                  borderColor: link.color,
-                  transition: { duration: 0.3 },
-                }}
-                data-cursor="hover"
-              >
-                {/* Animated background */}
-                <motion.div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                  style={{
-                    background: `linear-gradient(135deg, ${link.color}20 0%, ${link.color}05 100%)`,
+              />
+            )}
+
+            <div className="mb-6 font-mono text-sm text-accent tracking-[0.3em]">
+              [ {t("emailTitle")} ]
+            </div>
+            <ObfuscatedEmail user="athevon.pro" domain="gmail.com" />
+          </motion.div>
+
+          {/* Divider with accent */}
+          <motion.div
+            className="relative h-px bg-foreground/10 max-w-md mx-auto"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-accent" />
+          </motion.div>
+
+          {/* Social links */}
+          <motion.div
+            className="max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+          >
+            <div className="font-mono text-sm text-accent tracking-[0.3em] mb-8 text-center">
+              [ {t("connect")} ]
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {socialLinks.map((link, i) => (
+                <motion.a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative h-56 md:h-56 lg:h-64 border-2 border-foreground/20 overflow-hidden"
+                  initial={{ opacity: 0, y: 30, rotateX: -15 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  transition={{
+                    delay: 1 + i * 0.15,
+                    type: "spring",
+                    stiffness: 100,
                   }}
-                  transition={{ duration: 0.4 }}
-                />
+                  whileHover={{
+                    scale: 1.03,
+                    borderColor: link.color,
+                    transition: { duration: 0.3 },
+                  }}
+                  data-cursor="hover"
+                >
+                  {/* Animated background */}
+                  <motion.div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                    style={{
+                      background: `linear-gradient(135deg, ${link.color}20 0%, ${link.color}05 100%)`,
+                    }}
+                    transition={{ duration: 0.4 }}
+                  />
 
-                {/* Rotating border effect - disabled on mobile */}
-                {!isMobileReady && (
-                  <>
-                    <motion.div
-                      className="absolute -inset-px opacity-0 group-hover:opacity-100"
-                      style={{
-                        background: `conic-gradient(from 0deg, ${link.color}, transparent, ${link.color})`,
-                      }}
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    />
-                    <div className="absolute inset-[2px] bg-background" />
-                  </>
-                )}
-
-                {/* Content */}
-                <div className="relative h-full flex flex-col items-center justify-center p-6 text-center gap-3">
-                  {/* Logo SVG - simplified animation on mobile */}
-                  {isMobileReady ? (
-                    <div style={{ color: link.color }} className="opacity-80">
-                      {link.icon}
-                    </div>
-                  ) : (
-                    <motion.div
-                      style={{ color: link.color }}
-                      className="opacity-80 group-hover:opacity-100"
-                      animate={{
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      {link.icon}
-                    </motion.div>
+                  {/* Rotating border effect - disabled on mobile */}
+                  {!isMobileReady && (
+                    <>
+                      <motion.div
+                        className="absolute -inset-px opacity-0 group-hover:opacity-100"
+                        style={{
+                          background: `conic-gradient(from 0deg, ${link.color}, transparent, ${link.color})`,
+                        }}
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                      />
+                      <div className="absolute inset-[2px] bg-background" />
+                    </>
                   )}
 
-                  {/* Name */}
-                  <h3
-                    className="text-2xl md:text-3xl font-bold group-hover:translate-y-[-2px] transition-transform"
-                    style={{
-                      color: link.color,
-                    }}
-                  >
-                    {link.name}
-                  </h3>
+                  {/* Content */}
+                  <div className="relative h-full flex flex-col items-center justify-center p-6 text-center gap-3">
+                    {isMobileReady ? (
+                      <div style={{ color: link.color }} className="opacity-80">
+                        {link.icon}
+                      </div>
+                    ) : (
+                      <motion.div
+                        style={{ color: link.color }}
+                        className="opacity-80 group-hover:opacity-100"
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        {link.icon}
+                      </motion.div>
+                    )}
 
-                  {/* Number indicator */}
-                  <div
-                    className="font-mono text-xs opacity-50"
-                    style={{ color: link.color }}
-                  >
-                    [0{i + 1}]
+                    <h3
+                      className="text-2xl md:text-3xl font-bold group-hover:translate-y-[-2px] transition-transform"
+                      style={{ color: link.color }}
+                    >
+                      {link.name}
+                    </h3>
+
+                    <div
+                      className="font-mono text-xs opacity-50"
+                      style={{ color: link.color }}
+                    >
+                      [0{i + 1}]
+                    </div>
+
+                    <motion.div
+                      className="text-3xl opacity-0 group-hover:opacity-100 absolute bottom-4 right-4"
+                      style={{ color: link.color }}
+                      initial={{ x: -10, y: 10 }}
+                      whileHover={{ x: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      ↗
+                    </motion.div>
+
+                    {!isMobileReady &&
+                      [...Array(4)].map((_, idx) => (
+                        <motion.div
+                          key={idx}
+                          className="absolute w-1 h-1 rounded-full opacity-0 group-hover:opacity-100"
+                          style={{
+                            backgroundColor: link.color,
+                            left: `${25 + idx * 18}%`,
+                            top: "30%",
+                          }}
+                          animate={{
+                            y: [-10, -30, -50],
+                            opacity: [0, 1, 0],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            delay: idx * 0.15,
+                            ease: "easeOut",
+                          }}
+                        />
+                      ))}
                   </div>
 
-                  {/* Arrow indicator */}
-                  <motion.div
-                    className="text-3xl opacity-0 group-hover:opacity-100 absolute bottom-4 right-4"
-                    style={{ color: link.color }}
-                    initial={{ x: -10, y: 10 }}
-                    whileHover={{ x: 0, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    ↗
-                  </motion.div>
-
-                  {/* Particles effect on hover - disabled on mobile */}
-                  {!isMobileReady && [...Array(4)].map((_, idx) => (
-                    <motion.div
-                      key={idx}
-                      className="absolute w-1 h-1 rounded-full opacity-0 group-hover:opacity-100"
-                      style={{
-                        backgroundColor: link.color,
-                        left: `${25 + idx * 18}%`,
-                        top: "30%",
-                      }}
-                      animate={{
-                        y: [-10, -30, -50],
-                        opacity: [0, 1, 0],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        delay: idx * 0.15,
-                        ease: "easeOut",
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* Corner accents */}
-                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity" style={{ borderColor: link.color }} />
-                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity" style={{ borderColor: link.color }} />
-              </motion.a>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Additional info */}
-        <motion.div
-          className="pt-12 border-t border-foreground/10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.3 }}
-        >
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 font-mono text-sm text-muted">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-accent" />
-              <span>{t("locationValue")}</span>
+                  {/* Corner accents */}
+                  <div
+                    className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ borderColor: link.color }}
+                  />
+                  <div
+                    className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ borderColor: link.color }}
+                  />
+                </motion.a>
+              ))}
             </div>
-            <div className="hidden md:block w-px h-4 bg-muted/30" />
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-accent animate-pulse" />
-              <span>{t("availability")}</span>
+          </motion.div>
+
+          {/* Additional info */}
+          <motion.div
+            className="pt-12 border-t border-foreground/10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.3 }}
+          >
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 font-mono text-sm text-muted">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-accent" />
+                <span>{t("locationValue")}</span>
+              </div>
+              <div className="hidden md:block w-px h-4 bg-muted/30" />
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-accent animate-pulse" />
+                <span>{t("availability")}</span>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-    </main>
+          </motion.div>
+        </div>
+      </main>
+    </>
   );
 }

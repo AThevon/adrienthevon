@@ -13,22 +13,14 @@ const StaticNetwork = dynamic(
   { ssr: false }
 );
 
-const CustomCursor = dynamic(
-  () => import("@/components/effects/CustomCursor"),
-  { ssr: false }
-);
-
 export default function SkillsPage() {
   const { isMobile, isHydrated } = useDeviceDetect();
 
   const isMobileReady = isHydrated && isMobile;
 
   return (
-    <>
-      {!isMobileReady && <CustomCursor />}
-      <main className="relative min-h-dvh">
-        {isMobileReady ? <StaticNetwork /> : <NeuralNetwork2D />}
-      </main>
-    </>
+    <main className="relative min-h-dvh">
+      {isMobileReady ? <StaticNetwork /> : <NeuralNetwork2D />}
+    </main>
   );
 }

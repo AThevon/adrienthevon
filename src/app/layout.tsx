@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono, Syne, Goldman } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Syne, Major_Mono_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
@@ -34,11 +34,11 @@ const syne = Syne({
   display: "swap",
 });
 
-// Particle hero font - Bold gaming-inspired display
-const goldman = Goldman({
+// Particle hero font - Monospace display
+const majorMonoDisplay = Major_Mono_Display({
   variable: "--font-particle",
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -110,7 +110,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} ${goldman.variable} antialiased grain`}
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} ${majorMonoDisplay.variable} antialiased grain`}
       >
         <NextIntlClientProvider messages={messages}>
           <PageTransitionProvider>

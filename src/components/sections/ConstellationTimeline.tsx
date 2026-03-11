@@ -2,8 +2,14 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { timelineEvents } from "@/data/timeline";
+
+const AuroraShaderBackground = dynamic(
+  () => import("@/components/effects/AuroraShaderBackground"),
+  { ssr: false }
+);
 
 interface ConstellationNode {
   x: number;
@@ -19,62 +25,15 @@ interface ConstellationNode {
   description: string;
 }
 
-interface Star {
-  x: number;
-  y: number;
-  baseX: number;
-  baseY: number;
-  size: number;
-  opacity: number;
-  speed: number;
-  twinkleSpeed: number;
-  twinkleOffset: number;
-}
-
-interface ShootingStar {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-  maxLife: number;
-}
-
 export default function ConstellationTimeline() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const nodesRef = useRef<ConstellationNode[]>([]);
-  const starsRef = useRef<Star[]>([]);
-  const shootingStarsRef = useRef<ShootingStar[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
-  const [activeIndex, setActiveIndex] = useState(2); // Start at 2024
+  const [activeIndex, setActiveIndex] = useState(0); // Start at 2022
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const t = useTranslations("timeline");
   const tEvents = useTranslations("timeline.events");
-
-  // Initialize stars
-  const initStars = useCallback((width: number, height: number) => {
-    const stars: Star[] = [];
-    const count = Math.floor((width * height) / 5000); // Density based on screen size
-
-    for (let i = 0; i < count; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      stars.push({
-        x,
-        y,
-        baseX: x,
-        baseY: y,
-        size: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.5 + 0.2,
-        speed: Math.random() * 0.02 + 0.01,
-        twinkleSpeed: Math.random() * 0.03 + 0.01,
-        twinkleOffset: Math.random() * Math.PI * 2,
-      });
-    }
-
-    return stars;
-  }, []);
 
   // Initialize constellation nodes
   const initNodes = useCallback(
@@ -128,7 +87,6 @@ export default function ConstellationTimeline() {
         }
 
         setDimensions({ width, height });
-        starsRef.current = initStars(width, height);
         nodesRef.current = initNodes(width, height);
       }
     };
@@ -139,7 +97,7 @@ export default function ConstellationTimeline() {
     return () => {
       window.removeEventListener("resize", updateDimensions);
     };
-  }, [initStars, initNodes]);
+  }, [initNodes]);
 
   // Mouse move handler
   useEffect(() => {
@@ -150,25 +108,6 @@ export default function ConstellationTimeline() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
-
-  // Add shooting star periodically
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (Math.random() > 0.7 && dimensions.width > 0) {
-        const side = Math.random() > 0.5;
-        shootingStarsRef.current.push({
-          x: side ? 0 : dimensions.width,
-          y: Math.random() * dimensions.height * 0.5,
-          vx: (side ? 1 : -1) * (Math.random() * 3 + 5),
-          vy: Math.random() * 2 + 1,
-          life: 0,
-          maxLife: Math.random() * 60 + 40,
-        });
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [dimensions]);
 
   // Navigation handlers
   const handlePrev = useCallback(() => {
@@ -212,53 +151,8 @@ export default function ConstellationTimeline() {
         return;
       }
 
-      // Clear canvas
-      ctx.fillStyle = "#0a0a0a";
-      ctx.fillRect(0, 0, width, height);
-
-      // Draw background stars
-      starsRef.current.forEach((star) => {
-        // Parallax effect based on mouse
-        const parallaxX = (mouseRef.current.x / width - 0.5) * star.speed * 20;
-        const parallaxY = (mouseRef.current.y / height - 0.5) * star.speed * 20;
-
-        // Twinkling effect
-        const twinkle = Math.sin(time * star.twinkleSpeed * 50 + star.twinkleOffset);
-        const opacity = star.opacity + twinkle * 0.3;
-
-        ctx.beginPath();
-        ctx.arc(star.baseX + parallaxX, star.baseY + parallaxY, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, opacity)})`;
-        ctx.fill();
-      });
-
-      // Update and draw shooting stars
-      shootingStarsRef.current = shootingStarsRef.current.filter((star) => {
-        star.x += star.vx;
-        star.y += star.vy;
-        star.life++;
-
-        if (star.life > star.maxLife) return false;
-
-        const opacity = 1 - star.life / star.maxLife;
-        const gradient = ctx.createLinearGradient(
-          star.x,
-          star.y,
-          star.x - star.vx * 10,
-          star.y - star.vy * 10
-        );
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
-        gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(star.x, star.y);
-        ctx.lineTo(star.x - star.vx * 10, star.y - star.vy * 10);
-        ctx.stroke();
-
-        return true;
-      });
+      // Clear canvas (transparent — shader background shows through)
+      ctx.clearRect(0, 0, width, height);
 
       const nodes = nodesRef.current;
 
@@ -466,11 +360,14 @@ export default function ConstellationTimeline() {
       data-cursor-mode="timeline"
       className="fixed inset-0 w-full h-dvh overflow-hidden bg-[#0a0a0a]"
     >
-      {/* Canvas */}
+      {/* Shader aurora background — color synced with active event */}
+      <AuroraShaderBackground color={timelineEvents[activeIndex]?.color ?? "#ffaa00"} />
+
+      {/* Canvas overlay for constellation nodes */}
       <canvas
         ref={canvasRef}
         onClick={handleCanvasClick}
-        className="absolute inset-0 cursor-pointer"
+        className="absolute inset-0 z-10 cursor-pointer"
       />
 
       {/* Section header */}
@@ -490,82 +387,120 @@ export default function ConstellationTimeline() {
         </h2>
       </motion.div>
 
-      {/* Event info card - Redesigned */}
+      {/* Event info card */}
       <AnimatePresence mode="wait">
         {activeNode && (
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            transition={{
-              type: "spring",
-              damping: 20,
-              stiffness: 300
-            }}
-            className="absolute top-24 right-8 z-30 w-[420px] pointer-events-auto"
+            initial={{ opacity: 0, x: 40, filter: "blur(12px)" }}
+            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, x: 30, filter: "blur(8px)" }}
+            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            className="absolute top-24 right-8 z-30 w-[380px] pointer-events-auto"
           >
-            {/* Ambient glow behind card */}
-            <div
-              className="absolute -inset-8 opacity-20 blur-3xl rounded-full"
-              style={{ backgroundColor: activeNode.color }}
-            />
-
-            {/* Card container */}
-            <div className="relative bg-background/95 backdrop-blur-xl rounded-2xl border border-foreground/10 overflow-hidden">
-              {/* Top accent bar */}
-              <div
-                className="h-1 w-full"
+            {/* Animated gradient border */}
+            <div className="absolute -inset-px rounded-2xl overflow-hidden">
+              <motion.div
+                className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(90deg, ${activeNode.color} 0%, transparent 100%)`
+                  background: `conic-gradient(from 0deg, ${activeNode.color}50, transparent 40%, transparent 60%, ${activeNode.color}30, transparent)`,
                 }}
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               />
+            </div>
 
-              {/* Content */}
-              <div className="px-8 py-4">
-                {/* Year badge */}
-                <div className="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full border"
+            {/* Main container */}
+            <div className="relative bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl border border-white/[0.06] overflow-hidden">
+              {/* Header with gradient wash */}
+              <div className="relative px-6 pt-5 pb-4">
+                <div
+                  className="absolute inset-0 opacity-[0.08] rounded-t-2xl"
                   style={{
-                    borderColor: `${activeNode.color}40`,
-                    backgroundColor: `${activeNode.color}10`
+                    background: `radial-gradient(ellipse at 30% 0%, ${activeNode.color}, transparent 70%)`,
                   }}
+                />
+
+                {/* Step indicator + year */}
+                <motion.div
+                  className="relative flex items-center gap-3 mb-4"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 }}
                 >
-                  <div
-                    className="w-2 h-2 rounded-full animate-pulse"
-                    style={{
-                      backgroundColor: activeNode.color,
-                      boxShadow: `0 0 10px ${activeNode.color}`
-                    }}
-                  />
-                  <span
-                    className="font-mono text-xs font-bold tracking-wider"
+                  {/* Step dots */}
+                  <div className="flex items-center gap-1.5">
+                    {timelineEvents.map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="w-1.5 h-1.5 rounded-full"
+                        animate={{
+                          backgroundColor: i <= activeIndex ? activeNode.color : "rgba(255,255,255,0.1)",
+                          scale: i === activeIndex ? 1.4 : 1,
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="w-px h-3 bg-white/10" />
+
+                  {/* Year */}
+                  <motion.span
+                    className="font-mono text-[11px] font-bold tracking-[0.15em]"
                     style={{ color: activeNode.color }}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.08 }}
                   >
                     {activeNode.year}
-                  </span>
-                </div>
+                  </motion.span>
+                </motion.div>
 
                 {/* Title */}
-                <h3 className="text-3xl font-bold mb-4 tracking-tight leading-tight">
+                <motion.h3
+                  className="relative text-xl font-bold tracking-tight leading-snug"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
                   {activeNode.title}
-                </h3>
+                </motion.h3>
 
-                {/* Description */}
-                <p className="text-base text-muted/80 leading-relaxed">
+                {/* Divider */}
+                <motion.div
+                  className="mt-4 h-px"
+                  style={{
+                    background: `linear-gradient(90deg, ${activeNode.color}35, transparent)`,
+                  }}
+                  initial={{ scaleX: 0, originX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.4, delay: 0.12 }}
+                />
+              </div>
+
+              {/* Description */}
+              <div className="px-6 pb-5">
+                <motion.p
+                  className="text-sm text-white/50 leading-relaxed"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
                   {activeNode.description}
-                </p>
+                </motion.p>
 
-                {/* Decorative line */}
-                <div className="mt-6 flex items-center gap-2">
-                  <div
-                    className="h-px flex-1 opacity-30"
-                    style={{ backgroundColor: activeNode.color }}
-                  />
-                  <div
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: activeNode.color }}
-                  />
-                </div>
+                {/* Bottom decorative */}
+                <motion.div
+                  className="flex items-center gap-3 mt-5 font-mono text-[10px] text-white/20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <span>{String(activeIndex + 1).padStart(2, "0")}</span>
+                  <div className="flex-1 h-px bg-white/[0.06]" />
+                  <span>{String(timelineEvents.length).padStart(2, "0")}</span>
+                </motion.div>
               </div>
             </div>
           </motion.div>

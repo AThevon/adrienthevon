@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
-import NavigationDockButton from "@/components/ui/NavigationDockButton";
+import NavigationDock from "@/components/ui/NavigationDock";
 
 const HeroMobile = dynamic(() => import("./HeroMobile"), { ssr: false });
 
@@ -15,40 +15,6 @@ const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
   { ssr: false }
 );
-
-// Navigation items configuration
-export const navigationItems = [
-  {
-    key: "work",
-    href: "/work",
-    color: "#ffaa00",
-    icon: "W",
-  },
-  {
-    key: "skills",
-    href: "/skills",
-    color: "#00ccff",
-    icon: "S",
-  },
-  {
-    key: "journey",
-    href: "/journey",
-    color: "#8844ff",
-    icon: "J",
-  },
-  {
-    key: "about",
-    href: "/about",
-    color: "#ff0088",
-    icon: "A",
-  },
-  {
-    key: "contact",
-    href: "/contact",
-    color: "#ffcc00",
-    icon: "C",
-  },
-];
 
 // Floating shapes configuration
 const floatingShapes = [
@@ -159,7 +125,7 @@ function FloatingShape({
   );
 }
 
-export default function Hero() {
+export default function Hero({ preloaderActive = false }: { preloaderActive?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isMobile, isHydrated } = useDeviceDetect();
   const t = useTranslations("hero");
@@ -205,6 +171,7 @@ export default function Hero() {
             particleGap={3}
             color={COLORS.accent}
             mouseRadius={150}
+            paused={preloaderActive}
           />
         </div>
 
@@ -288,15 +255,13 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Navigation Dock - desktop only, mobile uses drawer */}
+          {/* Navigation Dock - desktop only */}
           {!isMobile && (
             <motion.div
               style={{ y: contentY, opacity: contentOpacity }}
-              className="mt-4 w-screen px-4 flex items-end justify-center gap-2"
+              className="mt-4 flex items-end justify-center"
             >
-              {navigationItems.map((item) => (
-                <NavigationDockButton key={item.key} item={item} />
-              ))}
+              <NavigationDock />
             </motion.div>
           )}
         </div>

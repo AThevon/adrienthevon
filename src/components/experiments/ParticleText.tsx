@@ -32,6 +32,7 @@ interface ParticleTextProps {
   particleGap?: number;
   color?: string;
   mouseRadius?: number;
+  paused?: boolean;
   onReady?: () => void;
 }
 
@@ -42,6 +43,7 @@ export default function ParticleText({
   particleGap = 2,
   color = COLORS.accent,
   mouseRadius = 100,
+  paused = false,
   onReady,
 }: ParticleTextProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -50,14 +52,37 @@ export default function ParticleText({
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number | null>(null);
   const startTimeRef = useRef(0);
+  const pausedRef = useRef(paused);
+  const hasStartedRef = useRef(false);
   const mouseRadiusSq = mouseRadius * mouseRadius;
+
+  // Reset entrance animation when paused goes from true → false
+  useEffect(() => {
+    const wasPaused = pausedRef.current;
+    pausedRef.current = paused;
+
+    if (wasPaused && !paused) {
+      // Preloader just finished — reset stagger timing
+      startTimeRef.current = performance.now();
+      hasStartedRef.current = true;
+      const chunks = chunksRef.current;
+      for (let i = 0; i < chunks.length; i++) {
+        chunks[i].active = false;
+      }
+    }
+
+    if (!paused && !wasPaused) {
+      // No preloader — start immediately
+      hasStartedRef.current = true;
+    }
+  }, [paused]);
 
   const initParticles = useCallback(
     (width: number, height: number, fontFamily: string) => {
       const offCtx = document.createElement("canvas").getContext("2d");
       if (!offCtx) return;
 
-      const font = `700 ${fontSize}px ${fontFamily}`;
+      const font = `400 ${fontSize}px ${fontFamily}`;
       offCtx.font = font;
 
       const lines = text.split("\n");
@@ -257,6 +282,12 @@ export default function ParticleText({
     const animate = (now: number) => {
       ctx.clearRect(0, 0, w, h);
 
+      // Don't activate anything while paused (preloader showing)
+      if (!hasStartedRef.current) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
       const chunks = chunksRef.current;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
@@ -355,7 +386,7 @@ export default function ParticleText({
         ref={fontProbeRef}
         style={{
           fontFamily: "var(--font-particle), sans-serif",
-          fontWeight: 900,
+          fontWeight: 400,
           position: "absolute",
           visibility: "hidden",
           pointerEvents: "none",

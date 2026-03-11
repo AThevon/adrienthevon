@@ -52,7 +52,7 @@ export default function Home() {
 
       {/* Main content */}
       <main className="relative">
-        <Hero />
+        <Hero preloaderActive={isLoading} />
       </main>
     </>
   );
