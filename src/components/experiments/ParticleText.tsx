@@ -9,6 +9,13 @@ const ENTRANCE_SPRING = 0.04;
 const ENTRANCE_DAMPING = 0.87;
 const DELAY_PER_CHAR = 0.06; // seconds between each letter
 
+// Alpha threshold for pixel detection — lowered for Chrome Windows
+// where font anti-aliasing can produce softer edges
+const ALPHA_THRESHOLD = 50;
+
+// Fonts to try in order if the primary font produces no particles
+const FALLBACK_FONTS = ["Arial Black", "Impact", "Arial", "sans-serif"];
+
 interface Particle {
   x: number;
   y: number;
@@ -47,7 +54,6 @@ export default function ParticleText({
   onReady,
 }: ParticleTextProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const fontProbeRef = useRef<HTMLSpanElement>(null);
   const chunksRef = useRef<LetterChunk[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationRef = useRef<number | null>(null);
@@ -77,10 +83,11 @@ export default function ParticleText({
     }
   }, [paused]);
 
+  // Returns the total number of particles generated
   const initParticles = useCallback(
-    (width: number, height: number, fontFamily: string) => {
+    (width: number, height: number, fontFamily: string): number => {
       const offCtx = document.createElement("canvas").getContext("2d");
-      if (!offCtx) return;
+      if (!offCtx) return 0;
 
       const font = `400 ${fontSize}px ${fontFamily}`;
       offCtx.font = font;
@@ -132,7 +139,7 @@ export default function ParticleText({
       offscreen.width = width;
       offscreen.height = height;
       const scanCtx = offscreen.getContext("2d");
-      if (!scanCtx) return;
+      if (!scanCtx) return 0;
 
       scanCtx.fillStyle = "#fff";
       scanCtx.font = font;
@@ -152,7 +159,7 @@ export default function ParticleText({
       for (let y = 0; y < height; y += particleGap) {
         for (let x = 0; x < width; x += particleGap) {
           const i = (y * width + x) * 4;
-          if (data[i + 3] > 128) {
+          if (data[i + 3] > ALPHA_THRESHOLD) {
             // Find which character this pixel belongs to
             let charGlobalIdx = -1;
             for (let b = 0; b < charBounds.length; b++) {
@@ -201,8 +208,10 @@ export default function ParticleText({
       const chunks: LetterChunk[] = [];
       const sortedKeys = [...letterParticles.keys()].sort((a, b) => a - b);
 
+      let totalParticles = 0;
       for (const key of sortedKeys) {
         const particles = letterParticles.get(key)!;
+        totalParticles += particles.length;
         chunks.push({
           particles,
           delay: key * DELAY_PER_CHAR,
@@ -212,14 +221,14 @@ export default function ParticleText({
 
       chunksRef.current = chunks;
       startTimeRef.current = performance.now();
+      return totalParticles;
     },
     [text, fontSize, particleGap, particleSize]
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const fontProbe = fontProbeRef.current;
-    if (!canvas || !fontProbe) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
@@ -228,12 +237,16 @@ export default function ParticleText({
     let w = 0;
     let h = 0;
 
-    const getResolvedFont = () => {
-      const computed = getComputedStyle(fontProbe).fontFamily;
-      return computed || "sans-serif";
+    // Resolve the --font-particle CSS variable from the DOM
+    const getResolvedFont = (): string => {
+      const raw = getComputedStyle(document.body)
+        .getPropertyValue("--font-particle")
+        .trim();
+      // Next.js font CSS variables may include quotes; keep as-is for Canvas
+      return raw || "sans-serif";
     };
 
-    const resize = () => {
+    const setupCanvas = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
       dpr = Math.min(window.devicePixelRatio, 2);
@@ -245,13 +258,51 @@ export default function ParticleText({
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initParticles(w, h, getResolvedFont());
     };
 
-    document.fonts.ready.then(() => {
-      resize();
+    const initWithFontFallback = (fontFamily: string) => {
+      // Try the primary font first
+      let count = initParticles(w, h, fontFamily);
+
+      if (count === 0) {
+        // Primary font produced no particles — try fallback fonts
+        // This can happen on Chrome Windows when the web font isn't
+        // available for Canvas rendering despite document.fonts.ready
+        for (const fallback of FALLBACK_FONTS) {
+          count = initParticles(w, h, fallback);
+          if (count > 0) break;
+        }
+      }
+    };
+
+    const resize = () => {
+      setupCanvas();
+      initWithFontFallback(getResolvedFont());
+    };
+
+    // Explicitly load the font for Canvas usage, then init
+    const startInit = async () => {
+      await document.fonts.ready;
+
+      setupCanvas();
+
+      const fontFamily = getResolvedFont();
+      const cssFont = `400 ${fontSize}px ${fontFamily}`;
+
+      // Explicitly request font load — on Chrome Windows, document.fonts.ready
+      // can resolve before the font is actually usable in Canvas
+      try {
+        await document.fonts.load(cssFont);
+      } catch {
+        // Font load failed — will fall through to fallback
+      }
+
+      initWithFontFallback(fontFamily);
+
       if (onReady) requestAnimationFrame(() => onReady());
-    });
+    };
+
+    startInit();
 
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
@@ -378,28 +429,13 @@ export default function ParticleText({
       clearTimeout(resizeTimeout);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [initParticles, mouseRadius, mouseRadiusSq, color, onReady]);
+  }, [initParticles, fontSize, mouseRadius, mouseRadiusSq, color, onReady]);
 
   return (
-    <>
-      <span
-        ref={fontProbeRef}
-        style={{
-          fontFamily: "var(--font-particle), sans-serif",
-          fontWeight: 400,
-          position: "absolute",
-          visibility: "hidden",
-          pointerEvents: "none",
-        }}
-        aria-hidden
-      >
-        A
-      </span>
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full pointer-events-none"
-        style={{ background: "transparent" }}
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      className="w-full h-full pointer-events-none"
+      style={{ background: "transparent" }}
+    />
   );
 }
