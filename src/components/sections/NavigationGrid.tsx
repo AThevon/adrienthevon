@@ -25,12 +25,6 @@ const navigationItems = [
     description: "journeyExplore",
   },
   {
-    key: "philosophy",
-    href: "/philosophy",
-    color: "#00ff88",
-    description: "philosophyExplore",
-  },
-  {
     key: "about",
     href: "/about",
     color: "#ff0088",

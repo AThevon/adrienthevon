@@ -15,7 +15,8 @@
       "Bash(done)",
       "Bash(npm run lint)",
       "Bash(npm run lint:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Skill(creative-3D)"
     ]
   }
 }

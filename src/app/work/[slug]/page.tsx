@@ -3,7 +3,6 @@
 import { useParams, useRouter } from "next/navigation";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import TextReveal from "@/components/ui/TextReveal";
@@ -44,11 +43,6 @@ function LetterReveal({ text, delay = 0 }: { text: string; delay?: number }) {
     </>
   );
 }
-
-const CustomCursor = dynamic(
-  () => import("@/components/effects/CustomCursor"),
-  { ssr: false }
-);
 
 // Helper to convert kebab-case to camelCase for i18n keys
 function kebabToCamel(str: string): string {
@@ -93,8 +87,6 @@ export default function ProjectPage() {
 
   return (
     <>
-      <CustomCursor />
-
       {/* Fixed gradient background that fades with scroll */}
       <motion.div
         className="fixed inset-0 pointer-events-none z-0"

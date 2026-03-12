@@ -3,14 +3,8 @@
 import { useParams, useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
 import { useRef, useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { getProjectById, getNextProject } from "@/data/projects";
-
-const CustomCursor = dynamic(
-  () => import("@/components/effects/CustomCursor"),
-  { ssr: false }
-);
 
 // Helper to convert kebab-case to camelCase for i18n keys
 function kebabToCamel(str: string): string {
@@ -173,8 +167,6 @@ export default function ImmersiveCaseStudy() {
 
   return (
     <>
-      <CustomCursor />
-
       {/* Progress indicator */}
       <ProgressIndicator
         progress={scrollYProgress}

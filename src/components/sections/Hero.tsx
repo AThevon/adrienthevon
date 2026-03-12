@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { usePerformance, useDeviceDetect } from "@/hooks";
+import { useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import DualText from "@/components/ui/DualText";
-import NavigationDockButton from "@/components/ui/NavigationDockButton";
+import NavigationDock from "@/components/ui/NavigationDock";
 
 const HeroMobile = dynamic(() => import("./HeroMobile"), { ssr: false });
 
@@ -15,51 +15,6 @@ const ParticleText = dynamic(
   () => import("@/components/experiments/ParticleText"),
   { ssr: false }
 );
-
-const StrokeRevealTitle = dynamic(
-  () => import("@/components/ui/StrokeRevealTitle"),
-  { ssr: false }
-);
-
-// Navigation items configuration
-export const navigationItems = [
-  {
-    key: "work",
-    href: "/work",
-    color: "#ffaa00",
-    icon: "W",
-  },
-  {
-    key: "skills",
-    href: "/skills",
-    color: "#00ccff",
-    icon: "S",
-  },
-  {
-    key: "journey",
-    href: "/journey",
-    color: "#8844ff",
-    icon: "J",
-  },
-  {
-    key: "philosophy",
-    href: "/philosophy",
-    color: "#00ff88",
-    icon: "P",
-  },
-  {
-    key: "about",
-    href: "/about",
-    color: "#ff0088",
-    icon: "A",
-  },
-  {
-    key: "contact",
-    href: "/contact",
-    color: "#ffcc00",
-    icon: "C",
-  },
-];
 
 // Floating shapes configuration
 const floatingShapes = [
@@ -170,13 +125,8 @@ function FloatingShape({
   );
 }
 
-export default function Hero() {
+export default function Hero({ preloaderActive = false }: { preloaderActive?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isReady, setIsReady] = useState(false);
-  const [particlesReady, setParticlesReady] = useState(false);
-  const [showFallback, setShowFallback] = useState(false);
-  const [particleKey, setParticleKey] = useState(0);
-  const { enable3D } = usePerformance();
   const { isMobile, isHydrated } = useDeviceDetect();
   const t = useTranslations("hero");
 
@@ -192,39 +142,11 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Only fade out content, no scale down
   const opacity = useTransform(scrollYProgress, [0.35, 0.6], [1, 0]);
 
-  // Navigation Dock appears when scrolling (slides up from bottom)
   const contentY = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsReady(true);
-      // Force particle effect remount
-      setParticleKey((prev) => prev + 1);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Show fallback after timeout if particles aren't ready
-  useEffect(() => {
-    if (particlesReady) {
-      setShowFallback(false);
-      return;
-    }
-
-    const fallbackTimer = setTimeout(() => {
-      if (!particlesReady) {
-        setShowFallback(true);
-      }
-    }, 2000);
-
-    return () => clearTimeout(fallbackTimer);
-  }, [particlesReady]);
-
-  // Use dedicated mobile component (only after hydration to avoid mismatch)
   if (isHydrated && isMobile) {
     return <HeroMobile />;
   }
@@ -240,27 +162,18 @@ export default function Hero() {
         className="sticky top-0 h-dvh w-full flex flex-col items-center justify-center overflow-hidden"
         style={{ opacity }}
       >
-        {/* Particle Text Background - Upper portion only */}
-        {enable3D && isReady && (
-          <div key={particleKey} className="absolute top-0 left-0 right-0 h-[65dvh] z-0 pointer-events-none">
-            <ParticleText
-              text={"ADRIEN\nTHEVON"}
-              fontSize={160}
-              particleSize={2.5}
-              particleGap={4}
-              color={COLORS.accent}
-              mouseRadius={150}
-              onReady={() => setParticlesReady(true)}
-            />
-          </div>
-        )}
-
-        {/* Cinematic title fallback — shown when Canvas can't render or particles timeout */}
-        {(!enable3D || showFallback) && (
-          <div className="absolute top-0 left-0 right-0 h-[65dvh] z-1 flex items-center justify-center pointer-events-none">
-            <StrokeRevealTitle delay={0.3} />
-          </div>
-        )}
+        {/* Particle Text Background */}
+        <div className="absolute top-0 left-0 right-0 h-[65dvh] z-0 pointer-events-none">
+          <ParticleText
+            text={"ADRIEN\nTHEVON"}
+            fontSize={160}
+            particleSize={1.8}
+            particleGap={3}
+            color={COLORS.accent}
+            mouseRadius={150}
+            paused={preloaderActive}
+          />
+        </div>
 
         {/* Floating shapes layer */}
         <div className="absolute inset-0 z-1 pointer-events-none">
@@ -342,15 +255,13 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Navigation Dock - desktop only, mobile uses drawer */}
+          {/* Navigation Dock - desktop only */}
           {!isMobile && (
             <motion.div
               style={{ y: contentY, opacity: contentOpacity }}
-              className="mt-4 w-screen px-4 flex items-end justify-center gap-2"
+              className="mt-4 flex items-end justify-center"
             >
-              {navigationItems.map((item) => (
-                <NavigationDockButton key={item.key} item={item} />
-              ))}
+              <NavigationDock />
             </motion.div>
           )}
         </div>

@@ -15,7 +15,6 @@ const menuItems = [
   { key: "work", href: "/work" },
   { key: "skills", href: "/skills" },
   { key: "journey", href: "/journey" },
-  { key: "philosophy", href: "/philosophy" },
   { key: "about", href: "/about" },
   { key: "contact", href: "/contact" },
 ];
