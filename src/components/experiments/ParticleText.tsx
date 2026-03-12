@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { COLORS } from "@/lib/constants";
 
 // --- Entrance animation config ---
-const ENTRANCE_SCATTER = 60; // close to destination — no clipping
+const ENTRANCE_SCATTER = 60;
 const ENTRANCE_SPRING = 0.04;
 const ENTRANCE_DAMPING = 0.87;
 const DELAY_PER_CHAR = 0.06; // seconds between each letter
@@ -13,8 +13,18 @@ const DELAY_PER_CHAR = 0.06; // seconds between each letter
 // where font anti-aliasing can produce softer edges
 const ALPHA_THRESHOLD = 50;
 
+// Max width for the offscreen scanning canvas. Keeps canvas small to avoid
+// anti-fingerprinting extensions that block getImageData on large canvases.
+const MAX_SCAN_WIDTH = 800;
+
 // Fonts to try in order if the primary font produces no particles
-const FALLBACK_FONTS = ["Arial Black", "Impact", "Arial", "sans-serif"];
+const FALLBACK_FONTS = [
+  '"Major Mono Display"',
+  "Arial Black",
+  "Impact",
+  "Arial",
+  "sans-serif",
+];
 
 interface Particle {
   x: number;
@@ -40,7 +50,28 @@ interface ParticleTextProps {
   color?: string;
   mouseRadius?: number;
   paused?: boolean;
-  onReady?: () => void;
+}
+
+/** Quick test: can a font render visible pixels on an offscreen Canvas? */
+function testFontOnCanvas(fontFamily: string, size: number): boolean {
+  try {
+    const c = document.createElement("canvas");
+    c.width = size * 2;
+    c.height = size * 2;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return false;
+    ctx.fillStyle = "#fff";
+    ctx.font = `400 ${size}px ${fontFamily}`;
+    ctx.textBaseline = "middle";
+    ctx.fillText("A", size * 0.2, size);
+    const data = ctx.getImageData(0, 0, c.width, c.height).data;
+    for (let i = 3; i < data.length; i += 4) {
+      if (data[i] > ALPHA_THRESHOLD) return true;
+    }
+  } catch {
+    // Canvas operation failed
+  }
+  return false;
 }
 
 export default function ParticleText({
@@ -51,7 +82,6 @@ export default function ParticleText({
   color = COLORS.accent,
   mouseRadius = 100,
   paused = false,
-  onReady,
 }: ParticleTextProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chunksRef = useRef<LetterChunk[]>([]);
@@ -68,7 +98,6 @@ export default function ParticleText({
     pausedRef.current = paused;
 
     if (wasPaused && !paused) {
-      // Preloader just finished — reset stagger timing
       startTimeRef.current = performance.now();
       hasStartedRef.current = true;
       const chunks = chunksRef.current;
@@ -78,7 +107,6 @@ export default function ParticleText({
     }
 
     if (!paused && !wasPaused) {
-      // No preloader — start immediately
       hasStartedRef.current = true;
     }
   }, [paused]);
@@ -86,20 +114,29 @@ export default function ParticleText({
   // Returns the total number of particles generated
   const initParticles = useCallback(
     (width: number, height: number, fontFamily: string): number => {
-      const offCtx = document.createElement("canvas").getContext("2d");
+      if (width <= 0 || height <= 0) return 0;
+
+      // Scan on a small offscreen canvas (max MAX_SCAN_WIDTH px wide) to avoid
+      // anti-fingerprinting extensions blocking getImageData on large canvases
+      const scale = Math.min(1, MAX_SCAN_WIDTH / width);
+      const scanW = Math.round(width * scale);
+      const scanH = Math.round(height * scale);
+      const scaledFontSize = fontSize * scale;
+
+      const offCtx = document
+        .createElement("canvas")
+        .getContext("2d", { willReadFrequently: true });
       if (!offCtx) return 0;
 
-      const font = `400 ${fontSize}px ${fontFamily}`;
+      const font = `400 ${scaledFontSize}px ${fontFamily}`;
       offCtx.font = font;
 
       const lines = text.split("\n");
-      const lineHeight = fontSize * 0.95;
-      const startY = height / 2 - ((lines.length - 1) * lineHeight) / 2;
+      const lineHeight = scaledFontSize * 0.95;
+      const startY = scanH / 2 - ((lines.length - 1) * lineHeight) / 2;
 
-      // Measure character boundaries per line
+      // Measure character boundaries in scaled space
       interface CharBounds {
-        lineIdx: number;
-        charIdx: number;
         globalIdx: number;
         left: number;
         right: number;
@@ -112,18 +149,15 @@ export default function ParticleText({
 
       lines.forEach((line, lineIdx) => {
         const lineWidth = offCtx.measureText(line).width;
-        const lineStartX = (width - lineWidth) / 2;
+        const lineStartX = (scanW - lineWidth) / 2;
         const lineCenterY = startY + lineIdx * lineHeight;
-        const lineTop = lineCenterY - fontSize * 0.6;
-        const lineBottom = lineCenterY + fontSize * 0.6;
+        const lineTop = lineCenterY - scaledFontSize * 0.6;
+        const lineBottom = lineCenterY + scaledFontSize * 0.6;
 
         let xCursor = lineStartX;
         for (let c = 0; c < line.length; c++) {
-          const char = line[c];
-          const charWidth = offCtx.measureText(char).width;
+          const charWidth = offCtx.measureText(line[c]).width;
           charBounds.push({
-            lineIdx,
-            charIdx: c,
             globalIdx: globalCharIdx++,
             left: xCursor,
             right: xCursor + charWidth,
@@ -134,11 +168,11 @@ export default function ParticleText({
         }
       });
 
-      // Render full text to scan pixels
+      // Render text on small offscreen canvas
       const offscreen = document.createElement("canvas");
-      offscreen.width = width;
-      offscreen.height = height;
-      const scanCtx = offscreen.getContext("2d");
+      offscreen.width = scanW;
+      offscreen.height = scanH;
+      const scanCtx = offscreen.getContext("2d", { willReadFrequently: true });
       if (!scanCtx) return 0;
 
       scanCtx.fillStyle = "#fff";
@@ -147,42 +181,51 @@ export default function ParticleText({
       scanCtx.textBaseline = "middle";
 
       lines.forEach((line, i) => {
-        scanCtx.fillText(line, width / 2, startY + i * lineHeight);
+        scanCtx.fillText(line, scanW / 2, startY + i * lineHeight);
       });
 
-      const imageData = scanCtx.getImageData(0, 0, width, height);
+      const imageData = scanCtx.getImageData(0, 0, scanW, scanH);
       const data = imageData.data;
 
-      // Group particles by letter
+      // Scan pixels in scaled space, map back to full size
       const letterParticles = new Map<number, Particle[]>();
+      const scaledGap = Math.max(1, Math.round(particleGap * scale));
+      const invScale = 1 / scale;
 
-      for (let y = 0; y < height; y += particleGap) {
-        for (let x = 0; x < width; x += particleGap) {
-          const i = (y * width + x) * 4;
+      for (let sy = 0; sy < scanH; sy += scaledGap) {
+        for (let sx = 0; sx < scanW; sx += scaledGap) {
+          const i = (sy * scanW + sx) * 4;
           if (data[i + 3] > ALPHA_THRESHOLD) {
-            // Find which character this pixel belongs to
             let charGlobalIdx = -1;
             for (let b = 0; b < charBounds.length; b++) {
               const cb = charBounds[b];
-              if (x >= cb.left && x < cb.right && y >= cb.top && y < cb.bottom) {
+              if (
+                sx >= cb.left &&
+                sx < cb.right &&
+                sy >= cb.top &&
+                sy < cb.bottom
+              ) {
                 charGlobalIdx = cb.globalIdx;
                 break;
               }
             }
             if (charGlobalIdx === -1) {
-              // Pixel outside measured bounds — assign to nearest char
               let minDist = Infinity;
               for (let b = 0; b < charBounds.length; b++) {
                 const cb = charBounds[b];
                 const cx = (cb.left + cb.right) / 2;
                 const cy = (cb.top + cb.bottom) / 2;
-                const d = (x - cx) ** 2 + (y - cy) ** 2;
+                const d = (sx - cx) ** 2 + (sy - cy) ** 2;
                 if (d < minDist) {
                   minDist = d;
                   charGlobalIdx = cb.globalIdx;
                 }
               }
             }
+
+            // Map back to full-size coordinates
+            const x = sx * invScale;
+            const y = sy * invScale;
 
             const angle = Math.random() * Math.PI * 2;
             const scatter = ENTRANCE_SCATTER * (0.5 + Math.random());
@@ -237,69 +280,61 @@ export default function ParticleText({
     let w = 0;
     let h = 0;
 
-    // Resolve the --font-particle CSS variable from the DOM
     const getResolvedFont = (): string => {
       const raw = getComputedStyle(document.body)
         .getPropertyValue("--font-particle")
         .trim();
-      // Next.js font CSS variables may include quotes; keep as-is for Canvas
       return raw || "sans-serif";
+    };
+
+    const findWorkingFont = (): string => {
+      const cssVarFont = getResolvedFont();
+      if (testFontOnCanvas(cssVarFont, fontSize)) return cssVarFont;
+      for (const font of FALLBACK_FONTS) {
+        if (testFontOnCanvas(font, fontSize)) return font;
+      }
+      return "sans-serif";
     };
 
     const setupCanvas = () => {
       const parent = canvas.parentElement;
-      if (!parent) return;
+      if (!parent) return false;
       dpr = Math.min(window.devicePixelRatio, 2);
       const rect = parent.getBoundingClientRect();
       w = rect.width;
       h = rect.height;
+      if (w <= 0 || h <= 0) return false;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    const initWithFontFallback = (fontFamily: string) => {
-      // Try the primary font first
-      let count = initParticles(w, h, fontFamily);
-
-      if (count === 0) {
-        // Primary font produced no particles — try fallback fonts
-        // This can happen on Chrome Windows when the web font isn't
-        // available for Canvas rendering despite document.fonts.ready
-        for (const fallback of FALLBACK_FONTS) {
-          count = initParticles(w, h, fallback);
-          if (count > 0) break;
-        }
-      }
+      return true;
     };
 
     const resize = () => {
-      setupCanvas();
-      initWithFontFallback(getResolvedFont());
+      if (!setupCanvas()) return;
+      initParticles(w, h, findWorkingFont());
     };
 
-    // Explicitly load the font for Canvas usage, then init
     const startInit = async () => {
-      await document.fonts.ready;
-
-      setupCanvas();
-
-      const fontFamily = getResolvedFont();
-      const cssFont = `400 ${fontSize}px ${fontFamily}`;
-
-      // Explicitly request font load — on Chrome Windows, document.fonts.ready
-      // can resolve before the font is actually usable in Canvas
       try {
-        await document.fonts.load(cssFont);
+        await document.fonts.ready;
+      } catch {
+        // proceed anyway
+      }
+
+      const cssVarFont = getResolvedFont();
+      try {
+        await document.fonts.load(`400 ${fontSize}px ${cssVarFont}`);
       } catch {
         // Font load failed — will fall through to fallback
       }
 
-      initWithFontFallback(fontFamily);
+      await new Promise<void>((r) => requestAnimationFrame(() => r()));
 
-      if (onReady) requestAnimationFrame(() => onReady());
+      if (!setupCanvas()) return;
+      initParticles(w, h, findWorkingFont());
     };
 
     startInit();
@@ -327,13 +362,9 @@ export default function ParticleText({
 
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
 
-    const totalChars = chunksRef.current.length;
-    const entranceEnd = totalChars * DELAY_PER_CHAR + 1.5;
-
     const animate = (now: number) => {
       ctx.clearRect(0, 0, w, h);
 
-      // Don't activate anything while paused (preloader showing)
       if (!hasStartedRef.current) {
         animationRef.current = requestAnimationFrame(animate);
         return;
@@ -343,11 +374,11 @@ export default function ParticleText({
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
       const elapsed = (now - startTimeRef.current) / 1000;
+      const entranceEnd = chunks.length * DELAY_PER_CHAR + 1.5;
       const entranceDone = elapsed > entranceEnd;
       const spring = entranceDone ? 0.08 : ENTRANCE_SPRING;
       const damping = entranceDone ? 0.88 : ENTRANCE_DAMPING;
 
-      // Physics
       for (let c = 0; c < chunks.length; c++) {
         const chunk = chunks[c];
 
@@ -429,7 +460,7 @@ export default function ParticleText({
       clearTimeout(resizeTimeout);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [initParticles, fontSize, mouseRadius, mouseRadiusSq, color, onReady]);
+  }, [initParticles, fontSize, mouseRadius, mouseRadiusSq, color]);
 
   return (
     <canvas
