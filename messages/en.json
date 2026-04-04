@@ -73,6 +73,7 @@
     "loading": "LOADING NETWORK...",
     "clickNode": "Click node → See projects",
     "tapNode": "Tap node → See projects",
+    "expandSheet": "Swipe up for more",
     "hoverExplore": "Hover → Explore connections",
     "projectsUsing": "PROJECTS USING THIS SKILL",
     "projectCount": "{count} project",

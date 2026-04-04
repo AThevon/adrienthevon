@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useDeviceDetect } from "@/hooks";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import ObfuscatedEmail from "@/components/ui/ObfuscatedEmail";
 
 const FallingPattern = dynamic(
@@ -16,9 +17,8 @@ const socialLinks = [
   {
     name: "GITHUB",
     url: "https://github.com/AThevon",
-    color: "#00ff88",
     icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
       </svg>
     ),
@@ -26,16 +26,15 @@ const socialLinks = [
   {
     name: "LINKEDIN",
     url: "https://linkedin.com/in/adrien-thevon-74b134100",
-    color: "#00d4ff",
     icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
       </svg>
     ),
   },
 ];
 
-// --- Magnetic letter that reacts to mouse proximity ---
+// --- Magnetic letter that reacts to mouse proximity (desktop only) ---
 function MagneticLetter({
   char,
   index,
@@ -57,7 +56,6 @@ function MagneticLetter({
 
     const rect = el.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
 
     const dx = mouseX - centerX;
     const dist = Math.abs(dx);
@@ -65,7 +63,7 @@ function MagneticLetter({
 
     if (dist < maxDist) {
       const force = 1 - dist / maxDist;
-      const easedForce = force * force; // Quadratic ease for snappier falloff
+      const easedForce = force * force;
       setOffset({
         x: dx * easedForce * 0.15,
         y: -easedForce * 18,
@@ -115,7 +113,7 @@ function MagneticLetter({
   );
 }
 
-// --- Creative magnetic title ---
+// --- Creative magnetic title (desktop only) ---
 function CreativeTitle({ text }: { text: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mouseX, setMouseX] = useState(-1000);
@@ -147,15 +145,178 @@ function CreativeTitle({ text }: { text: string }) {
   );
 }
 
-export default function ContactPage() {
+// --- Mobile contact page ---
+function ContactMobile() {
   const t = useTranslations("contact");
-  const { isMobile, isHydrated } = useDeviceDetect();
+  const reducedMotion = useReducedMotion();
+  const [copied, setCopied] = useState(false);
 
-  const isMobileReady = isHydrated && isMobile;
+  const email = "athevon.pro@gmail.com";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback: select text
+    }
+  };
+
+  const dur = reducedMotion ? 0 : undefined;
+
+  return (
+    <main className="relative min-h-dvh px-6 pt-20 pb-8">
+      <div className="max-w-lg mx-auto space-y-10">
+        {/* Section label */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: dur ?? 0.5 }}
+          className="flex items-center gap-3"
+        >
+          <span className="w-8 h-px bg-accent" />
+          <span className="font-mono text-[10px] text-muted tracking-[0.2em]">
+            [ {t("sectionNumber")} ]
+          </span>
+        </motion.div>
+
+        {/* Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: dur ?? 0.6, delay: dur ?? 0.1 }}
+        >
+          <h1 className="text-4xl font-bold tracking-tight leading-[0.9] mb-4">
+            {t("headline")}
+          </h1>
+          <p className="text-sm text-muted/70 leading-relaxed">
+            {t("intro")}
+          </p>
+        </motion.div>
+
+        {/* Email - direct, tap to copy */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: dur ?? 0.5, delay: dur ?? 0.25 }}
+        >
+          <div className="font-mono text-[10px] text-muted/50 uppercase tracking-wider mb-3">
+            {t("emailTitle")}
+          </div>
+          <button
+            onClick={handleCopy}
+            className="group flex items-center gap-3 w-full py-3 active:bg-foreground/[0.03] transition-colors"
+          >
+            <span className="text-accent text-lg font-mono tracking-tight">
+              {email}
+            </span>
+            <span className="flex-1" />
+            <AnimatePresence mode="wait">
+              {copied ? (
+                <motion.span
+                  key="copied"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: reducedMotion ? 0 : 0.15 }}
+                  className="font-mono text-[10px] text-accent tracking-wider"
+                >
+                  COPIED
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="copy"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reducedMotion ? 0 : 0.15 }}
+                  className="font-mono text-[10px] text-muted/30 tracking-wider"
+                >
+                  TAP TO COPY
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+          <div className="h-px bg-foreground/8" />
+        </motion.div>
+
+        {/* Social links - compact lines */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: dur ?? 0.5, delay: dur ?? 0.4 }}
+        >
+          <div className="font-mono text-[10px] text-muted/50 uppercase tracking-wider mb-3">
+            {t("connect")}
+          </div>
+          {socialLinks.map((link, i) => (
+            <div key={link.name}>
+              {i === 0 && <div className="h-px bg-foreground/8" />}
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 w-full py-4 active:bg-foreground/[0.03] transition-colors"
+              >
+                <span className="font-mono text-[10px] text-muted/30 w-6 shrink-0 tabular-nums">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-muted/60 group-active:text-foreground/80 transition-colors">
+                  {link.icon}
+                </span>
+                <span className="text-[15px] font-semibold tracking-tight text-foreground/90">
+                  {link.name}
+                </span>
+                <span className="flex-1" />
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="shrink-0 text-accent/40"
+                >
+                  <path
+                    d="M4 12L12 4M12 4H6M12 4V10"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </a>
+              <div className="h-px bg-foreground/8" />
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Location & availability */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: dur ?? 0.6 }}
+          className="flex items-center gap-6 font-mono text-[11px] text-muted/50"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-accent/50" />
+            <span>{t("locationValue")}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-accent animate-pulse" />
+            <span>{t("availability")}</span>
+          </div>
+        </motion.div>
+      </div>
+    </main>
+  );
+}
+
+// --- Desktop contact page ---
+function ContactDesktop() {
+  const t = useTranslations("contact");
 
   return (
     <>
-      {/* Fixed background — stays in place while content scrolls */}
+      {/* Fixed background */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <FallingPattern
           color="#ffaa00"
@@ -165,11 +326,11 @@ export default function ContactPage() {
         />
       </div>
 
-      <main className="relative z-10 min-h-dvh px-6 md:px-16 pt-20 pb-8 md:py-32">
-        <div className="relative max-w-5xl mx-auto text-center space-y-16 md:space-y-20">
+      <main className="relative z-10 min-h-dvh px-6 md:px-16 py-32">
+        <div className="relative max-w-5xl mx-auto text-center space-y-20">
           {/* Section number */}
           <motion.div
-            className="font-mono text-xs md:text-sm text-accent mb-8 tracking-[0.3em]"
+            className="font-mono text-sm text-accent mb-8 tracking-[0.3em]"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -177,25 +338,12 @@ export default function ContactPage() {
             [ {t("sectionNumber")} ]
           </motion.div>
 
-          {/* Main title — magnetic hover effect */}
-          {isMobileReady ? (
-            <div className="overflow-hidden mb-8">
-              <motion.h1
-                className="text-6xl md:text-8xl font-bold leading-none"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
-                {t("headline")}
-              </motion.h1>
-            </div>
-          ) : (
-            <CreativeTitle text={t("headline")} />
-          )}
+          {/* Main title - magnetic hover effect */}
+          <CreativeTitle text={t("headline")} />
 
           {/* Subtitle */}
           <motion.p
-            className="text-base md:text-xl lg:text-2xl text-muted max-w-2xl mx-auto"
+            className="text-xl lg:text-2xl text-muted max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -203,37 +351,32 @@ export default function ContactPage() {
             {t("intro")}
           </motion.p>
 
-          {/* Email - Hero element with glow */}
+          {/* Email with glow */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.6 }}
           >
-            {isMobileReady ? (
-              <div className="absolute -inset-4 bg-accent/15 rounded-full -z-10" />
-            ) : (
-              <motion.div
-                className="absolute -inset-4 bg-accent/10 blur-3xl -z-10"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-            )}
-
+            <motion.div
+              className="absolute -inset-4 bg-accent/10 blur-3xl -z-10"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
             <div className="mb-6 font-mono text-sm text-accent tracking-[0.3em]">
               [ {t("emailTitle")} ]
             </div>
             <ObfuscatedEmail user="athevon.pro" domain="gmail.com" />
           </motion.div>
 
-          {/* Divider with accent */}
+          {/* Divider */}
           <motion.div
             className="relative h-px bg-foreground/10 max-w-md mx-auto"
             initial={{ scaleX: 0 }}
@@ -243,7 +386,7 @@ export default function ContactPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-accent" />
           </motion.div>
 
-          {/* Social links */}
+          {/* Social links - desktop cards */}
           <motion.div
             className="max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
@@ -261,7 +404,7 @@ export default function ContactPage() {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative h-56 md:h-56 lg:h-64 border-2 border-foreground/20 overflow-hidden"
+                  className="group relative h-56 lg:h-64 border-2 border-foreground/20 overflow-hidden"
                   initial={{ opacity: 0, y: 30, rotateX: -15 }}
                   animate={{ opacity: 1, y: 0, rotateX: 0 }}
                   transition={{
@@ -271,7 +414,7 @@ export default function ContactPage() {
                   }}
                   whileHover={{
                     scale: 1.03,
-                    borderColor: link.color,
+                    borderColor: "#ffaa00",
                     transition: { duration: 0.3 },
                   }}
                   data-cursor="hover"
@@ -280,108 +423,67 @@ export default function ContactPage() {
                   <motion.div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100"
                     style={{
-                      background: `linear-gradient(135deg, ${link.color}20 0%, ${link.color}05 100%)`,
+                      background: "linear-gradient(135deg, rgba(255,170,0,0.08) 0%, rgba(255,170,0,0.02) 100%)",
                     }}
                     transition={{ duration: 0.4 }}
                   />
 
-                  {/* Rotating border effect - disabled on mobile */}
-                  {!isMobileReady && (
-                    <>
-                      <motion.div
-                        className="absolute -inset-px opacity-0 group-hover:opacity-100"
-                        style={{
-                          background: `conic-gradient(from 0deg, ${link.color}, transparent, ${link.color})`,
-                        }}
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                      />
-                      <div className="absolute inset-[2px] bg-background" />
-                    </>
-                  )}
+                  {/* Rotating border effect */}
+                  <motion.div
+                    className="absolute -inset-px opacity-0 group-hover:opacity-100"
+                    style={{
+                      background: "conic-gradient(from 0deg, #ffaa00, transparent, #ffaa00)",
+                    }}
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                  <div className="absolute inset-[2px] bg-background" />
 
                   {/* Content */}
                   <div className="relative h-full flex flex-col items-center justify-center p-6 text-center gap-3">
-                    {isMobileReady ? (
-                      <div style={{ color: link.color }} className="opacity-80">
-                        {link.icon}
-                      </div>
-                    ) : (
-                      <motion.div
-                        style={{ color: link.color }}
-                        className="opacity-80 group-hover:opacity-100"
-                        animate={{ scale: [1, 1.1, 1] }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        {link.icon}
-                      </motion.div>
-                    )}
-
-                    <h3
-                      className="text-2xl md:text-3xl font-bold group-hover:translate-y-[-2px] transition-transform"
-                      style={{ color: link.color }}
+                    <motion.div
+                      className="text-accent opacity-80 group-hover:opacity-100"
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+                        {link.name === "GITHUB" ? (
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        ) : (
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        )}
+                      </svg>
+                    </motion.div>
+
+                    <h3 className="text-2xl md:text-3xl font-bold text-accent group-hover:translate-y-[-2px] transition-transform">
                       {link.name}
                     </h3>
 
-                    <div
-                      className="font-mono text-xs opacity-50"
-                      style={{ color: link.color }}
-                    >
+                    <div className="font-mono text-xs text-accent/50">
                       [0{i + 1}]
                     </div>
 
                     <motion.div
-                      className="text-3xl opacity-0 group-hover:opacity-100 absolute bottom-4 right-4"
-                      style={{ color: link.color }}
+                      className="text-3xl text-accent opacity-0 group-hover:opacity-100 absolute bottom-4 right-4"
                       initial={{ x: -10, y: 10 }}
                       whileHover={{ x: 0, y: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      ↗
+                      &#8599;
                     </motion.div>
-
-                    {!isMobileReady &&
-                      [...Array(4)].map((_, idx) => (
-                        <motion.div
-                          key={idx}
-                          className="absolute w-1 h-1 rounded-full opacity-0 group-hover:opacity-100"
-                          style={{
-                            backgroundColor: link.color,
-                            left: `${25 + idx * 18}%`,
-                            top: "30%",
-                          }}
-                          animate={{
-                            y: [-10, -30, -50],
-                            opacity: [0, 1, 0],
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            delay: idx * 0.15,
-                            ease: "easeOut",
-                          }}
-                        />
-                      ))}
                   </div>
 
                   {/* Corner accents */}
-                  <div
-                    className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                    style={{ borderColor: link.color }}
-                  />
-                  <div
-                    className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                    style={{ borderColor: link.color }}
-                  />
+                  <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-accent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.a>
               ))}
             </div>
@@ -394,12 +496,12 @@ export default function ContactPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.3 }}
           >
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 font-mono text-sm text-muted">
+            <div className="flex items-center justify-center gap-8 font-mono text-sm text-muted">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-accent" />
                 <span>{t("locationValue")}</span>
               </div>
-              <div className="hidden md:block w-px h-4 bg-muted/30" />
+              <div className="w-px h-4 bg-muted/30" />
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-accent animate-pulse" />
                 <span>{t("availability")}</span>
@@ -410,4 +512,14 @@ export default function ContactPage() {
       </main>
     </>
   );
+}
+
+export default function ContactPage() {
+  const { isMobile, isHydrated } = useDeviceDetect();
+
+  if (isHydrated && isMobile) {
+    return <ContactMobile />;
+  }
+
+  return <ContactDesktop />;
 }

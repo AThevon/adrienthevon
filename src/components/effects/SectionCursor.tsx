@@ -56,7 +56,7 @@ const modeConfig: Record<CursorMode, {
   noise: {
     size: 8,
     hoverSize: 50,
-    color: COLORS.secondary.cyan,
+    color: COLORS.accent,
     mixBlend: false,
     showTrail: true,
     trailCount: 5,
@@ -80,7 +80,7 @@ const modeConfig: Record<CursorMode, {
   skills: {
     size: 12,
     hoverSize: 60,
-    color: COLORS.secondary.green,
+    color: COLORS.accent,
     mixBlend: false,
     showTrail: true,
     trailCount: 2,

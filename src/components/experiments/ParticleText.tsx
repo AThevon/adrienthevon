@@ -282,7 +282,7 @@ export default function ParticleText({
 
     const getResolvedFont = (): string => {
       const raw = getComputedStyle(document.body)
-        .getPropertyValue("--font-particle")
+        .getPropertyValue("--font-display")
         .trim();
       return raw || "sans-serif";
     };
@@ -431,7 +431,7 @@ export default function ParticleText({
       ctx.fill();
 
       // Batch draw — displaced particles
-      ctx.fillStyle = COLORS.secondary.yellow;
+      ctx.fillStyle = COLORS.accent;
       ctx.beginPath();
       for (let c = 0; c < chunks.length; c++) {
         if (!chunks[c].active) continue;

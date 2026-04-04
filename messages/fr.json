@@ -73,6 +73,7 @@
     "loading": "CHARGEMENT DU RÉSEAU...",
     "clickNode": "Cliquez sur un node → Voir les projets",
     "tapNode": "Touchez un node → Voir les projets",
+    "expandSheet": "Glissez vers le haut",
     "hoverExplore": "Survolez → Explorer les connexions",
     "projectsUsing": "PROJETS UTILISANT CETTE COMPÉTENCE",
     "projectCount": "{count} projet",
