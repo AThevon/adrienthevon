@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useMemo, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, useAnimate, type PanInfo } from "motion/react";
 import { useTranslations } from "next-intl";
 import { skillCategories, getSkillsUsedInProjects, type Skill } from "@/data/skills";
 import { getProjectById } from "@/data/projects";
 import { getSkillLogoUrl } from "@/lib/skillLogos";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // Helper to convert kebab-case to camelCase for i18n keys
 function kebabToCamel(str: string): string {
@@ -18,10 +19,25 @@ interface NodePosition {
   y: number;
 }
 
+// Bottom sheet snap points (in dvh from bottom)
+const SHEET_FULL = 85; // full expanded
+const SHEET_PEEK = 45; // initial peek
+// Threshold to decide snap direction
+const SNAP_THRESHOLD = 0.15; // 15% of sheet height
+
 export default function StaticNetwork() {
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
+  const [sheetMode, setSheetMode] = useState<"peek" | "full">("peek");
   const t = useTranslations("skills");
   const tProject = useTranslations("projectsData");
+  const reducedMotion = useReducedMotion();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [sheetScope, animateSheet] = useAnimate();
+
+  // Motion value for drag - represents translateY offset from current snap
+  const sheetY = useMotionValue(0);
+  // Backdrop opacity driven by sheet position
+  const backdropOpacity = useTransform(sheetY, [-100, 0, 300], [0.5, 0.4, 0]);
 
   const selectedSkill = selectedSkillId
     ? (() => {
@@ -30,6 +46,58 @@ export default function StaticNetwork() {
         return skill ? { ...skill, color: skillCategories[skill.category].color } : null;
       })()
     : null;
+
+  const closeSheet = useCallback(() => {
+    setSelectedSkillId(null);
+    setSheetMode("peek");
+    sheetY.set(0);
+  }, [sheetY]);
+
+  const handleDragEnd = useCallback((_: never, info: PanInfo) => {
+    const velocity = info.velocity.y;
+    const offset = info.offset.y;
+    const sheetHeightPx = window.innerHeight * (sheetMode === "full" ? SHEET_FULL : SHEET_PEEK) / 100;
+    const threshold = sheetHeightPx * SNAP_THRESHOLD;
+
+    // Fast swipe down -> dismiss or shrink
+    if (velocity > 500) {
+      if (sheetMode === "peek") {
+        closeSheet();
+      } else {
+        setSheetMode("peek");
+        animateSheet(sheetScope.current, { y: 0 }, { type: "spring", damping: 30, stiffness: 300 });
+        sheetY.set(0);
+      }
+      return;
+    }
+
+    // Fast swipe up -> expand
+    if (velocity < -500 && sheetMode === "peek") {
+      setSheetMode("full");
+      animateSheet(sheetScope.current, { y: 0 }, { type: "spring", damping: 30, stiffness: 300 });
+      sheetY.set(0);
+      return;
+    }
+
+    // Slow drag - use offset threshold
+    if (offset > threshold) {
+      if (sheetMode === "peek") {
+        closeSheet();
+      } else {
+        setSheetMode("peek");
+        animateSheet(sheetScope.current, { y: 0 }, { type: "spring", damping: 30, stiffness: 300 });
+        sheetY.set(0);
+      }
+    } else if (offset < -threshold && sheetMode === "peek") {
+      setSheetMode("full");
+      animateSheet(sheetScope.current, { y: 0 }, { type: "spring", damping: 30, stiffness: 300 });
+      sheetY.set(0);
+    } else {
+      // Snap back
+      animateSheet(sheetScope.current, { y: 0 }, { type: "spring", damping: 30, stiffness: 300 });
+      sheetY.set(0);
+    }
+  }, [sheetMode, closeSheet, animateSheet, sheetScope, sheetY]);
 
   // Pre-calculate positions for nodes in a circular layout
   const nodes = useMemo(() => {
@@ -230,78 +298,121 @@ export default function StaticNetwork() {
         </g>
       </svg>
 
-      {/* Projects Panel - Mobile Optimized */}
+      {/* Backdrop - tap to close */}
+      <AnimatePresence>
+        {selectedSkill && selectedSkill.projectIds && selectedSkill.projectIds.length > 0 && (
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.2 }}
+            className="fixed inset-0 z-10"
+            style={{ backgroundColor: "rgba(0,0,0,0.01)", opacity: backdropOpacity }}
+            onClick={closeSheet}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Bottom Sheet - Drag + Snap */}
       <AnimatePresence>
         {selectedSkill && selectedSkill.projectIds && selectedSkill.projectIds.length > 0 && (
           <motion.aside
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 left-0 right-0 max-h-[60dvh] z-20 pointer-events-auto"
+            ref={sheetScope}
+            key={`sheet-${selectedSkillId}`}
+            initial={{ y: "100%", height: `${SHEET_PEEK}dvh` }}
+            animate={{ y: 0, height: `${sheetMode === "full" ? SHEET_FULL : SHEET_PEEK}dvh` }}
+            exit={{ y: "100%" }}
+            transition={reducedMotion
+              ? { duration: 0 }
+              : { type: "spring", damping: 32, stiffness: 300 }
+            }
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0.05, bottom: 0.4 }}
+            onDragEnd={handleDragEnd}
+            style={{
+              y: sheetY,
+              touchAction: "none",
+            }}
+            className="fixed bottom-0 left-0 right-0 z-20 pointer-events-auto will-change-transform"
           >
             {/* Glowing backdrop */}
             <div
-              className="absolute inset-0 blur-2xl opacity-20"
+              className="absolute inset-0 blur-2xl opacity-15 rounded-t-3xl"
               style={{ backgroundColor: selectedSkill.color }}
             />
 
             {/* Main container */}
-            <div className="relative h-full bg-background/95 backdrop-blur-xl rounded-t-3xl border-t-2 border-foreground/10 flex flex-col">
+            <div className="relative h-full bg-background/95 backdrop-blur-xl rounded-t-3xl border-t border-foreground/10 flex flex-col overflow-hidden">
+              {/* Drag handle */}
+              <div className="flex justify-center pt-3 pb-1 shrink-0 cursor-grab active:cursor-grabbing">
+                <div className="w-10 h-1 rounded-full bg-foreground/20" />
+              </div>
+
               {/* Header with gradient accent */}
               <div
-                className="relative flex items-center justify-between p-6 shrink-0 border-b border-foreground/10"
+                className="relative flex items-center justify-between px-5 pb-4 pt-2 shrink-0"
                 style={{
-                  background: `linear-gradient(135deg, ${selectedSkill.color}15 0%, transparent 70%)`
+                  background: `linear-gradient(135deg, ${selectedSkill.color}12 0%, transparent 70%)`
                 }}
               >
                 {/* Skill info */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   {/* Icon with color background */}
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                     style={{ backgroundColor: `${selectedSkill.color}20` }}
                   >
                     <img
                       src={getSkillLogoUrl(selectedSkill.id, 'white')}
                       alt={selectedSkill.name}
-                      className="w-7 h-7"
+                      className="w-6 h-6"
                       style={{ filter: 'brightness(0) invert(1)' }}
                     />
                   </div>
-                  <div>
-                    <div className="font-mono text-xs text-muted/70 uppercase tracking-wider">
+                  <div className="min-w-0">
+                    <div className="font-mono text-[10px] text-muted/60 uppercase tracking-wider">
                       {t(`categories.${selectedSkill.category}`)}
                     </div>
-                    <h3 className="text-xl font-bold tracking-tight">{selectedSkill.name}</h3>
+                    <h3 className="text-lg font-bold tracking-tight truncate">{selectedSkill.name}</h3>
                   </div>
                 </div>
 
                 {/* Close button */}
                 <button
-                  onClick={() => setSelectedSkillId(null)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-foreground/10 transition-all"
+                  onClick={closeSheet}
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-foreground/5 active:bg-foreground/10 transition-colors shrink-0"
                   aria-label="Close"
                 >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </button>
               </div>
 
-              {/* Projects list - scrollable */}
+              {/* Separator */}
+              <div className="h-px bg-foreground/8 mx-5 shrink-0" />
+
+              {/* Projects list - properly scrollable */}
               <div
-                className="flex-1 min-h-0 overflow-y-auto p-4"
-                style={{ overscrollBehavior: 'contain' }}
+                ref={scrollRef}
+                className="flex-1 min-h-0 overflow-y-auto px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]"
+                style={{
+                  overscrollBehavior: "contain",
+                  WebkitOverflowScrolling: "touch",
+                  touchAction: "pan-y",
+                }}
+                onPointerDown={(e) => e.stopPropagation()}
               >
-                <div className="font-mono text-xs text-muted/60 uppercase tracking-wider mb-3 px-2">
+                <div className="font-mono text-[10px] text-muted/50 uppercase tracking-wider mb-3">
                   {selectedSkill.projectIds.length > 1
                     ? t("projectCount_plural", { count: selectedSkill.projectIds.length })
                     : t("projectCount", { count: selectedSkill.projectIds.length })
                   }
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {selectedSkill.projectIds.map((projectId, index) => {
                     const project = getProjectById(projectId);
                     if (!project) return null;
@@ -310,54 +421,79 @@ export default function StaticNetwork() {
                       <motion.a
                         key={projectId}
                         href={`/work/${projectId}`}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className="group block relative p-4 rounded-xl hover:bg-foreground/5 transition-all cursor-pointer"
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={reducedMotion
+                          ? { duration: 0 }
+                          : { delay: index * 0.04, duration: 0.25, ease: "easeOut" }
+                        }
+                        className="group flex items-center gap-3 relative p-3.5 rounded-xl active:bg-foreground/5 transition-colors"
                       >
-                        {/* Hover accent line */}
-                        <motion.div
-                          className="absolute left-0 top-0 bottom-0 w-1 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-xl"
+                        {/* Color accent dot */}
+                        <div
+                          className="w-2 h-2 rounded-full shrink-0"
                           style={{ backgroundColor: project.color }}
                         />
 
                         {/* Project info */}
-                        <div className="flex items-start justify-between gap-2 pl-3">
-                          <div className="flex-1">
-                            <div className="font-mono text-xs text-muted/50 mb-1">
+                        <div className="flex-1 min-w-0">
+                          <h5 className="font-semibold text-[15px] truncate">
+                            {project.title}
+                          </h5>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <span className="font-mono text-[10px] text-muted/40">
                               {project.year}
-                            </div>
-                            <h5 className="font-bold text-base group-hover:translate-x-1 transition-transform mb-1">
-                              {project.title}
-                            </h5>
-                            <div
-                              className="font-mono text-xs opacity-70"
-                              style={{ color: project.color }}
+                            </span>
+                            <span className="text-foreground/10">·</span>
+                            <span
+                              className="font-mono text-[10px] truncate"
+                              style={{ color: `${project.color}99` }}
                             >
                               {tProject(`${kebabToCamel(projectId)}.category`)}
-                            </div>
+                            </span>
                           </div>
-
-                          {/* Arrow icon */}
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            className="shrink-0 opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0"
-                          >
-                            <path
-                              d="M4 12L12 4M12 4H6M12 4V10"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
                         </div>
+
+                        {/* Arrow icon */}
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          className="shrink-0 text-muted/30"
+                        >
+                          <path
+                            d="M6 4L10 8L6 12"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </motion.a>
                     );
                   })}
                 </div>
+
+                {/* Expand hint - only in peek mode */}
+                {sheetMode === "peek" && selectedSkill.projectIds.length > 3 && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex justify-center pt-4 pb-2"
+                  >
+                    <button
+                      onClick={() => setSheetMode("full")}
+                      className="font-mono text-[10px] text-muted/40 uppercase tracking-wider flex items-center gap-1.5 active:text-muted/60 transition-colors"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                        <path d="M4 10L8 6L12 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      {t("expandSheet") || "Swipe up for more"}
+                    </button>
+                  </motion.div>
+                )}
               </div>
             </div>
           </motion.aside>
