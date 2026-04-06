@@ -65,6 +65,13 @@
 - [ ] Screenshots statiques dans `/public/images/previews/`
 - [ ] Le design actuel des essaims (particules accent) sera remplacé par les previews
 
+### Composant Boxy App Icons (21st.dev)
+Composant SVG isométrique avec des icones 3D en hover. Pistes d'intégration :
+- [ ] **Page Contact** : remplacer les liens sociaux actuels (GitHub, LinkedIn) par des versions isométriques custom dans le même style boxy. Les icones actuelles sont boring, ce composant apporterait du caractère
+- [ ] **Page Projets** : variante avec les icones/logos de chaque projet au lieu d'icones d'apps. Chaque "boxy icon" représenterait un projet avec sa couleur accent, clic = navigation vers le case study
+- [ ] **Réflexion en cours** : le style isométrique doit matcher le design system monochrome. Adapter les couleurs (gris/accent au lieu des couleurs rainbow) et potentiellement animer les hover avec le même feeling "sec" que le reste du site
+- Le composant source est sauvegardé dans le plan mais PAS encore intégré - à adapter d'abord au design system
+
 ### Pages à passer au nouveau design system
 - [ ] NavigationGrid desktop (encore des couleurs secondaires dans les data)
 - [ ] Page Work (liste projets)
@@ -87,3 +94,17 @@
 - Nav links comme éléments DOM positionnés au-dessus du canvas (sync complexe, 2 systèmes)
 - Nav links texte flottants simples sur canvas (boring, texte trop petit)
 - Toute l'app en canvas 2D (SEO mort, accessibilité morte, formulaires impossibles, reconstruire un navigateur)
+- Essaims de particules accent comme navlinks (visuellement pas assez impactant)
+
+---
+
+## Composant source : Boxy App Icons
+
+Composant SVG isométrique récupéré de 21st.dev. Style "boxy 3D" avec hover translateY.
+A adapter au design system (monochrome + accent) avant intégration.
+
+Source : `boxy-app-icons.tsx` - SVG with 6 isometric app icons (PayPal, GitLab, Instagram, Telegram, Spotify, Discord).
+Structure : viewBox 249x144, hover `-translate-y-5`, stroke/fill transitions `group-hover`.
+Dépendances : aucune (SVG pur + Tailwind classes).
+
+Le composant sera customisé : icones remplacées par GitHub/LinkedIn (contact) ou logos projets (work), couleurs adaptées au design system monochrome.
