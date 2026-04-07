@@ -104,13 +104,15 @@ function ProjectTakeoverContent({
             className="relative border border-foreground/10 overflow-hidden"
             style={{ height: "50vh" }}
           >
-            {!iframeLoaded && (
-              <div className="absolute inset-0 bg-foreground/5 animate-pulse" />
-            )}
+            <div
+              className="absolute inset-0 bg-foreground/5 transition-opacity duration-500 ease-out"
+              style={{ opacity: iframeLoaded ? 0 : 1, pointerEvents: "none" }}
+            />
             <iframe
               src={iframeSrc}
               sandbox="allow-scripts allow-same-origin"
-              className="w-full h-full"
+              className="w-full h-full transition-opacity duration-500 ease-out"
+              style={{ opacity: iframeLoaded ? 1 : 0 }}
               onLoad={() => setIframeLoaded(true)}
               title={project.title}
             />
@@ -172,7 +174,7 @@ export default function ProjectTakeover({
   onClose,
 }: ProjectTakeoverProps) {
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {projectId && (
         <ProjectTakeoverContent
           key={projectId}
