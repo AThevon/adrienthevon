@@ -26,9 +26,7 @@
 - [x] Scale dynamique : blocs déplacés grossissent proportionnellement à la distance
 - [x] Auto-scale : taille des blocs s'adapte au viewport (55% largeur, 60% hauteur)
 - [x] Alignement configurable (left/right/center, top/bottom/center + padding)
-- [x] **Nav links en essaims** : 25 particules accent par navlink, attraction magnétique vers curseur
-- [x] Physique Newtonienne : essaims repoussent les blocs ASCII, blocs repoussent les essaims
-- [x] Dock : anneau + texte accent quand essaim est proche du curseur, clic = navigate
+- [x] ~~Nav links en essaims~~ remplacé par ClipPathGrid (voir ci-dessous)
 - [x] Accessibilité : liens sr-only dans le DOM, canvas aria-hidden
 - [x] Preloader supprimé
 - [x] Floating shapes, grid overlay, corner accents, side decorations supprimés
@@ -54,16 +52,19 @@
 ### Contact Desktop
 - [x] Social cards monochrome accent (plus de vert/bleu par lien)
 
+### Homepage Desktop - ClipPath Grid
+- [x] **ClipPathGrid** : grille de nav 2 rows (2 cols + 3 cols) en bas-droite, 60vw x 55vh
+- [x] **ClipPathCell** : clip-path reveal hover (entree/sortie par le cote le plus proche du curseur)
+- [x] **NavigationArtifact** : artifacts animes extraits du NavigationDockButton (hexagones, cube 3D, cercles, etc.)
+- [x] **FloatingSocialIcons** : 2 icones (GitHub, LinkedIn) flottantes avec physique de rebond
+- [x] Drag & drop sur les icones sociales (clic = navigue, drag = lance)
+- [x] Rebond sur ASCII blocks, grille, viewport et entre icones
+- [x] Essaims de particules (SwarmNavLink) supprimes de AsciiBlocks
+- [x] NavigationDock supprime de la homepage
+
 ---
 
 ## En cours / A faire
-
-### Homepage Desktop - Piste "previews flottantes"
-- [ ] **Navlinks = visuels/screenshots de chaque page** qui flottent et interagissent avec les blocs ASCII
-- [ ] Clic sur un preview -> zoom plein écran -> swap seamless vers la vraie page DOM
-- [ ] Question ouverte : flat 2D (canvas drawImage) ou perspective 3D (R3F planes) ?
-- [ ] Screenshots statiques dans `/public/images/previews/`
-- [ ] Le design actuel des essaims (particules accent) sera remplacé par les previews
 
 ### Composant Boxy App Icons (21st.dev)
 Composant SVG isométrique avec des icones 3D en hover. Pistes d'intégration :
@@ -94,7 +95,8 @@ Composant SVG isométrique avec des icones 3D en hover. Pistes d'intégration :
 - Nav links comme éléments DOM positionnés au-dessus du canvas (sync complexe, 2 systèmes)
 - Nav links texte flottants simples sur canvas (boring, texte trop petit)
 - Toute l'app en canvas 2D (SEO mort, accessibilité morte, formulaires impossibles, reconstruire un navigateur)
-- Essaims de particules accent comme navlinks (visuellement pas assez impactant)
+- Essaims de particules accent comme navlinks (visuellement pas assez impactant, interaction trop agressive)
+- Previews flottantes avec screenshots des pages (maintenance des screenshots trop lourde)
 
 ---
 
