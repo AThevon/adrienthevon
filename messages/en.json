@@ -301,31 +301,6 @@
         }
       }
     },
-    "depenseMan": {
-      "category": "WEB APP",
-      "description": "Simple and effective personal finance management application.",
-      "longDescription": "Dépense Man is a progressive web app (PWA) for managing monthly finances in a simple, intuitive way. No unnecessary complexity, just the essential features to track expenses.\n\nA minimalist approach to personal budgeting, accessible on all devices with a clear interface and relevant visualizations.",
-      "role": "FULL-STACK DEVELOPER",
-      "client": "PERSONAL PROJECT",
-      "sections": {
-        "intro": {
-          "title": "THE NEED",
-          "content": "A budget app without the complexity of banking solutions. Simple, fast, effective."
-        },
-        "challenge": {
-          "title": "THE CHALLENGE",
-          "content": "Making budget management enjoyable. Creating an interface people actually want to use regularly."
-        },
-        "process": {
-          "title": "THE PROCESS",
-          "content": "PWA for offline access. Clean interface. Clear expense visualizations. Smart categorization."
-        },
-        "result": {
-          "title": "THE RESULT",
-          "content": "An app I use daily to manage my finances. Simple, but does exactly what you ask of it."
-        }
-      }
-    },
     "linekut": {
       "category": "CREATIVE TOOL",
       "description": "Image to cutting pattern converter for scroll saw, laser, and vinyl cutting.",
@@ -376,10 +351,10 @@
         }
       }
     },
-    "wt": {
+    "worktigre": {
       "category": "CLI TOOL",
-      "description": "Git worktree manager with GitHub CLI, fzf and Claude AI integration.",
-      "longDescription": "WT (Worktree Tiger) is a CLI tool that radically simplifies Git branch management through worktrees.\nStop juggling branches like a circus act.\n\nThe tool integrates GitHub CLI for managing PRs and issues, fzf for fuzzy navigation, and Claude AI for intelligent assistance (fix CI, review PRs, problem solving).",
+      "description": "Interactive git worktree manager with GitHub CLI, fzf and Claude AI integration.",
+      "longDescription": "WorkTigre radically simplifies Git branch management through worktrees. One tool to navigate, create, delete and switch between worktrees.\n\nGitHub CLI integration for PRs and issues, fzf for fuzzy navigation, and Claude AI for intelligent assistance. Fix CI, review PRs, problem solving - all from the terminal.",
       "role": "CREATOR & DEVELOPER",
       "client": "OPEN SOURCE",
       "sections": {
@@ -397,7 +372,132 @@
         },
         "result": {
           "title": "THE RESULT",
-          "content": "An open source tool distributed via Homebrew that makes worktree management a breeze."
+          "content": "An open source tool distributed via Homebrew, Nix and universal script. Used daily to manage dozens of worktrees."
+        }
+      }
+    },
+    "tokeneater": {
+      "category": "MACOS APP",
+      "description": "Native macOS app to monitor your Claude AI usage in real-time.",
+      "longDescription": "TokenEater lives in your menu bar and watches your Claude AI usage. Live percentages, color-coded thresholds, native WidgetKit widgets, and a floating overlay showing your active Claude Code sessions.\n\nSmart pacing to know if you're burning through tokens or cruising. Click a session in the overlay to jump to the right terminal.",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE NEED",
+          "content": "Know in real-time how many tokens I have left on Claude. Without opening the browser, without breaking the flow."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Create a performant native macOS app with menu bar, WidgetKit widgets, and a floating overlay. All in pure Swift."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "SwiftUI for UI, WidgetKit for desktop widgets, smart Claude API scraping. Distribution via DMG and Homebrew."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "An app I use all day. Discreet menu bar, desktop widgets, overlay showing my active sessions."
+        }
+      }
+    },
+    "pix2paint": {
+      "category": "IMAGE PROCESSING",
+      "description": "Turn any image into a paint-by-numbers grid. 100% in your browser.",
+      "longDescription": "Drop your image, adjust settings, get a numbered grid ready to paint. Two modes: classic pixel and smooth with organic contour lines.\n\nColor quantization (max 20), region numbering, PNG export. All processing runs in a Web Worker, zero UI lag. IndexedDB persistence to resume where you left off.",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE IDEA",
+          "content": "Turn a photo into a paint-by-numbers grid in a few clicks. Free, no sign-up, 100% in your browser."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Heavy client-side image processing without blocking the UI. Precise color quantization and organic contours."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Vite + vanilla TypeScript, zero framework. Web Worker for processing, Canvas 2D for rendering, IndexedDB for persistence."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "A smooth tool that turns any image into a ready-to-paint grid. High-res PNG export."
+        }
+      }
+    },
+    "yeetbg": {
+      "category": "IMAGE PROCESSING",
+      "description": "AI-powered background removal + interactive color editor. Zero server.",
+      "longDescription": "Drop an image, AI removes the background, recolor whatever you want. ONNX segmentation in a Web Worker for zero lag. K-means++ clustering in Lab color space to group similar colors.\n\nInteractive editor: click on canvas or palette to remove colors. Recolor individually. Export PNG, JPG or WebP. Full undo/redo.",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE IDEA",
+          "content": "Remove image backgrounds and recolor remaining zones. All in the browser, no upload."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Run an AI model (ONNX) client-side without killing performance. Precise color clustering in Lab space."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Vite + vanilla TypeScript. @imgly/background-removal in a Web Worker. K-means++ for clustering. Brutalist black/white design."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "A fast, privacy-first tool. Drop, remove, recolor, export. Nothing leaves your browser."
+        }
+      }
+    },
+    "nixdash": {
+      "category": "CLI / TUI",
+      "description": "Interactive terminal interface for managing your Nix packages.",
+      "longDescription": "NixDash gives Nix a human interface. Browse installed packages, fuzzy search through 177k+ nixpkgs, install or remove with diff preview.\n\nTemporary shells to test packages before installing. External flake management. Keyboard shortcuts for everything. Works with Home Manager, NixOS, and any Nix flake setup.",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE IDEA",
+          "content": "Make Nix accessible. An interactive TUI that replaces cryptic commands with a smooth experience."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Parse the Nix ecosystem (177k+ packages) and offer fast fuzzy search. Support different setups (Home Manager, NixOS)."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "100% Shell with fzf, gum and jq. Nix flake for distribution. Diff preview before every change."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "An interactive hub for Nix. Browse, search, install, temporary shell - all in a few keystrokes."
+        }
+      }
+    },
+    "envora": {
+      "category": "SECURITY TOOL",
+      "description": "Encrypted .env vault. Push/pull between machines with age encryption.",
+      "longDescription": "Your .env files contain secrets that can't go in git. But they need to exist on every machine. Envora stores them in a private git repo, encrypted with age.\n\nOne age key, stored in your password manager, unlocks the entire vault. Push encrypts and stores, pull decrypts and restores. Even if the repo is compromised, your secrets stay safe.",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE PROBLEM",
+          "content": ".env files don't go in git. But you work on 3 machines. Envora solves this dilemma with encryption."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Transparent encryption, zero friction. One key to unlock everything. Cross-platform (macOS, Linux, WSL)."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Shell + age encryption + git as transport. Nix flake for distribution. fzf/gum interface for selection."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "ev push, ev pull. Two commands. All your secrets synced and encrypted."
         }
       }
     }
