@@ -14,23 +14,17 @@ const iconMapping: Record<string, string> = {
   tailwind: "tailwindcss",
   html: "html5",
   css: "css",
+  swift: "swift",
 
   // Creative
   threejs: "threedotjs",
-  r3f: "react",
-  drei: "react",
-  webgl: "webgl",
-  glsl: "opengl",
   canvas: "javascript", // Canvas API uses JavaScript
   motion: "framer",
   gsap: "greensock",
 
   // Backend
   nodejs: "nodedotjs",
-  express: "express",
   postgresql: "postgresql",
-  prisma: "prisma",
-  firebase: "firebase",
   supabase: "supabase",
 
   // Tools
@@ -38,12 +32,11 @@ const iconMapping: Record<string, string> = {
   github: "github",
   vercel: "vercel",
   vite: "vite",
-  webpack: "webpack",
+  shell: "gnubash",
+  nix: "nixos",
 
   // Design
   figma: "figma",
-  photoshop: "adobephotoshop",
-  illustrator: "adobeillustrator",
 };
 
 // Colors for logos (official brand colors from Simple Icons)
@@ -56,25 +49,20 @@ const logoColors: Record<string, string> = {
   tailwind: "#06B6D4",
   html: "#E34F26",
   css: "#1572B6",
+  swift: "#F05138",
   threejs: "#000000",
-  webgl: "#990000",
-  glsl: "#5586A4",
   motion: "#0055FF",
   gsap: "#88CE02",
   nodejs: "#339933",
-  express: "#000000",
   postgresql: "#4169E1",
-  prisma: "#2D3748",
-  firebase: "#FFCA28",
   supabase: "#3ECF8E",
   git: "#F05032",
   github: "#181717",
   vercel: "#000000",
   vite: "#646CFF",
-  webpack: "#8DD6F9",
+  shell: "#4EAA25",
+  nix: "#5277C3",
   figma: "#F24E1E",
-  photoshop: "#31A8FF",
-  illustrator: "#FF9A00",
 };
 
 /**
