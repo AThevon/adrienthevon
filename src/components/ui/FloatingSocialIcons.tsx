@@ -353,7 +353,7 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
               width: ICON_SIZE,
               height: ICON_SIZE,
               willChange: 'transform',
-              zIndex: 40,
+              zIndex: 30,
               cursor: 'grab',
               display: 'flex',
               alignItems: 'center',
