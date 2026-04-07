@@ -80,7 +80,7 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
 
   return (
     <div
-      className="relative overflow-hidden border border-[#222] bg-[#0a0a0a] cursor-pointer flex flex-col items-center justify-center gap-3 p-4"
+      className={`relative overflow-hidden border bg-[#0a0a0a] cursor-pointer flex flex-col items-center justify-center gap-3 p-4 transition-colors duration-150 ${isHovered ? "border-[#ffaa00] z-10" : "border-[#222]"}`}
       data-cursor="hover"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -113,7 +113,7 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
       {/* Clip-path overlay */}
       <div
         ref={overlayScope}
-        className="absolute inset-0 bg-[#151515] border border-[#ffaa00] flex flex-col items-center justify-center gap-3 p-4 pointer-events-none"
+        className="absolute inset-0 bg-[#151515] flex flex-col items-center justify-center gap-3 p-4 pointer-events-none"
         style={{ clipPath: BOTTOM_RIGHT_CLIP }}
       >
         {/* Number on overlay */}
