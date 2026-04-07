@@ -538,17 +538,17 @@ export default function ProjectTimeline({
           ctx.fill();
 
           // Title label
-          ctx.font = isActive ? "bold 12px monospace" : "12px monospace";
+          ctx.font = isActive ? "bold 14px monospace" : "14px monospace";
           ctx.fillStyle = isActive ? COLORS.foreground : "#999";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          const labelY = node.above ? node.y - 20 : node.y + 20;
+          const labelY = node.above ? node.y - 24 : node.y + 24;
           ctx.fillText(node.title, node.x, labelY);
 
           // Category label
-          ctx.font = "9px monospace";
+          ctx.font = "11px monospace";
           ctx.fillStyle = "#555";
-          ctx.fillText(node.category, node.x, node.above ? labelY - 14 : labelY + 14);
+          ctx.fillText(node.category, node.x, node.above ? labelY - 18 : labelY + 18);
         });
       }
 

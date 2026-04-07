@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { getProjectById } from "@/data/projects";
@@ -24,16 +24,20 @@ function ProjectTakeoverContent({
   const tProject = useTranslations(`projectsData.${toCamelCase(projectId)}`);
   const tPage = useTranslations("projectPage");
 
-  const [iframeLoaded, setIframeLoaded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const shimmerRef = useRef<HTMLDivElement>(null);
 
   const isGithub = project?.link?.includes("github.com");
   const iframeSrc = project?.link?.startsWith("https://")
     ? project.link
     : `https://${project?.link}`;
 
-  // iframeLoaded resets naturally because AnimatePresence remounts
-  // this component with a new key (projectId), so useState(false) re-inits.
+  // Pure CSS transition on iframe load - no React re-render
+  const handleIframeLoad = useCallback(() => {
+    if (iframeRef.current) iframeRef.current.style.opacity = "1";
+    if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
+  }, []);
 
   // Detect overscroll at top to trigger close
   useEffect(() => {
@@ -56,7 +60,6 @@ function ProjectTakeoverContent({
 
   return (
     <motion.div
-      key={project.id}
       ref={scrollRef}
       className="fixed bottom-0 left-0 right-0 overflow-y-auto bg-background z-20"
       style={{ height: "75vh" }}
@@ -105,15 +108,17 @@ function ProjectTakeoverContent({
             style={{ height: "50vh" }}
           >
             <div
-              className="absolute inset-0 bg-foreground/5 transition-opacity duration-500 ease-out"
-              style={{ opacity: iframeLoaded ? 0 : 1, pointerEvents: "none" }}
+              ref={shimmerRef}
+              className="absolute inset-0 bg-foreground/5"
+              style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
             />
             <iframe
+              ref={iframeRef}
               src={iframeSrc}
               sandbox="allow-scripts allow-same-origin"
-              className="w-full h-full transition-opacity duration-500 ease-out"
-              style={{ opacity: iframeLoaded ? 1 : 0 }}
-              onLoad={() => setIframeLoaded(true)}
+              className="w-full h-full"
+              style={{ opacity: 0, transition: "opacity 500ms ease-out" }}
+              onLoad={handleIframeLoad}
               title={project.title}
             />
           </div>
