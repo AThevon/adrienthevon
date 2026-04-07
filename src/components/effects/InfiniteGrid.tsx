@@ -212,7 +212,7 @@ export default function InfiniteGrid() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
+      className="absolute inset-0 w-full h-full z-0"
       style={{ pointerEvents: "none" }}
       aria-hidden="true"
     />

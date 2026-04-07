@@ -293,7 +293,7 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
   }, [initBlocks, blockSize, mouseRadius, mouseRadiusSq, color, displacedColor]);
 
   return (
-    <div ref={ref} className="w-full h-full">
+    <div ref={ref} className="absolute inset-0 w-full h-full z-[1]">
       <canvas
         ref={canvasRef}
         className="w-full h-full"
