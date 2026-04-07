@@ -153,9 +153,22 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
       { x: x1 + 90, y: y1 + 50, vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.8 },
     ];
 
+    // Entrance animation: fade + scale with random delay
+    const entranceDelays = [Math.random() * 0.4 + 0.3, Math.random() * 0.4 + 0.3];
     for (let i = 0; i < 2; i++) {
       const el = elRefs.current[i];
-      if (el) el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px)`;
+      if (el) {
+        el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px) scale(0.5)`;
+        el.style.opacity = '0';
+        el.style.transition = 'none';
+        setTimeout(() => {
+          if (!el) return;
+          el.style.transition = 'opacity 0.4s ease-out, filter 0.4s ease-out';
+          el.style.opacity = '1';
+          // Scale handled by physics loop, just set initial transform without scale
+          el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px)`;
+        }, entranceDelays[i] * 1000);
+      }
     }
   }, []);
 
