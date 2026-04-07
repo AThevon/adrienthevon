@@ -300,7 +300,7 @@ export default function ContactPage() {
 
         {/* Social links */}
         <motion.div
-          className="flex items-center gap-6"
+          className="flex items-center gap-4 md:gap-6"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.25 }}
@@ -312,12 +312,26 @@ export default function ContactPage() {
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="hover"
-              className="group flex items-center gap-2 px-4 py-2 border border-[#222] font-mono text-xs text-[#888] uppercase tracking-[0.15em] transition-all duration-150 hover:border-[#ffaa00] hover:text-[#ffaa00]"
+              className="group relative flex flex-col items-center justify-center w-[140px] md:w-[160px] h-[100px] md:h-[120px] border border-[#1a1a1a] bg-[#0a0a0a] overflow-hidden transition-all duration-150 hover:bg-[#111] hover:border-[#333]"
             >
-              <span className="transition-colors duration-150 text-[#666] group-hover:text-[#ffaa00]">
+              {/* Top accent line - visible on hover */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#ffaa00] scale-x-0 origin-left transition-transform duration-200 group-hover:scale-x-100" />
+
+              {/* Icon */}
+              <span className="text-[#666] transition-all duration-150 group-hover:text-[#e8e8e8] group-hover:scale-110 [&>svg]:w-7 [&>svg]:h-7 md:[&>svg]:w-8 md:[&>svg]:h-8">
                 {link.icon}
               </span>
-              {link.name}
+
+              {/* Name */}
+              <span className="mt-3 font-mono text-[10px] text-[#444] uppercase tracking-[0.2em] transition-colors duration-150 group-hover:text-[#888]">
+                {link.name}
+              </span>
+
+              {/* Corner marks - hover only */}
+              <div className="absolute top-1.5 left-1.5 w-[6px] h-[6px] border-t border-l border-[#ffaa00] opacity-0 transition-opacity duration-150 group-hover:opacity-60" />
+              <div className="absolute top-1.5 right-1.5 w-[6px] h-[6px] border-t border-r border-[#ffaa00] opacity-0 transition-opacity duration-150 group-hover:opacity-60" />
+              <div className="absolute bottom-1.5 left-1.5 w-[6px] h-[6px] border-b border-l border-[#ffaa00] opacity-0 transition-opacity duration-150 group-hover:opacity-60" />
+              <div className="absolute bottom-1.5 right-1.5 w-[6px] h-[6px] border-b border-r border-[#ffaa00] opacity-0 transition-opacity duration-150 group-hover:opacity-60" />
             </a>
           ))}
         </motion.div>
