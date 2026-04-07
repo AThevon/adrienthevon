@@ -153,20 +153,36 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
       { x: x1 + 90, y: y1 + 50, vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.8 },
     ];
 
-    // Entrance animation: fade + scale with random delay
+    // Entrance animation: fade + rotate container (icon counter-rotates to stay upright)
     const entranceDelays = [Math.random() * 0.4 + 0.3, Math.random() * 0.4 + 0.3];
+    const entranceRotations = [90 + Math.random() * 90, -(90 + Math.random() * 90)]; // random 90-180deg
     for (let i = 0; i < 2; i++) {
       const el = elRefs.current[i];
       if (el) {
-        el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px) scale(0.5)`;
+        const rot = entranceRotations[i];
+        el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px) rotate(${rot}deg) scale(0.5)`;
         el.style.opacity = '0';
         el.style.transition = 'none';
+        // Counter-rotate icon to keep it upright during entrance
+        const iconEl = el.querySelector('[data-icon]') as HTMLElement;
+        if (iconEl) {
+          iconEl.style.transform = `rotate(${-rot}deg)`;
+          iconEl.style.transition = 'none';
+        }
         setTimeout(() => {
           if (!el) return;
-          el.style.transition = 'opacity 0.4s ease-out, filter 0.4s ease-out';
+          el.style.transition = 'opacity 0.5s ease-out, transform 0.6s cubic-bezier(0.33, 1, 0.68, 1)';
           el.style.opacity = '1';
-          // Scale handled by physics loop, just set initial transform without scale
-          el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px)`;
+          el.style.transform = `translate(${iconsRef.current[i].x - HALF}px, ${iconsRef.current[i].y - HALF}px) rotate(0deg) scale(1)`;
+          if (iconEl) {
+            iconEl.style.transition = 'transform 0.6s cubic-bezier(0.33, 1, 0.68, 1)';
+            iconEl.style.transform = 'rotate(0deg)';
+          }
+          // Clear transition after animation so physics loop can update freely
+          setTimeout(() => {
+            if (el) el.style.transition = 'none';
+            if (iconEl) iconEl.style.transition = 'none';
+          }, 700);
         }, entranceDelays[i] * 1000);
       }
     }
@@ -405,7 +421,7 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
               {num}
             </span>
             {/* Icon */}
-            <div className="relative z-[1] transition-colors duration-150 group-hover:text-[#ffaa00]">
+            <div data-icon className="relative z-[1] transition-colors duration-150 group-hover:text-[#ffaa00]">
               <Icon size={data.iconSize} />
             </div>
           </a>
