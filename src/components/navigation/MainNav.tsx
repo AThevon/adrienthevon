@@ -212,7 +212,8 @@ export default function MainNav() {
 
                             {/* Label */}
                             <motion.span
-                              className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter"
+                              className="text-4xl md:text-6xl lg:text-7xl tracking-tighter"
+                              style={{ fontFamily: "var(--font-display)" }}
                               style={{
                                 color: active ? "#ffaa00" : undefined,
                               }}
