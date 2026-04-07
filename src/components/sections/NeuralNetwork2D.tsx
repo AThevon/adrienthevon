@@ -552,29 +552,24 @@ export default function NeuralNetwork2D() {
             transition={{ type: "spring", damping: 28, stiffness: 220 }}
             className="fixed top-28 right-6 w-[340px] max-h-[calc(100dvh-140px)] z-20 pointer-events-auto"
           >
-            {/* Animated gradient border */}
-            <div className="absolute -inset-px rounded-2xl overflow-hidden">
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `conic-gradient(from 0deg, ${selectedSkill.color}40, transparent 40%, transparent 60%, ${selectedSkill.color}25, transparent)`,
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-
             {/* Main container */}
-            <div className="relative h-full bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl border border-white/[0.06] flex flex-col overflow-hidden">
+            <div
+              className="relative h-full bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl flex flex-col overflow-hidden"
+              style={{
+                border: '1px solid',
+                borderImage: `linear-gradient(135deg, ${selectedSkill.color}33, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.06)) 1`,
+              }}
+            >
+              {/* Top accent line */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[2px]"
+                style={{
+                  background: `linear-gradient(90deg, ${selectedSkill.color}55, transparent 60%)`,
+                }}
+              />
+
               {/* Header */}
               <div className="relative p-5 pb-4 shrink-0">
-                {/* Subtle gradient wash */}
-                <div
-                  className="absolute inset-0 opacity-[0.07] rounded-t-2xl"
-                  style={{
-                    background: `radial-gradient(ellipse at 30% 0%, ${selectedSkill.color}, transparent 70%)`,
-                  }}
-                />
 
                 {/* Close */}
                 <button

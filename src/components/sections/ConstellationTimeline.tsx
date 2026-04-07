@@ -398,28 +398,24 @@ export default function ConstellationTimeline() {
             transition={{ type: "spring", damping: 28, stiffness: 220 }}
             className="absolute top-24 right-8 z-30 w-[380px] pointer-events-auto"
           >
-            {/* Animated gradient border */}
-            <div className="absolute -inset-px rounded-2xl overflow-hidden">
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `conic-gradient(from 0deg, ${activeNode.color}50, transparent 40%, transparent 60%, ${activeNode.color}30, transparent)`,
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-
             {/* Main container */}
-            <div className="relative bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl border border-white/[0.06] overflow-hidden">
-              {/* Header with gradient wash */}
+            <div
+              className="relative bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl overflow-hidden"
+              style={{
+                border: '1px solid',
+                borderImage: `linear-gradient(135deg, ${activeNode.color}33, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.06)) 1`,
+              }}
+            >
+              {/* Top accent line */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[2px]"
+                style={{
+                  background: `linear-gradient(90deg, ${activeNode.color}55, transparent 60%)`,
+                }}
+              />
+
+              {/* Header */}
               <div className="relative px-6 pt-5 pb-4">
-                <div
-                  className="absolute inset-0 opacity-[0.08] rounded-t-2xl"
-                  style={{
-                    background: `radial-gradient(ellipse at 30% 0%, ${activeNode.color}, transparent 70%)`,
-                  }}
-                />
 
                 {/* Step indicator + year */}
                 <motion.div
