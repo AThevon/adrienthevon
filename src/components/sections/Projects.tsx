@@ -22,8 +22,8 @@ export default function Projects() {
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-  const handleProjectClick = (project: { id: string }) => {
-    router.push(`/work/${project.id}`);
+  const handleProjectClick = (_project: { id: string }) => {
+    router.push(`/work`);
   };
 
   // Show only first 4 projects on homepage

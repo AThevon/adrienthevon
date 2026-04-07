@@ -420,7 +420,7 @@ export default function StaticNetwork() {
                     return (
                       <motion.a
                         key={projectId}
-                        href={`/work/${projectId}`}
+                        href={`/work`}
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={reducedMotion

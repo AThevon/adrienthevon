@@ -682,7 +682,7 @@ export default function NeuralNetwork2D() {
                     return (
                       <motion.a
                         key={projectId}
-                        href={`/work/${projectId}`}
+                        href={`/work`}
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.15 + index * 0.06, type: "spring", damping: 20, stiffness: 200 }}
