@@ -113,28 +113,28 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
       {/* Clip-path overlay */}
       <div
         ref={overlayScope}
-        className="absolute inset-0 bg-[#e8e8e8] flex flex-col items-center justify-center gap-3 p-4 pointer-events-none"
+        className="absolute inset-0 bg-[#151515] border border-[#ffaa00] flex flex-col items-center justify-center gap-3 p-4 pointer-events-none"
         style={{ clipPath: BOTTOM_RIGHT_CLIP }}
       >
         {/* Number on overlay */}
         <span
-          className="absolute top-2 right-3 text-[10px] text-[#0a0a0a44]"
+          className="absolute top-2 right-3 text-[10px] text-[#ffaa0044]"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           {num}
         </span>
 
-        {/* Artifact on overlay - inverted */}
+        {/* Artifact on overlay */}
         <NavigationArtifact
           type={navKey}
-          color="#0a0a0a"
+          color={COLORS.accent}
           active={isHovered}
           className="w-16 h-16"
         />
 
         {/* Label on overlay */}
         <span
-          className="text-[clamp(18px,2vw,28px)] text-[#0a0a0a] uppercase tracking-[3px]"
+          className="text-[clamp(18px,2vw,28px)] text-[#e8e8e8] uppercase tracking-[3px]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           {label}
