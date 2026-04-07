@@ -157,7 +157,7 @@ export default function MainNav() {
 
           <div className="flex items-center gap-3 pointer-events-auto">
             <div className="hidden md:block">
-              <LanguageSwitcher />
+              <LanguageSwitcher id="header" />
             </div>
 
             <button
@@ -167,19 +167,30 @@ export default function MainNav() {
               aria-label={isOpen ? t("close") : t("menu")}
             >
               <motion.span
-                className="w-6 h-px bg-foreground"
-                animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 4 : 0 }}
-                transition={{ duration: 0.3 }}
+                className="w-6 h-px bg-foreground origin-center"
+                animate={{
+                  rotate: isOpen ? 45 : 0,
+                  y: isOpen ? 4 : 0,
+                  width: isOpen ? 20 : 24,
+                }}
+                transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
               />
               <motion.span
-                className="w-6 h-px bg-foreground"
-                animate={{ opacity: isOpen ? 0 : 1 }}
-                transition={{ duration: 0.2 }}
+                className="w-6 h-px bg-foreground origin-center"
+                animate={{
+                  scaleX: isOpen ? 0 : 1,
+                  opacity: isOpen ? 0 : 1,
+                }}
+                transition={{ duration: 0.15 }}
               />
               <motion.span
-                className="w-6 h-px bg-foreground"
-                animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -4 : 0 }}
-                transition={{ duration: 0.3 }}
+                className="w-6 h-px bg-foreground origin-center"
+                animate={{
+                  rotate: isOpen ? -45 : 0,
+                  y: isOpen ? -4 : 0,
+                  width: isOpen ? 20 : 24,
+                }}
+                transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
               />
             </button>
           </div>
@@ -216,7 +227,7 @@ export default function MainNav() {
                     num={String(index + 1).padStart(2, "0")}
                     active={isActive(item.href)}
                     span={item.span}
-                    onClick={() => transitionToPage(item.href)}
+                    onClick={() => { setIsOpen(false); transitionToPage(item.href); }}
                   />
                 ))}
               </motion.nav>
@@ -235,7 +246,7 @@ export default function MainNav() {
 
                 {/* Language Switcher - mobile */}
                 <div className="md:hidden">
-                  <LanguageSwitcher />
+                  <LanguageSwitcher id="menu" />
                 </div>
 
                 <span className="font-mono text-[10px] md:text-xs text-[#333] tracking-widest hidden md:block">

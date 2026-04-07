@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 type Locale = "fr" | "en";
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ id = "default" }: { id?: string }) {
   const locale = useLocale() as Locale;
   const [isPending, startTransition] = useTransition();
 
@@ -63,7 +63,7 @@ export default function LanguageSwitcher() {
               {locale === "fr" && (
                 <motion.div
                   className="absolute inset-0 bg-accent"
-                  layoutId="language-indicator"
+                  layoutId={`language-indicator-${id}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -95,7 +95,7 @@ export default function LanguageSwitcher() {
               {locale === "en" && (
                 <motion.div
                   className="absolute inset-0 bg-accent"
-                  layoutId="language-indicator"
+                  layoutId={`language-indicator-${id}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
