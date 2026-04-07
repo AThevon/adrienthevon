@@ -23,8 +23,12 @@ export default function MagneticButton({
     const { clientX, clientY } = e;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
 
-    const x = (clientX - left - width / 2) * strength;
-    const y = (clientY - top - height / 2) * strength;
+    const maxDisplacement = 12;
+    const rawX = (clientX - left - width / 2) * strength;
+    const rawY = (clientY - top - height / 2) * strength;
+
+    const x = Math.max(-maxDisplacement, Math.min(maxDisplacement, rawX));
+    const y = Math.max(-maxDisplacement, Math.min(maxDisplacement, rawY));
 
     setPosition({ x, y });
   };
