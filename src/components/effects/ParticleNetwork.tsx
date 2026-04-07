@@ -15,10 +15,10 @@ const PARTICLE_COUNT = 55;
 const LINK_DISTANCE = 140;
 const LINK_OPACITY = 0.12;
 const PARTICLE_SPEED = 0.3;
-const GRAB_DISTANCE = 180;
-const GRAB_OPACITY = 0.35;
-const PARTICLE_COLOR = "232, 232, 232"; // #e8e8e8 as RGB
-const LINK_COLOR = "232, 232, 232";
+const GRAB_DISTANCE = 200;
+const GRAB_OPACITY = 0.5;
+const PARTICLE_COLOR = "255, 170, 0"; // #ffaa00 as RGB
+const LINK_COLOR = "255, 170, 0";
 
 export default function ParticleNetwork() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -112,7 +112,7 @@ export default function ParticleNetwork() {
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.strokeStyle = `rgba(${LINK_COLOR}, ${opacity})`;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
@@ -130,7 +130,7 @@ export default function ParticleNetwork() {
             ctx.moveTo(mx, my);
             ctx.lineTo(particles[i].x, particles[i].y);
             ctx.strokeStyle = `rgba(255, 170, 0, ${opacity})`;
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
           }
         }
