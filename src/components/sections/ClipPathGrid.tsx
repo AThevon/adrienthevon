@@ -108,7 +108,7 @@ function ClipPathCell({ navKey, href, num, label, entranceDelay = 0 }: ClipPathC
 
       {/* Label */}
       <span
-        className="text-[clamp(14px,1.5vw,22px)] text-[#888] uppercase tracking-[3px]"
+        className="text-[clamp(12px,1.2vw,18px)] text-[#888] uppercase tracking-[3px]"
         style={{ fontFamily: "var(--font-display)" }}
       >
         {label}
@@ -138,7 +138,7 @@ function ClipPathCell({ navKey, href, num, label, entranceDelay = 0 }: ClipPathC
 
         {/* Label on overlay */}
         <span
-          className="text-[clamp(14px,1.5vw,22px)] text-[#e8e8e8] uppercase tracking-[3px]"
+          className="text-[clamp(12px,1.2vw,18px)] text-[#e8e8e8] uppercase tracking-[3px]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           {label}
