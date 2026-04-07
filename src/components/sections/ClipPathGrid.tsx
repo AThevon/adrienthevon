@@ -161,7 +161,7 @@ const ClipPathGrid = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <div
       ref={ref}
-      className="absolute bottom-0 right-0 flex flex-col"
+      className="absolute bottom-0 right-0 flex flex-col z-[2]"
       style={{ width: "60vw", height: "55vh" }}
     >
       {/* Row 1 - 2 columns */}
