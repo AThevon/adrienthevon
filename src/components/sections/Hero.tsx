@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
 import type { BoundingBox } from "@/components/ui/FloatingSocialIcons";
+import BackgroundPlus from "@/components/effects/BackgroundPlus";
 
 const HeroMobile = dynamic(() => import("./HeroMobile"), { ssr: false });
 
@@ -54,6 +55,9 @@ export default function Hero() {
       data-cursor-mode="hero"
       className="relative h-dvh overflow-hidden"
     >
+      {/* Background pattern */}
+      <BackgroundPlus plusColor="#1a1a1a" plusSize={50} />
+
       {/* ASCII blocks - top left */}
       <AsciiBlocks
         ascii={ASCII_NAME}
