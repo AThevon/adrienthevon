@@ -213,8 +213,8 @@ export default function MainNav() {
                             {/* Label */}
                             <motion.span
                               className="text-4xl md:text-6xl lg:text-7xl tracking-tighter"
-                              style={{ fontFamily: "var(--font-display)" }}
                               style={{
+                                fontFamily: "var(--font-display)",
                                 color: active ? "#ffaa00" : undefined,
                               }}
                               whileHover={{ x: 10 }}
