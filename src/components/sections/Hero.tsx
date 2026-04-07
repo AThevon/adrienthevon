@@ -1,16 +1,24 @@
 "use client";
 
+import { useRef } from "react";
 import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
 import { useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
-import { usePageTransition } from "@/hooks/usePageTransition";
-import { useCallback } from "react";
 
 const HeroMobile = dynamic(() => import("./HeroMobile"), { ssr: false });
 
 const AsciiBlocks = dynamic(
   () => import("@/components/experiments/AsciiBlocks"),
+  { ssr: false }
+);
+
+const ClipPathGrid = dynamic(
+  () => import("@/components/sections/ClipPathGrid"),
+  { ssr: false }
+);
+
+const FloatingSocialIcons = dynamic(
+  () => import("@/components/ui/FloatingSocialIcons"),
   { ssr: false }
 );
 
@@ -30,20 +38,8 @@ const ASCII_NAME = `      ▄▄▄▄   ▄▄▄▄▄▄   ▄▄▄▄▄▄
 
 export default function Hero() {
   const { isMobile, isHydrated } = useDeviceDetect();
-  const tNav = useTranslations("nav");
-  const { transitionToPage } = usePageTransition();
-
-  const navItems = [
-    { key: "work", label: tNav("work"), number: "01", href: "/work" },
-    { key: "skills", label: tNav("skills"), number: "02", href: "/skills" },
-    { key: "journey", label: tNav("journey"), number: "03", href: "/journey" },
-    { key: "about", label: tNav("about"), number: "04", href: "/about" },
-    { key: "contact", label: tNav("contact"), number: "05", href: "/contact" },
-  ];
-
-  const handleNavClick = useCallback((href: string) => {
-    transitionToPage(href);
-  }, [transitionToPage]);
+  const asciiRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   if (isHydrated && isMobile) {
     return <HeroMobile />;
@@ -54,8 +50,9 @@ export default function Hero() {
       data-cursor-mode="hero"
       className="relative h-dvh overflow-hidden"
     >
-      {/* Full-page canvas */}
+      {/* ASCII blocks - top left */}
       <AsciiBlocks
+        ref={asciiRef}
         ascii={ASCII_NAME}
         blockSize={6}
         gap={1}
@@ -66,17 +63,23 @@ export default function Hero() {
         align="left"
         verticalAlign="bottom"
         padding={48}
-        navItems={navItems}
-        onNavClick={handleNavClick}
       />
+
+      {/* ClipPath nav grid - bottom right */}
+      <ClipPathGrid ref={gridRef} />
+
+      {/* Floating social icons */}
+      <FloatingSocialIcons asciiRef={asciiRef} gridRef={gridRef} />
 
       {/* Accessible nav links (sr-only) */}
       <nav className="sr-only" aria-label="Navigation principale">
-        {navItems.map((item) => (
-          <a key={item.key} href={item.href}>
-            {item.label}
-          </a>
-        ))}
+        <a href="/work">Work</a>
+        <a href="/skills">Skills</a>
+        <a href="/journey">Journey</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="https://github.com/AThevon" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://linkedin.com/in/adrien-thevon-74b134100" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </section>
   );
