@@ -23,10 +23,6 @@ const FloatingSocialIcons = dynamic(
   { ssr: false }
 );
 
-const InfiniteGrid = dynamic(
-  () => import("@/components/effects/InfiniteGrid"),
-  { ssr: false }
-);
 
 const ASCII_NAME = `  ▄▄▄▄   ▄▄▄▄▄▄   ▄▄▄▄▄▄▄   ▄▄▄▄▄  ▄▄▄▄▄▄▄ ▄▄▄    ▄▄▄
 ▄██▀▀██▄ ███▀▀██▄ ███▀▀███▄  ███  ███▀▀▀▀▀ ████▄  ███
@@ -58,9 +54,6 @@ export default function Hero() {
       data-cursor-mode="hero"
       className="relative h-dvh overflow-hidden"
     >
-      {/* Infinite grid background */}
-      <InfiniteGrid />
-
       {/* ASCII blocks - top left */}
       <AsciiBlocks
         ascii={ASCII_NAME}
