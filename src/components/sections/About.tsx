@@ -21,7 +21,7 @@ const skills = [
   { name: "GSAP", hidden: "timeline spaghetti" },
   { name: "SHADERS", hidden: "ctrl+c ctrl+v" },
   { name: "CANVAS", hidden: "ctx.clearRect()" },
-  { name: "NODE.JS", hidden: "npm i everything" },
+  { name: "NODE.JS", hidden: "pnpm i everything" },
 ];
 
 export default function About() {

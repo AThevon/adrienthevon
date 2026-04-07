@@ -1,46 +1,57 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useTranslations } from "next-intl";
 
 interface TerminalLine {
   type: "comment" | "code" | "output" | "blank";
   content: string;
-  delay?: number;
 }
 
-export default function TerminalAbout() {
-  const t = useTranslations("about.terminal");
-  const [visibleLines, setVisibleLines] = useState<number>(0);
-  const [isTyping, setIsTyping] = useState(true);
-  const containerRef = useRef<HTMLDivElement>(null);
+const lines: TerminalLine[] = [
+  { type: "comment", content: "// status.ts" },
+  { type: "blank", content: "" },
+  { type: "code", content: `const current = {` },
+  { type: "code", content: `  role: "Creative Developer",` },
+  { type: "code", content: `  company: "Pictarine",` },
+  { type: "code", content: `  location: "Toulouse, FR",` },
+  { type: "code", content: `  focus: ["image processing", "frontend"],` },
+  { type: "code", content: `};` },
+  { type: "blank", content: "" },
+  { type: "code", content: `const stack = {` },
+  { type: "code", content: `  daily: ["TypeScript", "React", "Next.js", "Tailwind"],` },
+  { type: "code", content: `  creative: ["Three.js", "GSAP", "Canvas", "Shaders"],` },
+  { type: "code", content: `  tools: ["Zed", "Wezterm", "Shell", "Claude"],` },
+  { type: "code", content: `};` },
+  { type: "blank", content: "" },
+  { type: "code", content: `while (true) {` },
+  { type: "code", content: `  learn();` },
+  { type: "code", content: `  build();` },
+  { type: "code", content: `  ship();` },
+  { type: "code", content: `}` },
+];
 
-  const lines: TerminalLine[] = [
-    { type: "comment", content: "// who am i" },
-    { type: "blank", content: "" },
-    { type: "code", content: `const adrien = {` },
-    { type: "code", content: `  location: "Toulouse, FR",` },
-    { type: "code", content: `  role: "Creative Developer",` },
-    { type: "code", content: `  obsession: "pixels & interactions",` },
-    { type: "code", content: `};` },
-    { type: "blank", content: "" },
-    { type: "comment", content: "// journey.map()" },
-    { type: "blank", content: "" },
-    { type: "output", content: "2022 → " + t("journey.2022") },
-    { type: "output", content: "2023 → " + t("journey.2023") },
-    { type: "output", content: "2024 → " + t("journey.2024") },
-    { type: "output", content: "2025 → " + t("journey.2025") },
-    { type: "output", content: "2026 → " + t("journey.2026") },
-    { type: "blank", content: "" },
-    { type: "comment", content: "// current.status()" },
-    { type: "blank", content: "" },
-    { type: "code", content: `while (true) {` },
-    { type: "code", content: `  learn();` },
-    { type: "code", content: `  build();` },
-    { type: "code", content: `  ship();` },
-    { type: "code", content: `}` },
-  ];
+const formatCode = (content: string) => {
+  return content
+    .replace(/(const|while|true)/g, '<span class="text-purple-400">$1</span>')
+    .replace(/(".*?")/g, '<span class="text-green-400">$1</span>')
+    .replace(/(role|company|location|focus|daily|creative|tools|current|stack):/g, '<span class="text-blue-400">$1</span>:')
+    .replace(/(learn|build|ship)\(\)/g, '<span class="text-yellow-400">$1</span>()')
+    .replace(/(\{|\}|;|\[|\])/g, '<span class="text-foreground/50">$1</span>');
+};
+
+const getLineColor = (type: TerminalLine["type"]) => {
+  switch (type) {
+    case "comment": return "text-foreground/40";
+    case "code": return "text-accent";
+    case "output": return "text-foreground/70";
+    default: return "text-foreground";
+  }
+};
+
+export default function TerminalAbout() {
+  const [visibleLines, setVisibleLines] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
 
   useEffect(() => {
     if (visibleLines >= lines.length) {
@@ -50,40 +61,14 @@ export default function TerminalAbout() {
 
     const timeout = setTimeout(() => {
       setVisibleLines((prev) => prev + 1);
-    }, 120);
+    }, 100);
 
     return () => clearTimeout(timeout);
-  }, [visibleLines, lines.length]);
-
-  const getLineColor = (type: TerminalLine["type"]) => {
-    switch (type) {
-      case "comment":
-        return "text-foreground/40";
-      case "code":
-        return "text-accent";
-      case "output":
-        return "text-foreground/70";
-      default:
-        return "text-foreground";
-    }
-  };
-
-  const formatCode = (content: string) => {
-    // Simple syntax highlighting
-    return content
-      .replace(/(const|while|true)/g, '<span class="text-purple-400">$1</span>')
-      .replace(/(".*?")/g, '<span class="text-green-400">$1</span>')
-      .replace(/(location|role|obsession|adrien):/g, '<span class="text-blue-400">$1</span>:')
-      .replace(/(learn|build|ship)\(\)/g, '<span class="text-yellow-400">$1</span>()')
-      .replace(/(\{|\}|;)/g, '<span class="text-foreground/50">$1</span>');
-  };
+  }, [visibleLines]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full h-full flex items-center justify-center p-4 md:p-6"
-    >
-      {/* Terminal window */}
+    <div className="relative w-full h-full flex items-center justify-center p-4 md:p-6">
+      {/* Terminal window - fixed height from the start */}
       <div className="relative w-full max-w-lg bg-[#0d0d0d] border border-foreground/10 rounded-lg overflow-hidden shadow-2xl">
         {/* Terminal header */}
         <div className="flex items-center gap-2 px-4 py-3 bg-foreground/5 border-b border-foreground/10">
@@ -97,55 +82,64 @@ export default function TerminalAbout() {
           </span>
         </div>
 
-        {/* Terminal content */}
-        <div className="p-4 md:p-5 font-mono text-xs md:text-sm leading-relaxed">
-          <AnimatePresence>
-            {lines.slice(0, visibleLines).map((line, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.15 }}
-                className={`${getLineColor(line.type)} ${
-                  line.type === "blank" ? "h-4" : ""
-                }`}
-              >
-                {line.type === "code" ? (
-                  <span
-                    dangerouslySetInnerHTML={{ __html: formatCode(line.content) }}
-                  />
-                ) : line.type === "output" ? (
-                  <span className="flex">
-                    <span className="text-accent mr-2">→</span>
-                    {line.content.replace("→ ", "")}
-                  </span>
-                ) : (
-                  line.content
-                )}
-              </motion.div>
-            ))}
-          </AnimatePresence>
+        {/* Terminal content - fixed height, all lines pre-reserved */}
+        <div
+          className="p-4 md:p-5 font-mono text-xs md:text-sm leading-relaxed"
+          style={{ minHeight: `${lines.length * 1.65 + 3}em` }}
+        >
+          {lines.map((line, index) => (
+            <div
+              key={index}
+              className={`${getLineColor(line.type)} ${line.type === "blank" ? "h-4" : ""}`}
+              style={{ visibility: index < visibleLines ? "visible" : "hidden" }}
+            >
+              {index < visibleLines ? (
+                <motion.span
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.12 }}
+                  className="inline-block"
+                >
+                  {line.type === "code" ? (
+                    <span dangerouslySetInnerHTML={{ __html: formatCode(line.content) }} />
+                  ) : (
+                    line.content
+                  )}
+                </motion.span>
+              ) : (
+                // Invisible placeholder to maintain height
+                <span className="invisible">
+                  {line.type === "blank" ? "\u00A0" : line.content}
+                </span>
+              )}
+            </div>
+          ))}
 
           {/* Cursor */}
-          {isTyping && (
-            <motion.span
-              className="inline-block w-2 h-4 bg-accent ml-1"
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-            />
-          )}
-
-          {/* Blinking cursor at end */}
-          {!isTyping && (
-            <div className="mt-4 flex items-center">
-              <span className="text-foreground/40 mr-2">$</span>
+          <AnimatePresence mode="wait">
+            {isTyping ? (
               <motion.span
-                className="inline-block w-2 h-4 bg-accent"
+                key="typing-cursor"
+                className="inline-block w-2 h-4 bg-accent ml-1"
                 animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
+                transition={{ duration: 0.5, repeat: Infinity }}
               />
-            </div>
-          )}
+            ) : (
+              <motion.div
+                key="done-cursor"
+                className="mt-4 flex items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <span className="text-foreground/40 mr-2">$</span>
+                <motion.span
+                  className="inline-block w-2 h-4 bg-accent"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Glow effect */}
