@@ -11,7 +11,59 @@ const ParticleNetwork = dynamic(
   { ssr: false }
 );
 
-const EMAIL = "athevon.pro@gmail.com";
+// Email split to avoid scraping from source
+const E_USER = "athevon.pro";
+const E_DOMAIN = "gmail.com";
+function getEmail() { return `${E_USER}@${E_DOMAIN}`; }
+
+// --- Canvas-rendered email (never in DOM, anti-scraping) ---
+function CanvasEmail({ onClick, isHovered }: { onClick: () => void; isHovered: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const drawnRef = useRef(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    const email = getEmail();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // Measure text to size canvas
+    const fontSize = window.innerWidth < 768 ? 24 : window.innerWidth < 1024 ? 36 : 44;
+    ctx.font = `700 ${fontSize}px var(--font-display), Georgia, serif`;
+    const metrics = ctx.measureText(email);
+    const textW = Math.ceil(metrics.width) + 8;
+    const textH = fontSize * 1.4;
+
+    canvas.width = textW * dpr;
+    canvas.height = textH * dpr;
+    canvas.style.width = `${textW}px`;
+    canvas.style.height = `${textH}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Draw
+    ctx.clearRect(0, 0, textW, textH);
+    ctx.font = `700 ${fontSize}px var(--font-display), Georgia, serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = isHovered ? "#ffaa00" : "#e8e8e8";
+    ctx.fillText(email, textW / 2, textH / 2);
+    drawnRef.current = true;
+  }, [isHovered]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      onClick={onClick}
+      data-cursor="hover"
+      className="cursor-pointer transition-opacity"
+      style={{ maxWidth: "90vw" }}
+      aria-label="Email address - click to copy"
+    />
+  );
+}
 
 const SOCIAL_LINKS = [
   {
@@ -142,9 +194,11 @@ export default function ContactPage() {
   const { isMobile, isHydrated } = useDeviceDetect();
   const [copied, setCopied] = useState(false);
 
+  const [emailHovered, setEmailHovered] = useState(false);
+
   const handleCopy = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(EMAIL);
+      await navigator.clipboard.writeText(getEmail());
       setCopied(true);
     } catch {
       // Fallback
@@ -179,25 +233,20 @@ export default function ContactPage() {
           <span className="w-8 h-px bg-[#ffaa00]" />
         </motion.div>
 
-        {/* Email - big, centered, clickable */}
-        <motion.button
-          onClick={handleCopy}
-          data-cursor="hover"
-          className="group relative text-center"
+        {/* Email - canvas rendered (anti-scraping) */}
+        <motion.div
+          className="flex flex-col items-center gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1, ease: [0.33, 1, 0.68, 1] }}
+          onMouseEnter={() => setEmailHovered(true)}
+          onMouseLeave={() => setEmailHovered(false)}
         >
-          <span
-            className="block text-2xl md:text-4xl lg:text-5xl text-[#e8e8e8] tracking-tight transition-colors duration-150 group-hover:text-[#ffaa00]"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {EMAIL}
-          </span>
-          <span className="block mt-3 font-mono text-[10px] text-[#444] tracking-[0.15em] uppercase transition-colors duration-150 group-hover:text-[#666]">
+          <CanvasEmail onClick={handleCopy} isHovered={emailHovered} />
+          <span className={`font-mono text-[10px] tracking-[0.15em] uppercase transition-colors duration-150 ${emailHovered ? "text-[#666]" : "text-[#444]"}`}>
             Click to copy
           </span>
-        </motion.button>
+        </motion.div>
 
         {/* Divider */}
         <motion.div
