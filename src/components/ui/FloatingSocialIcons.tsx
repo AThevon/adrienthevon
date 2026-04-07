@@ -330,10 +330,13 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
     };
   }, []);
 
+  const octClip = 'polygon(12% 0%, 88% 0%, 100% 12%, 100% 88%, 88% 100%, 12% 100%, 0% 88%, 0% 12%)';
+
   return (
     <>
       {ICONS_DATA.map((data, i) => {
         const Icon = data.icon;
+        const num = String(i + 1).padStart(2, '0');
         return (
           <a
             key={data.id}
@@ -346,6 +349,7 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
             onMouseEnter={() => { hoveredRef.current = i; }}
             onMouseLeave={() => { hoveredRef.current = -1; }}
             data-cursor="hover"
+            className="group"
             style={{
               position: 'fixed',
               top: 0,
@@ -358,31 +362,39 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: '50%',
-              border: '1.5px solid #ffaa00',
               background: '#0a0a0a',
-              color: '#ffaa00',
+              color: '#e8e8e8',
               textDecoration: 'none',
               userSelect: 'none',
+              clipPath: octClip,
             }}
           >
-            <Icon size={data.iconSize} />
+            {/* Outer shape border */}
+            <div
+              className="absolute inset-0 transition-[border-color] duration-150 group-hover:border-[#ffaa00aa]"
+              style={{ clipPath: octClip, border: '1.5px solid #e8e8e844' }}
+            />
+            {/* Inner shape border */}
+            <div
+              className="absolute transition-[border-color] duration-150 group-hover:border-[#ffaa0044]"
+              style={{ inset: 5, clipPath: octClip, border: '1px solid #e8e8e822' }}
+            />
+            {/* Corner marks */}
+            <div className="absolute top-[-1px] left-[-1px] w-[6px] h-[6px] border-t border-l border-[#ffaa0066]" />
+            <div className="absolute top-[-1px] right-[-1px] w-[6px] h-[6px] border-t border-r border-[#ffaa0066]" />
+            <div className="absolute bottom-[-1px] left-[-1px] w-[6px] h-[6px] border-b border-l border-[#ffaa0066]" />
+            <div className="absolute bottom-[-1px] right-[-1px] w-[6px] h-[6px] border-b border-r border-[#ffaa0066]" />
+            {/* Number */}
             <span
-              style={{
-                position: 'absolute',
-                top: ICON_SIZE + 8,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                fontSize: '8px',
-                color: '#ffaa0088',
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                whiteSpace: 'nowrap',
-                pointerEvents: 'none',
-              }}
+              className="absolute font-mono transition-colors duration-150 group-hover:text-[#ffaa0066]"
+              style={{ top: 3, right: 5, fontSize: '7px', color: '#333', letterSpacing: '1px' }}
             >
-              {data.label}
+              {num}
             </span>
+            {/* Icon */}
+            <div className="relative z-[1] transition-colors duration-150 group-hover:text-[#ffaa00]">
+              <Icon size={data.iconSize} />
+            </div>
           </a>
         );
       })}
