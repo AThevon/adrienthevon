@@ -142,51 +142,41 @@ export default function NavigationArtifact({
     case "about":
       return (
         <motion.div className={`relative ${className}`}>
-          {[0, 1].map((strand) => (
-            <motion.div
-              key={strand}
-              className="absolute w-full h-full"
-              animate={
-                active
-                  ? {
-                      rotate: [0, 360],
-                    }
-                  : {}
-              }
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "linear",
-                delay: strand * 3,
-              }}
-            >
-              {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
-                <motion.div
-                  key={angle}
-                  className="absolute w-1.5 h-1.5 rounded-full"
-                  style={{
-                    backgroundColor: color,
-                    left: "50%",
-                    top: "50%",
-                    transform: `rotate(${angle}deg) translateX(24px)`,
-                  }}
-                  animate={
-                    active
-                      ? {
-                          scale: [0.5, 1, 0.5],
-                          opacity: [0.3, 1, 0.3],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: angle / 360,
-                  }}
-                />
-              ))}
-            </motion.div>
-          ))}
+          {/* Head */}
+          <motion.div
+            className="absolute rounded-full"
+            style={{
+              width: "28%",
+              height: "28%",
+              border: `2px solid ${color}`,
+              left: "36%",
+              top: "12%",
+            }}
+            animate={active ? { scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] } : {}}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+          {/* Shoulders arc */}
+          <motion.div
+            className="absolute"
+            style={{
+              width: "70%",
+              height: "36%",
+              border: `2px solid ${color}`,
+              borderRadius: "50% 50% 0 0",
+              borderBottom: "none",
+              left: "15%",
+              top: "48%",
+            }}
+            animate={active ? { scale: [1, 1.05, 1], opacity: [0.5, 0.9, 0.5] } : {}}
+            transition={{ duration: 3, repeat: Infinity, delay: 0.3 }}
+          />
+          {/* Outer ring - personality */}
+          <motion.div
+            className="absolute inset-0 rounded-full"
+            style={{ border: `2px solid ${color}`, opacity: 0.15 }}
+            animate={active ? { scale: [1, 1.15, 1], opacity: [0.1, 0.3, 0.1] } : {}}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
         </motion.div>
       );
 
