@@ -61,7 +61,7 @@ export default function Hero() {
         mouseRadius={100}
         paused={false}
         align="left"
-        verticalAlign="bottom"
+        verticalAlign="top"
         padding={48}
       />
 
