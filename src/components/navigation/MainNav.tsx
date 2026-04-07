@@ -162,35 +162,35 @@ export default function MainNav() {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="relative w-12 h-12 bg-background/80 backdrop-blur-sm border border-foreground/10 flex flex-col items-center justify-center gap-1.5 group transition-colors hover:bg-foreground/5"
+              className="relative w-12 h-12 bg-background/80 backdrop-blur-sm border border-foreground/10 flex flex-col items-center justify-center gap-[5px] group transition-colors hover:bg-foreground/5"
               data-cursor="hover"
               aria-label={isOpen ? t("close") : t("menu")}
             >
               <motion.span
-                className="w-6 h-px bg-foreground origin-center"
+                className="block h-[1.5px] bg-foreground origin-center"
                 animate={{
                   rotate: isOpen ? 45 : 0,
-                  y: isOpen ? 4 : 0,
-                  width: isOpen ? 20 : 24,
+                  y: isOpen ? 5 : 0,
+                  width: isOpen ? 18 : 22,
                 }}
-                transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
+                transition={{ duration: 0.25, ease: [0.33, 1, 0.68, 1] }}
               />
               <motion.span
-                className="w-6 h-px bg-foreground origin-center"
+                className="block w-[22px] h-[1.5px] bg-foreground origin-center"
                 animate={{
                   scaleX: isOpen ? 0 : 1,
-                  opacity: isOpen ? 0 : 1,
+                  width: isOpen ? 0 : 14,
                 }}
                 transition={{ duration: 0.15 }}
               />
               <motion.span
-                className="w-6 h-px bg-foreground origin-center"
+                className="block h-[1.5px] bg-foreground origin-center"
                 animate={{
                   rotate: isOpen ? -45 : 0,
-                  y: isOpen ? -4 : 0,
-                  width: isOpen ? 20 : 24,
+                  y: isOpen ? -5 : 0,
+                  width: isOpen ? 18 : 22,
                 }}
-                transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
+                transition={{ duration: 0.25, ease: [0.33, 1, 0.68, 1] }}
               />
             </button>
           </div>
