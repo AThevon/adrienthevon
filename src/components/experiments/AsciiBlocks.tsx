@@ -8,8 +8,8 @@ const ENTRANCE_SCATTER = 80;
 const ENTRANCE_SPRING = 0.035;
 const ENTRANCE_DAMPING = 0.88;
 const DELAY_PER_COL = 0.012;
-const POST_SPRING = 0.025;
-const POST_DAMPING = 0.92;
+const POST_SPRING = 0.018;
+const POST_DAMPING = 0.94;
 
 interface Block {
   x: number; y: number;
@@ -211,36 +211,31 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
         for (let i = 0; i < blocks.length; i++) {
           const b = blocks[i];
 
-          // Mouse repulsion
-          const dx = mx - b.x;
-          const dy = my - b.y;
+          // Mouse repulsion - smooth exploded view
+          const dx = mx - b.originX;
+          const dy = my - b.originY;
           const distSq = dx * dx + dy * dy;
-          if (distSq < mouseRadiusSq) {
+
+          if (distSq < mouseRadiusSq && distSq > 0) {
             const dist = Math.sqrt(distSq);
-            const force = (mouseRadius - dist) / mouseRadius;
-            const invDist = 1 / (dist || 1);
-            b.vx -= dx * invDist * force * 25;
-            b.vy -= dy * invDist * force * 25;
+            const t = 1 - dist / mouseRadius; // 1 at center, 0 at edge
+            const pushDist = t * t * mouseRadius * 0.6; // quadratic falloff
+            const invDist = 1 / dist;
+            // Target position = origin pushed away from cursor
+            const targetX = b.originX - dx * invDist * pushDist;
+            const targetY = b.originY - dy * invDist * pushDist;
+            // Smoothly interpolate toward target (no velocity impulse)
+            b.x += (targetX - b.x) * 0.12;
+            b.y += (targetY - b.y) * 0.12;
+          } else {
+            // Spring back to origin
+            b.vx += (b.originX - b.x) * spring;
+            b.vy += (b.originY - b.y) * spring;
+            b.vx *= damping;
+            b.vy *= damping;
+            b.x += b.vx;
+            b.y += b.vy;
           }
-
-          // Jitter
-          const dispX = b.x - b.originX;
-          const dispY = b.y - b.originY;
-          const dispDist = Math.sqrt(dispX * dispX + dispY * dispY);
-          if (dispDist > 3) {
-            const jitterAmp = Math.min(dispDist * 0.12, 6);
-            if (Math.random() < 0.008) {
-              b.vx += (Math.random() - 0.5) * jitterAmp;
-              b.vy += (Math.random() - 0.5) * jitterAmp;
-            }
-          }
-
-          b.vx += (b.originX - b.x) * spring;
-          b.vy += (b.originY - b.y) * spring;
-          b.vx *= damping;
-          b.vy *= damping;
-          b.x += b.vx;
-          b.y += b.vy;
         }
       }
 
@@ -269,12 +264,17 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
           const dx = b.x - b.originX;
           const dy = b.y - b.originY;
           const dd = dx * dx + dy * dy;
-          if (dd > 25) {
+          if (dd > 4) {
             const dist = Math.sqrt(dd);
-            const sf = 1 + Math.min(dist / 80, 1.5);
+            // Subtle scale: blocks spread slightly as they move
+            const sf = 1 + Math.min(dist / 150, 0.8);
             const sw2 = bw * sf;
             const sh = bh * sf;
+            // Fade opacity based on distance
+            const alpha = Math.max(0.3, 1 - dist / (mouseRadius * 0.8));
+            ctx.globalAlpha = alpha;
             ctx.fillRect(b.x - (sw2 - bw) / 2, b.y - (sh - bh) / 2, sw2, sh);
+            ctx.globalAlpha = 1;
           }
         }
       }

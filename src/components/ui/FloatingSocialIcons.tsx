@@ -125,6 +125,7 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
   const iconsRef = useRef<FloatingIcon[]>([]);
   const elRefs = useRef<(HTMLAnchorElement | null)[]>([null, null]);
   const hoveredRef = useRef<number>(-1);
+  const cooldownUntilRef = useRef<number[]>([0, 0]); // timestamp until hover damping is ignored
   const dragRef = useRef<{
     index: number;
     offsetX: number;
@@ -175,10 +176,12 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
         if (isDragging) continue;
 
         const isHovered = hoveredRef.current === i;
-        const damping = isHovered ? DAMPING_HOVER : DAMPING_IDLE;
+        const inCooldown = performance.now() < cooldownUntilRef.current[i];
+        const effectiveHover = isHovered && !inCooldown;
+        const damping = effectiveHover ? DAMPING_HOVER : DAMPING_IDLE;
 
         // Jitter (only when idle, not hovered)
-        if (!isHovered) {
+        if (!effectiveHover) {
           icon.vx += (Math.random() - 0.5) * 2 * JITTER;
           icon.vy += (Math.random() - 0.5) * 2 * JITTER;
         }
@@ -188,7 +191,7 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
         icon.vy *= damping;
 
         // Re-inject velocity if too slow and not hovered
-        if (!isHovered) {
+        if (!effectiveHover) {
           const speed = Math.sqrt(icon.vx * icon.vx + icon.vy * icon.vy);
           if (speed < MIN_VELOCITY) {
             const angle = Math.random() * Math.PI * 2;
@@ -286,6 +289,9 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
           icon.vx = Math.max(-maxV, Math.min(maxV, icon.vx));
           icon.vy = Math.max(-maxV, Math.min(maxV, icon.vy));
         }
+
+        // Cooldown: ignore hover damping for 500ms so the throw carries
+        cooldownUntilRef.current[drag.index] = performance.now() + 500;
 
         // Push out of forbidden zones after drag
         if (icon) {
