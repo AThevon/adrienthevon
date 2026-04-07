@@ -35,6 +35,7 @@ interface AsciiBlocksProps {
   align?: "center" | "left" | "right";
   verticalAlign?: "center" | "top" | "bottom";
   padding?: number;
+  onBoundsComputed?: (bounds: { left: number; top: number; right: number; bottom: number }) => void;
 }
 
 const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiBlocks({
@@ -48,6 +49,7 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
   align = "center",
   verticalAlign = "center",
   padding = 0,
+  onBoundsComputed,
 }, ref) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chunksRef = useRef<ColChunk[]>([]);
@@ -99,6 +101,8 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
         : verticalAlign === "bottom" ? canvasH - gridH - padding
         : (canvasH - gridH) / 2;
 
+      onBoundsComputed?.({ left: offsetX, top: offsetY, right: offsetX + gridW, bottom: offsetY + gridH });
+
       const colMap = new Map<number, Block[]>();
       const addBlock = (x: number, y: number, col: number) => {
         const angle = Math.random() * Math.PI * 2;
@@ -134,7 +138,7 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
       chunksRef.current = chunks;
       startTimeRef.current = performance.now();
     },
-    [ascii, blockSize, gap, align, verticalAlign, padding]
+    [ascii, blockSize, gap, align, verticalAlign, padding, onBoundsComputed]
   );
 
   useEffect(() => {

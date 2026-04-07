@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useDeviceDetect } from "@/hooks";
 import { COLORS } from "@/lib/constants";
+import type { BoundingBox } from "@/components/ui/FloatingSocialIcons";
 
 const HeroMobile = dynamic(() => import("./HeroMobile"), { ssr: false });
 
@@ -38,8 +39,12 @@ const ASCII_NAME = `  ▄▄▄▄   ▄▄▄▄▄▄   ▄▄▄▄▄▄▄ 
 
 export default function Hero() {
   const { isMobile, isHydrated } = useDeviceDetect();
-  const asciiRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const asciiBoundsRef = useRef<BoundingBox | null>(null);
+
+  const handleAsciiBounds = useCallback((bounds: BoundingBox) => {
+    asciiBoundsRef.current = bounds;
+  }, []);
 
   if (isHydrated && isMobile) {
     return <HeroMobile />;
@@ -52,7 +57,6 @@ export default function Hero() {
     >
       {/* ASCII blocks - top left */}
       <AsciiBlocks
-        ref={asciiRef}
         ascii={ASCII_NAME}
         blockSize={6}
         gap={1}
@@ -63,13 +67,14 @@ export default function Hero() {
         align="left"
         verticalAlign="top"
         padding={96}
+        onBoundsComputed={handleAsciiBounds}
       />
 
       {/* ClipPath nav grid - bottom right */}
       <ClipPathGrid ref={gridRef} />
 
       {/* Floating social icons */}
-      <FloatingSocialIcons asciiRef={asciiRef} gridRef={gridRef} />
+      <FloatingSocialIcons asciiBoundsRef={asciiBoundsRef} gridRef={gridRef} />
 
       {/* Accessible nav links (sr-only) */}
       <nav className="sr-only" aria-label="Navigation principale">
