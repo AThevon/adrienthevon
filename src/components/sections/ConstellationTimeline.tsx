@@ -392,10 +392,10 @@ export default function ConstellationTimeline() {
         {activeNode && (
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0, x: 40, filter: "blur(12px)" }}
-            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, x: 30, filter: "blur(8px)" }}
-            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 100%)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
+            exit={{ opacity: 0, clipPath: "inset(0 100% 100% 0)" }}
+            transition={{ duration: 0.25, ease: [0.33, 1, 0.68, 1] }}
             className="absolute top-24 right-8 z-30 w-[380px] pointer-events-auto"
           >
             {/* Main container */}
@@ -420,9 +420,9 @@ export default function ConstellationTimeline() {
                 {/* Step indicator + year */}
                 <motion.div
                   className="relative flex items-center gap-3 mb-4"
-                  initial={{ opacity: 0, y: 6 }}
+                  initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 }}
+                  transition={{ delay: 0.08, duration: 0.2 }}
                 >
                   {/* Step dots */}
                   <div className="flex items-center gap-1.5">
@@ -445,9 +445,9 @@ export default function ConstellationTimeline() {
                   <motion.span
                     className="font-mono text-[11px] font-bold tracking-[0.15em]"
                     style={{ color: activeNode.color }}
-                    initial={{ opacity: 0, x: -8 }}
+                    initial={{ opacity: 0, x: -6 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.08 }}
+                    transition={{ delay: 0.12, duration: 0.2 }}
                   >
                     {activeNode.year}
                   </motion.span>
@@ -456,9 +456,9 @@ export default function ConstellationTimeline() {
                 {/* Title */}
                 <motion.h3
                   className="relative text-xl font-bold tracking-tight leading-snug"
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
+                  transition={{ delay: 0.15, duration: 0.2 }}
                 >
                   {activeNode.title}
                 </motion.h3>
@@ -471,7 +471,7 @@ export default function ConstellationTimeline() {
                   }}
                   initial={{ scaleX: 0, originX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.4, delay: 0.12 }}
+                  transition={{ duration: 0.3, delay: 0.18 }}
                 />
               </div>
 
@@ -479,9 +479,9 @@ export default function ConstellationTimeline() {
               <div className="px-6 pb-5">
                 <motion.p
                   className="text-sm text-white/50 leading-relaxed"
-                  initial={{ opacity: 0, y: 6 }}
+                  initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
+                  transition={{ delay: 0.2, duration: 0.2 }}
                 >
                   {activeNode.description}
                 </motion.p>
@@ -491,7 +491,7 @@ export default function ConstellationTimeline() {
                   className="flex items-center gap-3 mt-5 font-mono text-[10px] text-white/20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
+                  transition={{ delay: 0.25, duration: 0.2 }}
                 >
                   <span>{String(activeIndex + 1).padStart(2, "0")}</span>
                   <div className="flex-1 h-px bg-white/[0.06]" />
