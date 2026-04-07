@@ -102,8 +102,12 @@ export default function ProjectTimeline({
   const compressedRef = useRef(compressed);
 
   // Keep refs in sync with props so the rAF loop always has fresh values.
-  activeIdRef.current = activeProjectId;
-  compressedRef.current = compressed;
+  useEffect(() => {
+    activeIdRef.current = activeProjectId;
+  }, [activeProjectId]);
+  useEffect(() => {
+    compressedRef.current = compressed;
+  }, [compressed]);
 
   // -------------------------------------------------------------------
   // Node initialisation

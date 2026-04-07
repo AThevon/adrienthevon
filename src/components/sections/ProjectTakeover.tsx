@@ -32,10 +32,8 @@ function ProjectTakeoverContent({
     ? project.link
     : `https://${project?.link}`;
 
-  // Reset iframe loaded state when projectId changes
-  useEffect(() => {
-    setIframeLoaded(false);
-  }, [projectId]);
+  // iframeLoaded resets naturally because AnimatePresence remounts
+  // this component with a new key (projectId), so useState(false) re-inits.
 
   // Detect overscroll at top to trigger close
   useEffect(() => {
