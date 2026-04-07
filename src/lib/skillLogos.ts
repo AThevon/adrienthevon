@@ -25,6 +25,7 @@ const iconMapping: Record<string, string> = {
   // Backend
   nodejs: "nodedotjs",
   postgresql: "postgresql",
+  drizzle: "drizzle",
   supabase: "supabase",
 
   // Tools

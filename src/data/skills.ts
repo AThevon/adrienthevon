@@ -127,8 +127,15 @@ export const skills: Skill[] = [
     id: "postgresql",
     name: "PostgreSQL",
     category: "backend",
-    connections: ["nodejs"],
+    connections: ["nodejs", "drizzle"],
     description: "Base de données relationnelle",
+  },
+  {
+    id: "drizzle",
+    name: "Drizzle",
+    category: "backend",
+    connections: ["postgresql", "typescript", "nextjs"],
+    description: "ORM TypeScript type-safe et léger",
   },
   {
     id: "supabase",
