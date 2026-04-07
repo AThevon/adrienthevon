@@ -56,7 +56,7 @@ export default function Hero() {
       className="relative h-dvh overflow-hidden"
     >
       {/* Background pattern */}
-      <BackgroundPlus plusColor="#1a1a1a" plusSize={50} />
+      <BackgroundPlus plusColor="#282828" plusSize={50} />
 
       {/* ASCII blocks - top left */}
       <AsciiBlocks
