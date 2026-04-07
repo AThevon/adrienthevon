@@ -62,7 +62,7 @@ export default function Hero() {
         paused={false}
         align="left"
         verticalAlign="top"
-        padding={48}
+        padding={96}
       />
 
       {/* ClipPath nav grid - bottom right */}
