@@ -19,7 +19,7 @@ function getEmail() { return `${E_USER}@${E_DOMAIN}`; }
 // --- Canvas-rendered email (never in DOM, anti-scraping) ---
 function CanvasEmail({ onClick, isHovered }: { onClick: () => void; isHovered: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const drawnRef = useRef(false);
+  const fontReady = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,39 +27,81 @@ function CanvasEmail({ onClick, isHovered }: { onClick: () => void; isHovered: b
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    const email = getEmail();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    function draw() {
+      if (!canvas || !ctx) return;
 
-    // Measure text to size canvas
-    const fontSize = window.innerWidth < 768 ? 24 : window.innerWidth < 1024 ? 36 : 44;
-    ctx.font = `700 ${fontSize}px var(--font-display), Georgia, serif`;
-    const metrics = ctx.measureText(email);
-    const textW = Math.ceil(metrics.width) + 8;
-    const textH = fontSize * 1.4;
+      const email = getEmail().toUpperCase();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const vw = window.innerWidth;
 
-    canvas.width = textW * dpr;
-    canvas.height = textH * dpr;
-    canvas.style.width = `${textW}px`;
-    canvas.style.height = `${textH}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Responsive font size - much bigger
+      const fontSize = vw < 480 ? 20 : vw < 768 ? 28 : vw < 1024 ? 40 : 52;
+      const letterSpacing = fontSize * 0.08;
+      const fontStr = `400 ${fontSize}px "Dela Gothic One", "Impact", sans-serif`;
 
-    // Draw
-    ctx.clearRect(0, 0, textW, textH);
-    ctx.font = `700 ${fontSize}px var(--font-display), Georgia, serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = isHovered ? "#ffaa00" : "#e8e8e8";
-    ctx.fillText(email, textW / 2, textH / 2);
-    drawnRef.current = true;
+      ctx.font = fontStr;
+
+      // Measure total width with letter spacing
+      let totalW = 0;
+      for (let i = 0; i < email.length; i++) {
+        totalW += ctx.measureText(email[i]).width + (i < email.length - 1 ? letterSpacing : 0);
+      }
+
+      const textH = fontSize * 1.6;
+      const canvasW = Math.ceil(totalW) + 16;
+
+      canvas.width = canvasW * dpr;
+      canvas.height = textH * dpr;
+      canvas.style.width = `${canvasW}px`;
+      canvas.style.height = `${textH}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Clear and draw characters individually (for letter-spacing)
+      ctx.clearRect(0, 0, canvasW, textH);
+      ctx.font = fontStr;
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = isHovered ? "#ffaa00" : "#e8e8e8";
+
+      let x = 8;
+      for (let i = 0; i < email.length; i++) {
+        ctx.fillText(email[i], x, textH / 2);
+        x += ctx.measureText(email[i]).width + letterSpacing;
+      }
+    }
+
+    // Wait for font to load before first draw
+    if (!fontReady.current) {
+      document.fonts.ready.then(() => {
+        fontReady.current = true;
+        draw();
+      });
+    } else {
+      draw();
+    }
   }, [isHovered]);
+
+  // Redraw on resize
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-render by toggling a trivial state
+      const canvas = canvasRef.current;
+      if (canvas) {
+        canvas.dispatchEvent(new Event("redraw"));
+      }
+    };
+
+    // Simple: just re-trigger the effect
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <canvas
       ref={canvasRef}
       onClick={onClick}
       data-cursor="hover"
-      className="cursor-pointer transition-opacity"
-      style={{ maxWidth: "90vw" }}
+      className="cursor-pointer"
+      style={{ maxWidth: "92vw" }}
       aria-label="Email address - click to copy"
     />
   );
