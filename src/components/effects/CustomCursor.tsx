@@ -4,14 +4,14 @@ import { useEffect, useRef } from "react";
 import { COLORS } from "@/lib/constants";
 
 // --- Config ---
-const DOT_RADIUS = 2.5;
-const RING_RADIUS = 12;
-const RING_HOVER_RADIUS = 20;
-const RING_DASH = [3.5, 3.5];
-const RING_WIDTH = 1;
-const RING_ROTATION_SPEED = 0.012; // rad/frame idle
-const RING_HOVER_SPEED = 0.04; // rad/frame hover
-const LERP_SPEED = 0.15;
+const DOT_RADIUS = 3;
+const RING_RADIUS = 14;
+const RING_HOVER_RADIUS = 22;
+const RING_DASH = [4, 3];
+const RING_WIDTH = 1.5;
+const RING_ROTATION_SPEED = 0.015; // rad/frame idle
+const RING_HOVER_SPEED = 0.05; // rad/frame hover
+const LERP_SPEED = 0.35;
 const COLOR = COLORS.foreground;
 const ACCENT = COLORS.accent;
 
@@ -106,7 +106,7 @@ export default function CustomCursor() {
 
       ctx.beginPath();
       ctx.arc(0, 0, r, 0, Math.PI * 2);
-      ctx.strokeStyle = isHover ? `${ACCENT}88` : `${COLOR}44`;
+      ctx.strokeStyle = isHover ? `${ACCENT}cc` : `${COLOR}77`;
       ctx.lineWidth = RING_WIDTH;
       ctx.setLineDash(RING_DASH);
       ctx.stroke();
