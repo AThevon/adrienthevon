@@ -1,7 +1,7 @@
 "use client";
 
-import { forwardRef, useRef, useState } from "react";
-import { useAnimate } from "motion/react";
+import { forwardRef, useRef, useState, useMemo } from "react";
+import { motion, useAnimate } from "motion/react";
 import { useTranslations } from "next-intl";
 import { usePageTransition } from "@/hooks/usePageTransition";
 import NavigationArtifact from "@/components/ui/NavigationArtifact";
@@ -45,9 +45,10 @@ interface ClipPathCellProps {
   href: string;
   num: string;
   label: string;
+  entranceDelay?: number;
 }
 
-function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
+function ClipPathCell({ navKey, href, num, label, entranceDelay = 0 }: ClipPathCellProps) {
   const { transitionToPage } = usePageTransition();
   const [overlayScope, animateOverlay] = useAnimate();
   const [isHovered, setIsHovered] = useState(false);
@@ -79,7 +80,10 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.35, delay: entranceDelay, ease: [0.33, 1, 0.68, 1] }}
       className={`relative overflow-hidden border bg-[#0a0a0a] cursor-pointer flex flex-col items-center justify-center gap-3 p-4 transition-colors duration-150 ${isHovered ? "border-[#ffaa00] z-10" : "border-[#222]"}`}
       data-cursor="hover"
       onMouseEnter={handleMouseEnter}
@@ -140,23 +144,38 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
           {label}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 }
+
+// Fisher-Yates shuffle
+function shuffleArray(length: number): number[] {
+  const arr = Array.from({ length }, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+const allCells = [
+  { key: "work", href: "/work", num: "01" },
+  { key: "skills", href: "/skills", num: "02" },
+  { key: "journey", href: "/journey", num: "03" },
+  { key: "about", href: "/about", num: "04" },
+  { key: "contact", href: "/contact", num: "05" },
+];
+
+const ENTRANCE_STAGGER = 0.12; // seconds between each cell
 
 const ClipPathGrid = forwardRef<HTMLDivElement>((_, ref) => {
   const t = useTranslations("nav");
 
-  const row1Cells = [
-    { key: "work", href: "/work", num: "01" },
-    { key: "skills", href: "/skills", num: "02" },
-  ];
-
-  const row2Cells = [
-    { key: "journey", href: "/journey", num: "03" },
-    { key: "about", href: "/about", num: "04" },
-    { key: "contact", href: "/contact", num: "05" },
-  ];
+  // Shuffle order once at mount - each cell gets a random entrance delay
+  const delays = useMemo(() => {
+    const order = shuffleArray(allCells.length);
+    return order.map((rank) => rank * ENTRANCE_STAGGER);
+  }, []);
 
   return (
     <div
@@ -165,33 +184,29 @@ const ClipPathGrid = forwardRef<HTMLDivElement>((_, ref) => {
       style={{ width: "60vw", height: "55vh" }}
     >
       {/* Row 1 - 2 columns */}
-      <div
-        className="grid grid-cols-2"
-        style={{ flex: 1 }}
-      >
-        {row1Cells.map((cell) => (
+      <div className="grid grid-cols-2" style={{ flex: 1 }}>
+        {allCells.slice(0, 2).map((cell, i) => (
           <ClipPathCell
             key={cell.key}
             navKey={cell.key}
             href={cell.href}
             num={cell.num}
             label={t(cell.key)}
+            entranceDelay={delays[i]}
           />
         ))}
       </div>
 
       {/* Row 2 - 3 columns */}
-      <div
-        className="grid grid-cols-3"
-        style={{ flex: 1 }}
-      >
-        {row2Cells.map((cell) => (
+      <div className="grid grid-cols-3" style={{ flex: 1 }}>
+        {allCells.slice(2).map((cell, i) => (
           <ClipPathCell
             key={cell.key}
             navKey={cell.key}
             href={cell.href}
             num={cell.num}
             label={t(cell.key)}
+            entranceDelay={delays[i + 2]}
           />
         ))}
       </div>
