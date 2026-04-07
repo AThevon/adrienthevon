@@ -104,8 +104,8 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
 
       {/* Label */}
       <span
-        className="text-[12px] text-[#888] uppercase tracking-[4px]"
-        style={{ fontFamily: "var(--font-mono)" }}
+        className="text-[clamp(18px,2vw,28px)] text-[#888] uppercase tracking-[3px]"
+        style={{ fontFamily: "var(--font-display)" }}
       >
         {label}
       </span>
@@ -113,12 +113,12 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
       {/* Clip-path overlay */}
       <div
         ref={overlayScope}
-        className="absolute inset-0 bg-[#ffaa00] flex flex-col items-center justify-center gap-3 p-4 pointer-events-none"
+        className="absolute inset-0 bg-[#e8e8e8] flex flex-col items-center justify-center gap-3 p-4 pointer-events-none"
         style={{ clipPath: BOTTOM_RIGHT_CLIP }}
       >
         {/* Number on overlay */}
         <span
-          className="absolute top-2 right-3 text-[10px] text-[#0a0a0a]"
+          className="absolute top-2 right-3 text-[10px] text-[#0a0a0a44]"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           {num}
@@ -134,8 +134,8 @@ function ClipPathCell({ navKey, href, num, label }: ClipPathCellProps) {
 
         {/* Label on overlay */}
         <span
-          className="text-[12px] text-[#0a0a0a] uppercase tracking-[4px]"
-          style={{ fontFamily: "var(--font-mono)" }}
+          className="text-[clamp(18px,2vw,28px)] text-[#0a0a0a] uppercase tracking-[3px]"
+          style={{ fontFamily: "var(--font-display)" }}
         >
           {label}
         </span>

@@ -24,7 +24,7 @@ export default function NavigationArtifact({
               key={ring}
               className="absolute inset-0"
               style={{
-                border: `1px solid ${color}`,
+                border: `2px solid ${color}`,
                 clipPath:
                   "polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)",
                 scale: 1 - ring * 0.25,
@@ -81,7 +81,7 @@ export default function NavigationArtifact({
                 key={i}
                 className="absolute inset-0"
                 style={{
-                  border: `1px solid ${color}40`,
+                  border: `2px solid ${color}40`,
                   transform: `rotateY(${deg}deg) translateZ(32px)`,
                 }}
               />
@@ -98,7 +98,7 @@ export default function NavigationArtifact({
               key={i}
               className="absolute inset-2 rounded-full"
               style={{
-                border: `1px solid ${color}`,
+                border: `2px solid ${color}`,
                 rotate: `${angle}deg`,
               }}
               animate={
@@ -198,7 +198,7 @@ export default function NavigationArtifact({
               key={wave}
               className="absolute inset-0 rounded-full"
               style={{
-                border: `1px solid ${color}`,
+                border: `2px solid ${color}`,
               }}
               animate={
                 active
