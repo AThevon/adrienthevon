@@ -233,12 +233,18 @@ export default function ProjectTimeline({
       }
       onProjectHover(found);
       canvas.style.cursor = found ? "pointer" : "default";
+      if (found) {
+        canvas.setAttribute("data-cursor", "hover");
+      } else {
+        canvas.removeAttribute("data-cursor");
+      }
     };
 
     const handleMouseLeave = () => {
       mouseRef.current = { x: -9999, y: -9999 };
       onProjectHover(null);
       canvas.style.cursor = "default";
+      canvas.removeAttribute("data-cursor");
     };
 
     canvas.addEventListener("mousemove", handleMouseMove);

@@ -211,6 +211,15 @@ export default function NeuralNetwork2D() {
       });
       hoveredNodeRef.current = currentHovered;
 
+      // Toggle data-cursor for custom cursor accent on node hover
+      if (canvas) {
+        if (currentHovered) {
+          canvas.setAttribute("data-cursor", "hover");
+        } else {
+          canvas.removeAttribute("data-cursor");
+        }
+      }
+
       // Update node positions based on mode
       if (selectedSkillId) {
         // FOCUS MODE: Selected node in center, connected in orbit, others fade
@@ -442,7 +451,7 @@ export default function NeuralNetwork2D() {
         if ((isHovered || isSelected) && !isFaded) {
           ctx.save();
           ctx.globalAlpha = opacity;
-          ctx.font = "12px 'Geist Mono', monospace";
+          ctx.font = "14px 'Geist Mono', monospace";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
@@ -627,22 +636,26 @@ export default function NeuralNetwork2D() {
                   </div>
                 </div>
 
-                {/* Connections count */}
-                {selectedSkill.connections && selectedSkill.connections.length > 0 && (
-                  <motion.div
-                    className="flex items-center gap-2 mt-3.5 font-mono text-[10px] text-white/30"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <circle cx="3" cy="3" r="1.5" stroke="currentColor" strokeWidth="1" />
-                      <circle cx="9" cy="9" r="1.5" stroke="currentColor" strokeWidth="1" />
-                      <path d="M4.2 4.2L7.8 7.8" stroke="currentColor" strokeWidth="1" strokeDasharray="2 1" />
-                    </svg>
-                    <span>{selectedSkill.connections.length} connections</span>
-                  </motion.div>
-                )}
+                {/* Connections count - only count connections to visible nodes */}
+                {(() => {
+                  const visibleIds = new Set(Array.from(nodesRef.current.keys()));
+                  const visibleCount = selectedSkill.connections.filter(id => visibleIds.has(id)).length;
+                  return visibleCount > 0 ? (
+                    <motion.div
+                      className="flex items-center gap-2 mt-3.5 font-mono text-[10px] text-white/30"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="3" cy="3" r="1.5" stroke="currentColor" strokeWidth="1" />
+                        <circle cx="9" cy="9" r="1.5" stroke="currentColor" strokeWidth="1" />
+                        <path d="M4.2 4.2L7.8 7.8" stroke="currentColor" strokeWidth="1" strokeDasharray="2 1" />
+                      </svg>
+                      <span>{visibleCount} connections</span>
+                    </motion.div>
+                  ) : null;
+                })()}
 
                 {/* Divider */}
                 <motion.div
