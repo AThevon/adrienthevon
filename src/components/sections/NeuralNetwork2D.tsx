@@ -636,10 +636,19 @@ export default function NeuralNetwork2D() {
                   </div>
                 </div>
 
-                {/* Connections count - only count connections to visible nodes */}
+                {/* Connections count - bidirectional, only visible nodes */}
                 {(() => {
                   const visibleIds = new Set(Array.from(nodesRef.current.keys()));
-                  const visibleCount = selectedSkill.connections.filter(id => visibleIds.has(id)).length;
+                  const connectedIds = new Set<string>();
+                  // Outgoing: this skill declares connection to X
+                  selectedSkill.connections.forEach(id => { if (visibleIds.has(id)) connectedIds.add(id); });
+                  // Incoming: X declares connection to this skill
+                  nodesRef.current.forEach((node, id) => {
+                    if (id !== selectedSkill.id && node.skill.connections.includes(selectedSkill.id)) {
+                      connectedIds.add(id);
+                    }
+                  });
+                  const visibleCount = connectedIds.size;
                   return visibleCount > 0 ? (
                     <motion.div
                       className="flex items-center gap-2 mt-3.5 font-mono text-[10px] text-white/30"
