@@ -42,7 +42,7 @@ export default function WorkBadgeNav() {
         {/* Badges */}
         <div
           ref={scrollRef}
-          className="flex items-center gap-4 overflow-x-auto scrollbar-hide flex-1"
+          className="flex items-center gap-3 overflow-x-auto scrollbar-hide flex-1"
         >
           {sorted.map((p) => {
             const isActive = p.id === slug;
@@ -65,13 +65,13 @@ export default function WorkBadgeNav() {
                     width: 40,
                     height: 40,
                     borderRadius: 10,
-                    borderWidth: isActive ? 2 : 1,
-                    borderStyle: "solid",
-                    borderColor: isActive ? p.color : "#2a2a2a",
+                    border: "none",
+                    outline: isActive ? `2px solid ${p.color}` : `1px solid #2a2a2a`,
+                    outlineOffset: isActive ? 4 : 0,
                     boxShadow: isActive ? `0 0 24px ${p.color}25` : "none",
                     background: p.id === "yeetbg" ? "#ffffff" : undefined,
                     transform: isActive ? "scale(1.15)" : "scale(1)",
-                    transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1), border-color 200ms ease-out, box-shadow 200ms ease-out",
+                    transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1), outline-color 200ms ease-out, outline-offset 200ms ease-out, outline-width 200ms ease-out, box-shadow 200ms ease-out",
                   }}
                 >
                   {p.logo ? (
