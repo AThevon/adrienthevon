@@ -93,13 +93,14 @@ export default function ProjectTimeline({
     const maxT = Math.max(...timestamps);
     const range = maxT - minT || 1;
 
-    // Diagonal from top-left to bottom-right
+    // Diagonal from bottom-left to top-right
+    // Oldest project (last in sorted array) at bottom-left, newest at top-right
     const marginX = width * 0.12;
     const marginY = height * 0.12;
     const diagStartX = marginX;
-    const diagStartY = marginY;
+    const diagStartY = height - marginY;
     const diagEndX = width - marginX;
-    const diagEndY = height - marginY;
+    const diagEndY = marginY;
 
     // Preserve loaded logo images if nodes already exist
     const existingLogos = new Map<string, HTMLImageElement | null>();
@@ -116,8 +117,9 @@ export default function ProjectTimeline({
     const perpY = diagDx / diagLen;
 
     const nodes: TimelineNode[] = projects.map((p, i) => {
-      // Equal spacing along diagonal
-      const t = n > 1 ? i / (n - 1) : 0.5;
+      // Equal spacing along diagonal (reverse index: oldest=0 at bottom-left)
+      const ri = n - 1 - i;
+      const t = n > 1 ? ri / (n - 1) : 0.5;
       const diagX = diagStartX + t * diagDx;
       const diagY = diagStartY + t * diagDy;
 
@@ -470,13 +472,13 @@ export default function ProjectTimeline({
           node.y += node.vy;
         });
 
-        // Diagonal axis geometry
+        // Diagonal axis geometry (bottom-left to top-right)
         const marginX = width * 0.12;
         const marginY = height * 0.12;
         const dsx = marginX;
-        const dsy = marginY;
+        const dsy = height - marginY;
         const dex = width - marginX;
-        const dey = height - marginY;
+        const dey = marginY;
         const ddx = dex - dsx;
         const ddy = dey - dsy;
 
@@ -515,8 +517,9 @@ export default function ProjectTimeline({
         nodes.forEach((node, i) => {
           const isActive = node.projectId === activeId;
 
-          // Point on diagonal for this node (equal spacing)
-          const t = nn > 1 ? i / (nn - 1) : 0.5;
+          // Point on diagonal for this node (equal spacing, reversed)
+          const ri = nn - 1 - i;
+          const t = nn > 1 ? ri / (nn - 1) : 0.5;
           const diagPtX = dsx + t * ddx;
           const diagPtY = dsy + t * ddy;
 
@@ -538,13 +541,14 @@ export default function ProjectTimeline({
           const badgeRadius = isActive ? RADIUS + 2 : RADIUS;
           drawBadge(node, badgeSize, badgeRadius, isActive);
 
-          // Title label (offset further from diagonal than badge)
+          // Title + category labels (pushed further out from diagonal)
           const diagLenFull = Math.sqrt(ddx * ddx + ddy * ddy);
           const perpXn = -ddy / diagLenFull;
           const perpYn = ddx / diagLenFull;
           const side = i % 2 === 0 ? 1 : -1;
-          const labelOffX = perpXn * (side > 0 ? 28 : -28);
-          const labelOffY = perpYn * (side > 0 ? 28 : -28);
+          const labelDist = badgeSize / 2 + 18;
+          const labelOffX = perpXn * labelDist * side;
+          const labelOffY = perpYn * labelDist * side;
 
           ctx.font = isActive ? "bold 13px monospace" : "13px monospace";
           ctx.fillStyle = isActive ? COLORS.foreground : "#888";
@@ -552,7 +556,6 @@ export default function ProjectTimeline({
           ctx.textBaseline = "middle";
           ctx.fillText(node.title, node.x + labelOffX, node.y + labelOffY);
 
-          // Category
           ctx.font = "10px monospace";
           ctx.fillStyle = "#444";
           ctx.fillText(node.category, node.x + labelOffX, node.y + labelOffY + 14 * side);
