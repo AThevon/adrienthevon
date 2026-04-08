@@ -59,24 +59,21 @@ export default function WorkBadgeNav() {
                   transition: "margin 250ms cubic-bezier(0.33, 1, 0.68, 1)",
                 }}
               >
-                {/* Stylized parentheses with 45deg folded ends */}
+                {/* Stylized parentheses with 45deg folds + bounce animation */}
                 {isActive && (
                   <>
-                    {/* Left parenthesis: top fold + bar + bottom fold */}
-                    <span style={{ position: "absolute", left: -9, top: 0, bottom: 0, width: 10 }}>
-                      {/* Top fold 45deg */}
+                    {/* Left parenthesis */}
+                    <span key={`l-${p.id}`} className="paren-left" style={{ position: "absolute", left: -9, top: 0, bottom: 0, width: 10 }}>
                       <span style={{
                         position: "absolute", top: 0, left: 0,
                         width: 8, height: 2, background: p.color,
                         transformOrigin: "left center",
                         transform: "rotate(45deg)",
                       }} />
-                      {/* Vertical bar */}
                       <span style={{
                         position: "absolute", top: 5, bottom: 5, left: 0,
                         width: 2, background: p.color,
                       }} />
-                      {/* Bottom fold 45deg */}
                       <span style={{
                         position: "absolute", bottom: 0, left: 0,
                         width: 8, height: 2, background: p.color,
@@ -84,21 +81,18 @@ export default function WorkBadgeNav() {
                         transform: "rotate(-45deg)",
                       }} />
                     </span>
-                    {/* Right parenthesis: top fold + bar + bottom fold */}
-                    <span style={{ position: "absolute", right: -9, top: 0, bottom: 0, width: 10 }}>
-                      {/* Top fold 45deg */}
+                    {/* Right parenthesis */}
+                    <span key={`r-${p.id}`} className="paren-right" style={{ position: "absolute", right: -9, top: 0, bottom: 0, width: 10 }}>
                       <span style={{
                         position: "absolute", top: 0, right: 0,
                         width: 8, height: 2, background: p.color,
                         transformOrigin: "right center",
                         transform: "rotate(-45deg)",
                       }} />
-                      {/* Vertical bar */}
                       <span style={{
                         position: "absolute", top: 5, bottom: 5, right: 0,
                         width: 2, background: p.color,
                       }} />
-                      {/* Bottom fold 45deg */}
                       <span style={{
                         position: "absolute", bottom: 0, right: 0,
                         width: 8, height: 2, background: p.color,
