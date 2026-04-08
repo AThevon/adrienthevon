@@ -202,7 +202,7 @@ export default function MainNav() {
         {isOpen && (
           <motion.div
             key="menu-overlay"
-            className="fixed inset-0 z-40 bg-background"
+            className="fixed inset-0 z-[60] bg-background"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
