@@ -52,7 +52,7 @@ export default function WorkPage() {
   const isOpen = activeProjectId !== null;
 
   return (
-    <main className="h-dvh overflow-hidden flex flex-col">
+    <main className="h-dvh flex flex-col overflow-hidden">
       {isOpen ? (
         <>
           {/* Badge bar replaces canvas when a project is open */}
@@ -65,7 +65,7 @@ export default function WorkPage() {
           </div>
 
           {/* Detail panel fills the rest */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto">
             <ProjectTakeover
               projectId={activeProjectId}
               onClose={handleClose}
