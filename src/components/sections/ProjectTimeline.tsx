@@ -374,9 +374,9 @@ export default function ProjectTimeline({
         ctx.fill();
       }
 
-      // Background
+      // Background (white for yeetbg, dark for others)
       roundedRect(bx, by, size, size, r);
-      ctx.fillStyle = "#141414";
+      ctx.fillStyle = node.projectId === "yeetbg" ? "#ffffff" : "#141414";
       ctx.fill();
 
       // Logo image or text fallback

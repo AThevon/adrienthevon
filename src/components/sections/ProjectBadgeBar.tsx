@@ -53,6 +53,7 @@ export default function ProjectBadgeBar({
                   borderRadius: isActive ? 12 : 8,
                   border: `${isActive ? 2 : 1}px solid ${isActive ? project.color : "#2a2a2a"}`,
                   boxShadow: isActive ? `0 0 20px ${project.color}30` : "none",
+                  background: project.id === "yeetbg" ? "#ffffff" : undefined,
                 }}
               >
                 {project.logo ? (
