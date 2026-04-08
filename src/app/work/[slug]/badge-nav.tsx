@@ -6,24 +6,27 @@ import { projects } from "@/data/projects";
 
 const sorted = [...projects].reverse();
 
+// Module-level flag - survives remounts, only false on first page load
+let hasEnteredOnce = false;
+
 export default function ProjectBadgeNav() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
   const scrollRef = useRef<HTMLDivElement>(null);
-  const hasAnimated = useRef(false);
+  const shouldAnimate = !hasEnteredOnce;
 
-  // Scroll active badge into view
+  // Mark as entered after first mount
+  useEffect(() => {
+    hasEnteredOnce = true;
+  }, []);
+
+  // Scroll active badge into view on slug change
   useEffect(() => {
     if (!slug || !scrollRef.current) return;
     const el = scrollRef.current.querySelector(`[data-project="${slug}"]`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   }, [slug]);
-
-  // Only animate on first mount
-  useEffect(() => {
-    hasAnimated.current = true;
-  }, []);
 
   return (
     <div className="sticky top-0 z-30 bg-background border-b border-foreground/5">
@@ -39,8 +42,8 @@ export default function ProjectBadgeNav() {
               data-project={p.id}
               data-cursor="hover"
               onClick={() => router.push(`/work/${p.id}`)}
-              className={`shrink-0 ${!hasAnimated.current ? "sidebar-slide" : ""}`}
-              style={!hasAnimated.current ? { animationDelay: `${i * 40}ms` } : undefined}
+              className={`shrink-0 ${shouldAnimate ? "sidebar-slide" : ""}`}
+              style={shouldAnimate ? { animationDelay: `${i * 40}ms` } : undefined}
             >
               <div
                 className="relative overflow-hidden transition-all duration-200"
