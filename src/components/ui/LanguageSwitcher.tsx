@@ -61,14 +61,7 @@ export default function LanguageSwitcher({ id = "default" }: { id?: string }) {
             {/* Active indicator */}
             <AnimatePresence>
               {locale === "fr" && (
-                <motion.div
-                  className="absolute inset-0 bg-accent"
-                  layoutId={`language-indicator-${id}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
+                <div className="absolute inset-0 bg-accent" />
               )}
             </AnimatePresence>
           </motion.button>
@@ -93,14 +86,7 @@ export default function LanguageSwitcher({ id = "default" }: { id?: string }) {
             {/* Active indicator */}
             <AnimatePresence>
               {locale === "en" && (
-                <motion.div
-                  className="absolute inset-0 bg-accent"
-                  layoutId={`language-indicator-${id}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
+                <div className="absolute inset-0 bg-accent" />
               )}
             </AnimatePresence>
           </motion.button>
