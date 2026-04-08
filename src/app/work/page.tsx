@@ -3,10 +3,11 @@
 import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useDeviceDetect } from "@/hooks";
+import { CanvasLoader, ProjectLoader } from "@/components/ui/WorkLoader";
 
 const ProjectTimeline = dynamic(
   () => import("@/components/sections/ProjectTimeline"),
-  { ssr: false }
+  { ssr: false, loading: () => <CanvasLoader /> }
 );
 const ProjectBadgeBar = dynamic(
   () => import("@/components/sections/ProjectBadgeBar"),
@@ -14,7 +15,7 @@ const ProjectBadgeBar = dynamic(
 );
 const ProjectTakeover = dynamic(
   () => import("@/components/sections/ProjectTakeover"),
-  { ssr: false }
+  { ssr: false, loading: () => <ProjectLoader /> }
 );
 const ProjectTimelineMobile = dynamic(
   () => import("@/components/sections/ProjectTimelineMobile"),
@@ -55,42 +56,46 @@ export default function WorkPage() {
 
   const isOpen = activeProjectId !== null;
 
-  return (
-    <main className="h-dvh flex flex-col overflow-hidden">
-      {isOpen ? (
-        <>
-          {/* Badge bar replaces canvas when a project is open */}
-          <div className="shrink-0" style={{ height: "15vh" }}>
-            <ProjectBadgeBar
-              activeProjectId={activeProjectId}
-              onProjectClick={handleProjectClick}
-              onClose={handleClose}
-            />
-          </div>
-
-          {/* Detail panel fills the rest */}
-          <div className="flex-1 min-h-0 overflow-y-auto">
-            <ProjectTakeover
-              projectId={activeProjectId}
-              onClose={handleClose}
-            />
-          </div>
-        </>
-      ) : (
-        /* Full canvas timeline with procedural background */
-        <div className="flex-1 relative">
-          <ProceduralGround />
-          <div className="relative z-10 w-full h-full">
-            <ProjectTimeline
-              scrollProgress={0}
-              activeProjectId={hoveredProjectId}
-              onProjectClick={handleProjectClick}
-              onProjectHover={handleHover}
-              compressed={false}
-            />
-          </div>
+  if (isOpen) {
+    // Single view: badge bar (fixed top) + scrollable detail panel
+    return (
+      <main className="h-dvh flex flex-col">
+        {/* Badge bar - fixed height */}
+        <div className="shrink-0 h-[15vh]">
+          <ProjectBadgeBar
+            activeProjectId={activeProjectId}
+            onProjectClick={handleProjectClick}
+            onClose={handleClose}
+          />
         </div>
-      )}
+
+        {/* Scrollable detail area */}
+        <div
+          className="flex-1 overflow-y-auto"
+          style={{ minHeight: 0 }}
+        >
+          <ProjectTakeover
+            projectId={activeProjectId}
+            onClose={handleClose}
+          />
+        </div>
+      </main>
+    );
+  }
+
+  // Full canvas timeline view
+  return (
+    <main className="h-dvh relative overflow-hidden">
+      <ProceduralGround />
+      <div className="relative z-10 w-full h-full">
+        <ProjectTimeline
+          scrollProgress={0}
+          activeProjectId={hoveredProjectId}
+          onProjectClick={handleProjectClick}
+          onProjectHover={handleHover}
+          compressed={false}
+        />
+      </div>
     </main>
   );
 }
