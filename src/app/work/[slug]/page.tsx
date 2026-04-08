@@ -164,7 +164,7 @@ function ProjectMeta({ slug, year }: { slug: string; year: string }) {
   return (
     <div className="flex items-center gap-3 font-mono text-xs text-muted uppercase tracking-widest">
       <span>{tProject("category")}</span>
-      <span className="opacity-40">-</span>
+      <span className="text-foreground/30">-</span>
       <span>{year}</span>
     </div>
   );
