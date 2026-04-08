@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getProjectById } from "@/data/projects";
+import ProjectBadgeNav from "./badge-nav";
 
-// Helper to convert kebab-case to camelCase for i18n keys
 function kebabToCamel(str: string): string {
   return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 }
@@ -22,9 +22,7 @@ export async function generateMetadata({
   const project = getProjectById(slug);
 
   if (!project) {
-    return {
-      title: "Project Not Found",
-    };
+    return { title: "Project Not Found" };
   }
 
   return {
@@ -57,5 +55,10 @@ export default function ProjectLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <ProjectBadgeNav />
+      {children}
+    </>
+  );
 }

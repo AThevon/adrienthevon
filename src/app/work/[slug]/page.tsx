@@ -1,10 +1,9 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useRef, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { projects, getProjectById } from "@/data/projects";
-import MagneticButton from "@/components/ui/MagneticButton";
+import { getProjectById } from "@/data/projects";
 
 function toCamelCase(str: string): string {
   return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
@@ -12,7 +11,6 @@ function toCamelCase(str: string): string {
 
 export default function ProjectPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params.slug as string;
   const project = getProjectById(slug);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -23,7 +21,6 @@ export default function ProjectPage() {
     if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
   }, []);
 
-  // Reset iframe on slug change
   useEffect(() => {
     if (iframeRef.current) iframeRef.current.style.opacity = "0";
     if (shimmerRef.current) shimmerRef.current.style.opacity = "1";
@@ -41,146 +38,83 @@ export default function ProjectPage() {
   const iframeSrc = project.link.startsWith("https://") ? project.link : `https://${project.link}`;
   const ctaLabel = isGithub ? "VIEW ON GITHUB" : "VIEW WEBSITE";
 
-  // Sorted chronologically (oldest first) for badge bar
-  const sorted = [...projects].reverse();
-
   return (
-    <main className="min-h-dvh">
-      {/* Badge bar - sticky top */}
-      <div className="sticky top-0 z-30 bg-background border-b border-foreground/5">
-        <div className="flex items-center justify-center gap-3 px-8 py-4 overflow-x-auto scrollbar-hide max-w-full">
-          {sorted.map((p, i) => {
-            const isActive = p.id === slug;
-            return (
-              <button
-                key={p.id}
-                data-cursor="hover"
-                onClick={() => router.push(`/work/${p.id}`)}
-                className="shrink-0 sidebar-slide"
-                style={{ animationDelay: `${i * 40}ms` }}
-              >
-                <div
-                  className="relative overflow-hidden transition-all duration-200"
-                  style={{
-                    width: isActive ? 44 : 32,
-                    height: isActive ? 44 : 32,
-                    borderRadius: isActive ? 12 : 8,
-                    border: `${isActive ? 2 : 1}px solid ${isActive ? p.color : "#2a2a2a"}`,
-                    boxShadow: isActive ? `0 0 20px ${p.color}30` : "none",
-                    background: p.id === "yeetbg" ? "#ffffff" : undefined,
-                  }}
-                >
-                  {p.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={p.logo} alt={p.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <div
-                      className="w-full h-full flex items-center justify-center font-mono text-[10px] font-bold"
-                      style={{ color: p.color, background: "#141414" }}
-                    >
-                      {p.title.slice(0, 2)}
-                    </div>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Back to timeline */}
-        <div className="flex justify-center -mt-1 pb-2">
-          <button
-            onClick={() => router.push("/work")}
-            data-cursor="hover"
-            className="w-7 h-7 flex items-center justify-center border border-foreground/10 hover:border-accent hover:text-accent transition-colors text-muted"
-            aria-label="Retour timeline"
-          >
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-              <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </button>
-        </div>
+    <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4">
+        <ProjectMeta slug={slug} year={project.year} />
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="project-cta"
+          data-cursor="hover"
+        >
+          <span className="cta-label">{ctaLabel}</span>
+          <svg className="cta-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        </a>
       </div>
 
-      {/* Project content */}
-      <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between gap-4">
-          <ProjectMeta slug={slug} year={project.year} />
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="project-cta"
-            data-cursor="hover"
-          >
-            <span className="cta-label">{ctaLabel}</span>
-            <svg className="cta-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </a>
-        </div>
+      {/* Title */}
+      <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none">
+        {project.title}
+      </h1>
 
-        {/* Title */}
-        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none">
-          {project.title}
-        </h1>
+      {/* Description */}
+      <ProjectDescription slug={slug} />
 
-        {/* Description */}
-        <ProjectDescription slug={slug} />
-
-        {/* Preview */}
-        {!isGithub ? (
+      {/* Preview */}
+      {!isGithub ? (
+        <div
+          className="relative border border-foreground/10 overflow-hidden"
+          style={{ aspectRatio: "16 / 9" }}
+        >
           <div
-            className="relative border border-foreground/10 overflow-hidden"
-            style={{ aspectRatio: "16 / 9" }}
-          >
-            <div
-              ref={shimmerRef}
-              className="absolute inset-0 bg-foreground/5"
-              style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
-            />
-            {/* Scale trick: iframe renders at 1.5x width then scaled down for higher res */}
-            <iframe
-              ref={iframeRef}
-              key={slug}
-              src={iframeSrc}
-              sandbox="allow-scripts allow-same-origin"
-              style={{
-                width: "150%",
-                height: "150%",
-                transform: "scale(0.6667)",
-                transformOrigin: "top left",
-                opacity: 0,
-                transition: "opacity 500ms ease-out",
-                border: "none",
-              }}
-              onLoad={handleIframeLoad}
-              title={project.title}
-            />
-          </div>
-        ) : (
-          <GithubPreview project={project} />
-        )}
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-3 py-1 text-muted hover:border-accent hover:text-accent transition-colors cursor-default"
-            >
-              {tag}
-            </span>
-          ))}
+            ref={shimmerRef}
+            className="absolute inset-0 bg-foreground/5"
+            style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
+          />
+          <iframe
+            ref={iframeRef}
+            key={slug}
+            src={iframeSrc}
+            sandbox="allow-scripts allow-same-origin"
+            style={{
+              width: "150%",
+              height: "150%",
+              transform: "scale(0.6667)",
+              transformOrigin: "top left",
+              opacity: 0,
+              transition: "opacity 500ms ease-out",
+              border: "none",
+            }}
+            onLoad={handleIframeLoad}
+            title={project.title}
+          />
         </div>
+      ) : (
+        <GithubPreview project={project} />
+      )}
 
-        {/* Role + Client */}
-        <ProjectFooter slug={slug} client={project.client} />
-
-        <div className="h-16" />
+      {/* Tags */}
+      <div className="flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-3 py-1 text-muted hover:border-accent hover:text-accent transition-colors cursor-default"
+          >
+            {tag}
+          </span>
+        ))}
       </div>
-    </main>
+
+      {/* Role + Client */}
+      <ProjectFooter slug={slug} client={project.client} />
+
+      <div className="h-16" />
+    </div>
   );
 }
 
