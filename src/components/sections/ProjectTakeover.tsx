@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { getProjectById } from "@/data/projects";
 import MagneticButton from "@/components/ui/MagneticButton";
-import { ANIMATION } from "@/lib/constants";
 
 interface ProjectTakeoverProps {
   projectId: string | null;
@@ -16,33 +14,32 @@ function toCamelCase(str: string): string {
   return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
 }
 
-function ProjectTakeoverContent({
+export default function ProjectTakeover({
   projectId,
   onClose,
-}: ProjectTakeoverProps & { projectId: string }) {
-  const project = getProjectById(projectId);
-  const tProject = useTranslations(`projectsData.${toCamelCase(projectId)}`);
-  const tPage = useTranslations("projectPage");
-
+}: ProjectTakeoverProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const shimmerRef = useRef<HTMLDivElement>(null);
 
-  const isGithub = project?.link?.includes("github.com");
-  const iframeSrc = project?.link?.startsWith("https://")
-    ? project.link
-    : `https://${project?.link}`;
+  const isOpen = projectId !== null;
+  const project = projectId ? getProjectById(projectId) : null;
 
-  // Pure CSS transition on iframe load - no React re-render
+  // Reset iframe opacity when project changes
+  useEffect(() => {
+    if (iframeRef.current) iframeRef.current.style.opacity = "0";
+    if (shimmerRef.current) shimmerRef.current.style.opacity = "1";
+  }, [projectId]);
+
   const handleIframeLoad = useCallback(() => {
     if (iframeRef.current) iframeRef.current.style.opacity = "1";
     if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
   }, []);
 
-  // Detect overscroll at top to trigger close
+  // Overscroll to close
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
+    if (!el || !isOpen) return;
 
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY < -50 && el.scrollTop <= 0) {
@@ -52,33 +49,37 @@ function ProjectTakeoverContent({
 
     el.addEventListener("wheel", handleWheel, { passive: true });
     return () => el.removeEventListener("wheel", handleWheel);
-  }, [onClose]);
+  }, [onClose, isOpen]);
+
+  // Scroll to top when project changes
+  useEffect(() => {
+    if (scrollRef.current && projectId) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [projectId]);
 
   if (!project) return null;
 
+  const isGithub = project.link.includes("github.com");
+  const iframeSrc = project.link.startsWith("https://")
+    ? project.link
+    : `https://${project.link}`;
   const ctaText = isGithub ? "VIEW GITHUB →" : "VIEW SITE →";
 
   return (
-    <motion.div
+    <div
       ref={scrollRef}
       className="fixed bottom-0 left-0 right-0 overflow-y-auto bg-background z-20"
-      style={{ height: "75vh" }}
-      initial={{ y: "100%" }}
-      animate={{ y: 0 }}
-      exit={{ y: "100%" }}
-      transition={{
-        duration: ANIMATION.duration.normal,
-        ease: ANIMATION.ease.out,
+      style={{
+        height: "75vh",
+        transform: isOpen ? "translateY(0)" : "translateY(100%)",
+        transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1)",
       }}
     >
       <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
         {/* Header row */}
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 font-mono text-xs text-muted uppercase tracking-widest">
-            <span>{tProject("category")}</span>
-            <span className="opacity-40">—</span>
-            <span>{project.year}</span>
-          </div>
+          <PanelMeta projectId={projectId!} year={project.year} />
           <MagneticButton strength={0.15}>
             <a
               href={project.link}
@@ -97,9 +98,7 @@ function ProjectTakeoverContent({
         </h2>
 
         {/* Description */}
-        <p className="font-mono text-sm text-muted max-w-3xl leading-relaxed">
-          {tProject("longDescription")}
-        </p>
+        <PanelDescription projectId={projectId!} />
 
         {/* Iframe preview */}
         {!isGithub ? (
@@ -110,10 +109,14 @@ function ProjectTakeoverContent({
             <div
               ref={shimmerRef}
               className="absolute inset-0 bg-foreground/5"
-              style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
+              style={{
+                transition: "opacity 500ms ease-out",
+                pointerEvents: "none",
+              }}
             />
             <iframe
               ref={iframeRef}
+              key={projectId}
               src={iframeSrc}
               sandbox="allow-scripts allow-same-origin"
               className="w-full h-full"
@@ -138,7 +141,7 @@ function ProjectTakeoverContent({
           </div>
         )}
 
-        {/* Tags / badges */}
+        {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {project.tags.map((tag) => (
             <span
@@ -151,42 +154,56 @@ function ProjectTakeoverContent({
         </div>
 
         {/* Role + Client */}
-        <div className="grid grid-cols-2 gap-6 font-mono text-xs text-muted">
-          <div className="space-y-1">
-            <div className="uppercase tracking-widest opacity-50">
-              {tPage("role")}
-            </div>
-            <div className="uppercase tracking-widest">
-              {tProject("role")}
-            </div>
-          </div>
-          <div className="space-y-1">
-            <div className="uppercase tracking-widest opacity-50">
-              {tPage("client")}
-            </div>
-            <div className="uppercase tracking-widest">
-              {project.client}
-            </div>
-          </div>
-        </div>
+        <PanelFooter projectId={projectId!} client={project.client} />
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-export default function ProjectTakeover({
-  projectId,
-  onClose,
-}: ProjectTakeoverProps) {
+// Extracted to avoid re-mounting useTranslations on every render
+function PanelMeta({ projectId, year }: { projectId: string; year: string }) {
+  const tProject = useTranslations(`projectsData.${toCamelCase(projectId)}`);
   return (
-    <AnimatePresence mode="wait">
-      {projectId && (
-        <ProjectTakeoverContent
-          key={projectId}
-          projectId={projectId}
-          onClose={onClose}
-        />
-      )}
-    </AnimatePresence>
+    <div className="flex items-center gap-3 font-mono text-xs text-muted uppercase tracking-widest">
+      <span>{tProject("category")}</span>
+      <span className="opacity-40">-</span>
+      <span>{year}</span>
+    </div>
+  );
+}
+
+function PanelDescription({ projectId }: { projectId: string }) {
+  const tProject = useTranslations(`projectsData.${toCamelCase(projectId)}`);
+  return (
+    <p className="font-mono text-sm text-muted max-w-3xl leading-relaxed whitespace-pre-line">
+      {tProject("longDescription")}
+    </p>
+  );
+}
+
+function PanelFooter({
+  projectId,
+  client,
+}: {
+  projectId: string;
+  client: string;
+}) {
+  const tProject = useTranslations(`projectsData.${toCamelCase(projectId)}`);
+  const tPage = useTranslations("projectPage");
+  return (
+    <div className="grid grid-cols-2 gap-6 font-mono text-xs text-muted">
+      <div className="space-y-1">
+        <div className="uppercase tracking-widest opacity-50">
+          {tPage("role")}
+        </div>
+        <div className="uppercase tracking-widest">{tProject("role")}</div>
+      </div>
+      <div className="space-y-1">
+        <div className="uppercase tracking-widest opacity-50">
+          {tPage("client")}
+        </div>
+        <div className="uppercase tracking-widest">{client}</div>
+      </div>
+    </div>
   );
 }

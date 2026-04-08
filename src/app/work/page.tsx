@@ -76,13 +76,11 @@ export default function WorkPage() {
         />
       </div>
 
-      {/* Takeover panel */}
-      {isOpen && (
-        <ProjectTakeover
-          projectId={activeProjectId}
-          onClose={handleClose}
-        />
-      )}
+      {/* Takeover panel - always rendered, CSS transition handles show/hide */}
+      <ProjectTakeover
+        projectId={activeProjectId}
+        onClose={handleClose}
+      />
     </main>
   );
 }
