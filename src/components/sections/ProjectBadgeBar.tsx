@@ -71,13 +71,6 @@ export default function ProjectBadgeBar({
                   </div>
                 )}
               </div>
-              {/* Label */}
-              <span
-                className="font-mono text-[8px] uppercase tracking-widest transition-colors duration-200 whitespace-nowrap"
-                style={{ color: isActive ? project.color : "#555" }}
-              >
-                {project.title}
-              </span>
             </button>
           );
         })}
