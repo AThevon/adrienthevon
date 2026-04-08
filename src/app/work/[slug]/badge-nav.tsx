@@ -46,14 +46,17 @@ export default function ProjectBadgeNav() {
               style={shouldAnimate ? { animationDelay: `${i * 40}ms` } : undefined}
             >
               <div
-                className="relative overflow-hidden transition-all duration-200"
+                className="relative overflow-hidden"
                 style={{
                   width: isActive ? 44 : 32,
                   height: isActive ? 44 : 32,
                   borderRadius: isActive ? 12 : 8,
-                  border: `${isActive ? 2 : 1}px solid ${isActive ? p.color : "#2a2a2a"}`,
+                  borderWidth: isActive ? 2 : 1,
+                  borderStyle: "solid",
+                  borderColor: isActive ? p.color : "#2a2a2a",
                   boxShadow: isActive ? `0 0 20px ${p.color}30` : "none",
                   background: p.id === "yeetbg" ? "#ffffff" : undefined,
+                  transition: "width 200ms ease-out, height 200ms ease-out, border-radius 200ms ease-out, border-color 200ms ease-out, border-width 200ms ease-out, box-shadow 200ms ease-out",
                 }}
               >
                 {p.logo ? (
