@@ -52,26 +52,55 @@ export default function WorkBadgeNav() {
                 data-project={p.id}
                 data-cursor="hover"
                 onClick={() => router.push(`/work/${p.id}`)}
-                className="shrink-0 group"
+                className="shrink-0 group relative"
                 style={{
-                  marginLeft: isActive ? 6 : 0,
-                  marginRight: isActive ? 6 : 0,
+                  marginLeft: isActive ? 10 : 0,
+                  marginRight: isActive ? 10 : 0,
                   transition: "margin 250ms cubic-bezier(0.33, 1, 0.68, 1)",
                 }}
               >
+                {/* Parentheses - left and right arcs */}
+                {isActive && (
+                  <>
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: -7,
+                        top: "15%",
+                        bottom: "15%",
+                        width: 3,
+                        borderRadius: "3px 0 0 3px",
+                        background: p.color,
+                        opacity: 0.6,
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        right: -7,
+                        top: "15%",
+                        bottom: "15%",
+                        width: 3,
+                        borderRadius: "0 3px 3px 0",
+                        background: p.color,
+                        opacity: 0.6,
+                      }}
+                    />
+                  </>
+                )}
                 <div
-                  className={`relative ${!isActive ? "overflow-hidden group-hover:brightness-125" : ""}`}
+                  className={`relative overflow-hidden ${!isActive ? "group-hover:brightness-125" : ""}`}
                   style={{
                     width: 40,
                     height: 40,
                     borderRadius: 10,
-                    border: "none",
-                    outline: isActive ? `2px solid ${p.color}` : `1px solid #2a2a2a`,
-                    outlineOffset: isActive ? 4 : 0,
-                    boxShadow: isActive ? `0 0 24px ${p.color}25` : "none",
+                    borderWidth: isActive ? 2 : 1,
+                    borderStyle: "solid",
+                    borderColor: isActive ? p.color : "#2a2a2a",
+                    boxShadow: isActive ? `0 0 24px ${p.color}20` : "none",
                     background: p.id === "yeetbg" ? "#ffffff" : undefined,
                     transform: isActive ? "scale(1.15)" : "scale(1)",
-                    transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1), outline-color 200ms ease-out, outline-offset 200ms ease-out, outline-width 200ms ease-out, box-shadow 200ms ease-out",
+                    transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1), border-color 200ms ease-out, box-shadow 200ms ease-out",
                   }}
                 >
                   {p.logo ? (
