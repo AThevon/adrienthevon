@@ -39,10 +39,10 @@ export default function WorkBadgeNav() {
               data-project={p.id}
               data-cursor="hover"
               onClick={() => router.push(`/work/${p.id}`)}
-              className="shrink-0"
+              className="shrink-0 group"
             >
               <div
-                className="relative overflow-hidden"
+                className={`relative overflow-hidden ${!isActive ? "group-hover:scale-110 group-hover:brightness-125" : ""}`}
                 style={{
                   width: isActive ? 44 : 32,
                   height: isActive ? 44 : 32,
