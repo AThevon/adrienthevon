@@ -49,14 +49,15 @@ export default function ProjectPage() {
       {/* Badge bar - sticky top */}
       <div className="sticky top-0 z-30 bg-background border-b border-foreground/5">
         <div className="flex items-center justify-center gap-3 px-8 py-4 overflow-x-auto scrollbar-hide max-w-full">
-          {sorted.map((p) => {
+          {sorted.map((p, i) => {
             const isActive = p.id === slug;
             return (
               <button
                 key={p.id}
                 data-cursor="hover"
                 onClick={() => router.push(`/work/${p.id}`)}
-                className="shrink-0"
+                className="shrink-0 sidebar-slide"
+                style={{ animationDelay: `${i * 40}ms` }}
               >
                 <div
                   className="relative overflow-hidden transition-all duration-200"
