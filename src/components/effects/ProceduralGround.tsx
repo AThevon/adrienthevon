@@ -56,13 +56,13 @@ export default function ProceduralGround() {
         vec3 accentDim = vec3(0.15, 0.10, 0.02);         // dark warm
         vec3 accentBright = vec3(1.0, 0.667, 0.0);       // #ffaa00
 
-        // Composite
-        vec3 finalColor = mix(baseColor, accentDim, n * 0.3);
-        finalColor += topoLine * accentBright * depth * 0.15;
+        // Composite - boosted visibility
+        vec3 finalColor = mix(baseColor, accentDim, n * 0.6);
+        finalColor += topoLine * accentBright * depth * 0.4;
 
-        // Horizon fade
+        // Horizon fade (gentler)
         float fade = smoothstep(0.1, -1.0, uv.y);
-        finalColor *= (1.0 - length(uv) * 0.5) * (1.0 - fade);
+        finalColor *= (1.0 - length(uv) * 0.35) * (1.0 - fade);
 
         gl_FragColor = vec4(finalColor, 1.0);
       }
@@ -120,7 +120,7 @@ export default function ProceduralGround() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ filter: "contrast(1.1) brightness(0.85)" }}
+      style={{ filter: "contrast(1.15)" }}
       aria-hidden="true"
     />
   );
