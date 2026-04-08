@@ -114,7 +114,7 @@ export default function About() {
               <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold tracking-tighter leading-[1.1] mb-2 lg:mb-4">
                 {t("tagline")}
               </h2>
-              <p className="text-sm lg:text-base text-muted max-w-md">
+              <p className="text-sm lg:text-base text-muted max-w-md whitespace-pre-line">
                 {t("oneliner")}
               </p>
             </motion.div>
