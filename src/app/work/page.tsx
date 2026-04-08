@@ -20,6 +20,10 @@ const ProjectTimelineMobile = dynamic(
   () => import("@/components/sections/ProjectTimelineMobile"),
   { ssr: false }
 );
+const ProceduralGround = dynamic(
+  () => import("@/components/effects/ProceduralGround"),
+  { ssr: false }
+);
 
 export default function WorkPage() {
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
@@ -73,15 +77,18 @@ export default function WorkPage() {
           </div>
         </>
       ) : (
-        /* Full canvas timeline */
-        <div className="flex-1">
-          <ProjectTimeline
-            scrollProgress={0}
-            activeProjectId={hoveredProjectId}
-            onProjectClick={handleProjectClick}
-            onProjectHover={handleHover}
-            compressed={false}
-          />
+        /* Full canvas timeline with procedural background */
+        <div className="flex-1 relative">
+          <ProceduralGround />
+          <div className="relative z-10 w-full h-full">
+            <ProjectTimeline
+              scrollProgress={0}
+              activeProjectId={hoveredProjectId}
+              onProjectClick={handleProjectClick}
+              onProjectHover={handleHover}
+              compressed={false}
+            />
+          </div>
         </div>
       )}
     </main>
