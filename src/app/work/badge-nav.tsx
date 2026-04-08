@@ -60,7 +60,7 @@ export default function WorkBadgeNav() {
                 }}
               >
                 <div
-                  className={`relative overflow-hidden ${!isActive ? "group-hover:brightness-125" : ""}`}
+                  className={`relative ${!isActive ? "overflow-hidden group-hover:brightness-125" : ""}`}
                   style={{
                     width: 40,
                     height: 40,
