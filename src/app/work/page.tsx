@@ -49,14 +49,16 @@ export default function WorkPage() {
 
   return (
     <main className="h-dvh overflow-hidden">
-      {/* Canvas timeline - shrinks when takeover is open */}
-      <ProjectTimeline
-        scrollProgress={0}
-        activeProjectId={hoveredProjectId || activeProjectId}
-        onProjectClick={handleProjectClick}
-        onProjectHover={handleHover}
-        compressed={isOpen}
-      />
+      {/* Canvas timeline */}
+      <div style={{ height: isOpen ? "15vh" : "100vh", transition: "height 250ms ease-out" }}>
+        <ProjectTimeline
+          scrollProgress={0}
+          activeProjectId={hoveredProjectId || activeProjectId}
+          onProjectClick={handleProjectClick}
+          onProjectHover={handleHover}
+          compressed={isOpen}
+        />
+      </div>
 
       {/* Takeover panel - slides up via CSS transform */}
       <ProjectTakeover

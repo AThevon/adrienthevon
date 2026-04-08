@@ -21,6 +21,8 @@ interface TimelineNode {
   y: number;
   baseX: number;
   baseY: number;
+  vx: number;
+  vy: number;
   projectId: string;
   title: string;
   category: string;
@@ -110,6 +112,8 @@ export default function ProjectTimeline({
         y: baseY,
         baseX,
         baseY,
+        vx: 0,
+        vy: 0,
         projectId: p.id,
         title: p.title,
         category: p.category,
@@ -419,12 +423,32 @@ export default function ProjectTimeline({
         });
       } else {
         // ---------------------------------------------------------------
-        // NORMAL MODE
+        // NORMAL MODE - gentle mouse repulsion + spring return
         // ---------------------------------------------------------------
 
         nodes.forEach((node) => {
-          node.x += (node.baseX - node.x) * 0.12;
-          node.y += (node.baseY - node.y) * 0.12;
+          // Mouse repulsion (gentle, like Journey page)
+          const dx = node.x - mouseRef.current.x;
+          const dy = node.y - mouseRef.current.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const repRadius = 100;
+
+          if (dist < repRadius && dist > 0) {
+            const force = (1 - dist / repRadius) * 0.15;
+            node.vx += (dx / dist) * force;
+            node.vy += (dy / dist) * force;
+          }
+
+          // Spring return to base
+          node.vx += (node.baseX - node.x) * 0.06;
+          node.vy += (node.baseY - node.y) * 0.06;
+
+          // Damping
+          node.vx *= 0.88;
+          node.vy *= 0.88;
+
+          node.x += node.vx;
+          node.y += node.vy;
         });
 
         // Axis
@@ -461,10 +485,12 @@ export default function ProjectTimeline({
           ctx.lineTo(node.x, centerY);
           ctx.stroke();
 
-          drawBadge(node, BADGE, RADIUS, isActive);
+          const badgeSize = isActive ? BADGE + 6 : BADGE;
+          const badgeRadius = isActive ? RADIUS + 2 : RADIUS;
+          drawBadge(node, badgeSize, badgeRadius, isActive);
 
           // Title label
-          const labelY = node.above ? node.y - BADGE / 2 - 14 : node.y + BADGE / 2 + 18;
+          const labelY = node.above ? node.y - badgeSize / 2 - 14 : node.y + badgeSize / 2 + 18;
           ctx.font = isActive ? "bold 13px monospace" : "13px monospace";
           ctx.fillStyle = isActive ? COLORS.foreground : "#888";
           ctx.textAlign = "center";
@@ -499,11 +525,7 @@ export default function ProjectTimeline({
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      style={{
-        width: "100%",
-        height: compressed ? "25vh" : "100vh",
-        transition: "height 0.25s ease-out",
-      }}
+      style={{ width: "100%", height: "100%" }}
     />
   );
 }

@@ -25,7 +25,6 @@ export default function ProjectTakeover({
   const isOpen = projectId !== null;
   const project = projectId ? getProjectById(projectId) : null;
 
-  // Reset iframe opacity when project changes
   useEffect(() => {
     if (iframeRef.current) iframeRef.current.style.opacity = "0";
     if (shimmerRef.current) shimmerRef.current.style.opacity = "1";
@@ -36,7 +35,6 @@ export default function ProjectTakeover({
     if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
   }, []);
 
-  // Scroll to top when project changes
   useEffect(() => {
     if (scrollRef.current && projectId) {
       scrollRef.current.scrollTop = 0;
@@ -53,99 +51,121 @@ export default function ProjectTakeover({
 
   return (
     <div
-      ref={scrollRef}
-      className="fixed bottom-0 left-0 right-0 overflow-y-auto bg-background z-20"
+      className="fixed inset-x-0 bottom-0 z-20"
       style={{
-        height: "75vh",
+        top: "15vh",
         transform: isOpen ? "translateY(0)" : "translateY(100%)",
         transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1)",
       }}
     >
-      <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
-        {/* Header row */}
-        <div className="flex items-center justify-between gap-4">
-          <PanelMeta projectId={projectId!} year={project.year} />
-          <MagneticButton strength={0.15}>
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-4 py-2 text-foreground hover:border-accent hover:text-accent transition-colors"
-            >
-              {ctaText}
-            </a>
-          </MagneticButton>
-        </div>
+      {/* Close button - arrow up */}
+      <div className="flex justify-center -mt-6 mb-0 relative z-10">
+        <button
+          onClick={onClose}
+          className="w-10 h-10 flex items-center justify-center border border-foreground/20 bg-background hover:border-accent hover:text-accent transition-colors"
+          data-cursor="hover"
+          aria-label="Fermer"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        </button>
+      </div>
 
-        {/* Title */}
-        <h2 className="font-display text-4xl md:text-6xl uppercase leading-none">
-          {project.title}
-        </h2>
+      {/* Scrollable content */}
+      <div
+        ref={scrollRef}
+        className="overflow-y-auto bg-background border-t border-foreground/10"
+        style={{ height: "calc(100% + 1.5rem)" }}
+      >
+        <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
+          {/* Header row */}
+          <div className="flex items-center justify-between gap-4">
+            <PanelMeta projectId={projectId!} year={project.year} />
+            <MagneticButton strength={0.15}>
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-4 py-2 text-foreground hover:border-accent hover:text-accent transition-colors"
+              >
+                {ctaText}
+              </a>
+            </MagneticButton>
+          </div>
 
-        {/* Description */}
-        <PanelDescription projectId={projectId!} />
+          {/* Title */}
+          <h2 className="font-display text-4xl md:text-6xl uppercase leading-none">
+            {project.title}
+          </h2>
 
-        {/* Iframe preview */}
-        {!isGithub ? (
-          <div
-            className="relative border border-foreground/10 overflow-hidden"
-            style={{ height: "50vh" }}
-          >
+          {/* Description */}
+          <PanelDescription projectId={projectId!} />
+
+          {/* Iframe preview - 16:9 */}
+          {!isGithub ? (
             <div
-              ref={shimmerRef}
-              className="absolute inset-0 bg-foreground/5"
-              style={{
-                transition: "opacity 500ms ease-out",
-                pointerEvents: "none",
-              }}
-            />
-            <iframe
-              ref={iframeRef}
-              key={projectId}
-              src={iframeSrc}
-              sandbox="allow-scripts allow-same-origin"
-              className="w-full h-full"
-              style={{ opacity: 0, transition: "opacity 500ms ease-out" }}
-              onLoad={handleIframeLoad}
-              title={project.title}
-            />
-          </div>
-        ) : (
-          <div
-            className="border border-foreground/10 flex items-center justify-center"
-            style={{ height: "50vh" }}
-          >
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-sm text-muted hover:text-accent transition-colors uppercase tracking-widest"
+              className="relative border border-foreground/10 overflow-hidden"
+              style={{ aspectRatio: "16 / 9" }}
             >
-              VIEW ON GITHUB →
-            </a>
-          </div>
-        )}
+              <div
+                ref={shimmerRef}
+                className="absolute inset-0 bg-foreground/5"
+                style={{
+                  transition: "opacity 500ms ease-out",
+                  pointerEvents: "none",
+                }}
+              />
+              <iframe
+                ref={iframeRef}
+                key={projectId}
+                src={iframeSrc}
+                sandbox="allow-scripts allow-same-origin"
+                className="w-full h-full"
+                style={{ opacity: 0, transition: "opacity 500ms ease-out" }}
+                onLoad={handleIframeLoad}
+                title={project.title}
+              />
+            </div>
+          ) : (
+            <div
+              className="border border-foreground/10 flex items-center justify-center"
+              style={{ aspectRatio: "16 / 9" }}
+            >
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-sm text-muted hover:text-accent transition-colors uppercase tracking-widest"
+              >
+                VIEW ON GITHUB →
+              </a>
+            </div>
+          )}
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-3 py-1 text-muted hover:border-accent hover:text-accent transition-colors cursor-default"
-            >
-              {tag}
-            </span>
-          ))}
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-3 py-1 text-muted hover:border-accent hover:text-accent transition-colors cursor-default"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Role + Client */}
+          <PanelFooter projectId={projectId!} client={project.client} />
+
+          {/* Bottom padding for scroll */}
+          <div className="h-8" />
         </div>
-
-        {/* Role + Client */}
-        <PanelFooter projectId={projectId!} client={project.client} />
       </div>
     </div>
   );
 }
 
-// Extracted to avoid re-mounting useTranslations on every render
 function PanelMeta({ projectId, year }: { projectId: string; year: string }) {
   const tProject = useTranslations(`projectsData.${toCamelCase(projectId)}`);
   return (
