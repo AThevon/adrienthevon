@@ -2,9 +2,9 @@
 
 :root {
   --background: #0a0a0a;
-  --foreground: #fafafa;
+  --foreground: #e8e8e8;
   --accent: #ffaa00;
-  --muted: #888888;
+  --muted: #666666;
 }
 
 @theme inline {
@@ -12,9 +12,118 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
-  --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-display: var(--font-display);
+}
+
+/* Sidebar entry animations (CSS-only, Strict Mode safe) */
+@keyframes sidebar-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes sidebar-slide-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes sidebar-scale-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+.sidebar-fade { animation: sidebar-fade-in 0.25s ease-out both; }
+.sidebar-slide { animation: sidebar-slide-up 0.25s ease-out both; }
+.sidebar-scale { animation: sidebar-scale-in 0.2s ease-out both; }
+
+/* Project CTA - exceptional button */
+@keyframes cta-glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+@keyframes cta-arrow-slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(4px); }
+}
+.project-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  background: transparent;
+  border: 1px solid rgba(255, 170, 0, 0.25);
+  text-decoration: none;
+  overflow: hidden;
+  transition: all 200ms ease-out;
+}
+.project-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 170, 0, 0.08) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.project-cta::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  animation: cta-glow-pulse 3s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.15), inset 0 0 20px rgba(255, 170, 0, 0.05);
+}
+.project-cta:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.project-cta:hover::before { opacity: 1; }
+.project-cta:hover::after { opacity: 1; }
+.project-cta:hover .cta-arrow {
+  animation: cta-arrow-slide 0.6s ease-out infinite alternate;
+}
+.project-cta .cta-label { position: relative; z-index: 1; }
+.project-cta .cta-arrow {
+  position: relative;
+  z-index: 1;
+  transition: transform 200ms ease-out;
+}
+
+/* Badge parentheses bounce animation */
+@keyframes paren-bounce-left {
+  0% { transform: translateX(6px); opacity: 0; }
+  40% { transform: translateX(-3px); opacity: 1; }
+  70% { transform: translateX(1px); }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes paren-bounce-right {
+  0% { transform: translateX(-6px); opacity: 0; }
+  40% { transform: translateX(3px); opacity: 1; }
+  70% { transform: translateX(-1px); }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.paren-left { animation: paren-bounce-left 0.4s cubic-bezier(0.33, 1, 0.68, 1) both; }
+.paren-right { animation: paren-bounce-right 0.4s cubic-bezier(0.33, 1, 0.68, 1) both; }
+
+/* Work page loaders */
+@keyframes loader-line-sweep {
+  0% { transform: scaleX(0); transform-origin: left; }
+  50% { transform: scaleX(1); transform-origin: left; }
+  50.01% { transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+@keyframes loader-fade-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+@keyframes loader-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
 }
 
 /* Hide cursor on desktop only - custom cursor replaces it */
@@ -54,12 +163,14 @@ html.lenis body {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-mono), ui-monospace, monospace;
   overflow-x: hidden;
-  font-feature-settings: "ss01", "ss02", "cv01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100dvh;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
 /* Mobile-specific fixes */
@@ -73,30 +184,27 @@ body {
   }
 }
 
-/* Typography utilities */
-.font-display {
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-feature-settings: "ss01", "ss02";
-}
-
-/* Heading styles - Use display font for impact */
+/* Display font - Dela Gothic One for titles */
+.font-display,
 h1, h2, .heading-xl {
-  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
+/* Subheadings - mono bold */
 h3, h4, .heading-md {
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-mono), ui-monospace, monospace;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
-/* Mono text with ligatures */
+/* Mono text */
 .font-mono, code, pre {
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-feature-settings: "liga", "calt";
 }
 
 /* Special text treatments */
@@ -143,55 +251,14 @@ h3, h4, .heading-md {
 
 /* Glitch effect */
 @keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
 }
 
 .glitch:hover {
   animation: glitch 0.3s ease infinite;
-}
-
-/* Cinematic gradient text for fallback hero title */
-@keyframes cinematic-sweep {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.cinematic-gradient {
-  background: linear-gradient(
-    135deg,
-    var(--foreground) 0%,
-    var(--foreground) 30%,
-    var(--accent) 50%,
-    var(--foreground) 70%,
-    var(--foreground) 100%
-  );
-  background-size: 200% 200%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: cinematic-sweep 8s ease-in-out infinite;
 }

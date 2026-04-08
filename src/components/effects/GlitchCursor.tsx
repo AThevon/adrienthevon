@@ -26,10 +26,10 @@ const sectionColors: Record<SectionType, string> = {
   hero: COLORS.accent,
   projects: COLORS.foreground,
   about: COLORS.accent,
-  noise: COLORS.secondary.cyan,
+  noise: COLORS.accent,
   contact: COLORS.accent,
   timeline: COLORS.accent,
-  skills: COLORS.secondary.green,
+  skills: COLORS.accent,
   default: COLORS.foreground,
 };
 

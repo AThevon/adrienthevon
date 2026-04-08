@@ -392,41 +392,37 @@ export default function ConstellationTimeline() {
         {activeNode && (
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0, x: 40, filter: "blur(12px)" }}
-            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, x: 30, filter: "blur(8px)" }}
-            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 100%)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
+            exit={{ opacity: 0, clipPath: "inset(0 100% 100% 0)" }}
+            transition={{ duration: 0.25, ease: [0.33, 1, 0.68, 1] }}
             className="absolute top-24 right-8 z-30 w-[380px] pointer-events-auto"
           >
-            {/* Animated gradient border */}
-            <div className="absolute -inset-px rounded-2xl overflow-hidden">
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `conic-gradient(from 0deg, ${activeNode.color}50, transparent 40%, transparent 60%, ${activeNode.color}30, transparent)`,
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-
             {/* Main container */}
-            <div className="relative bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl border border-white/[0.06] overflow-hidden">
-              {/* Header with gradient wash */}
+            <div
+              className="relative bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl overflow-hidden"
+              style={{
+                border: '1px solid',
+                borderImage: `linear-gradient(135deg, ${activeNode.color}33, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.06)) 1`,
+              }}
+            >
+              {/* Top accent line */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[2px]"
+                style={{
+                  background: `linear-gradient(90deg, ${activeNode.color}55, transparent 60%)`,
+                }}
+              />
+
+              {/* Header */}
               <div className="relative px-6 pt-5 pb-4">
-                <div
-                  className="absolute inset-0 opacity-[0.08] rounded-t-2xl"
-                  style={{
-                    background: `radial-gradient(ellipse at 30% 0%, ${activeNode.color}, transparent 70%)`,
-                  }}
-                />
 
                 {/* Step indicator + year */}
                 <motion.div
                   className="relative flex items-center gap-3 mb-4"
-                  initial={{ opacity: 0, y: 6 }}
+                  initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 }}
+                  transition={{ delay: 0.08, duration: 0.2 }}
                 >
                   {/* Step dots */}
                   <div className="flex items-center gap-1.5">
@@ -449,9 +445,9 @@ export default function ConstellationTimeline() {
                   <motion.span
                     className="font-mono text-[11px] font-bold tracking-[0.15em]"
                     style={{ color: activeNode.color }}
-                    initial={{ opacity: 0, x: -8 }}
+                    initial={{ opacity: 0, x: -6 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.08 }}
+                    transition={{ delay: 0.12, duration: 0.2 }}
                   >
                     {activeNode.year}
                   </motion.span>
@@ -460,9 +456,9 @@ export default function ConstellationTimeline() {
                 {/* Title */}
                 <motion.h3
                   className="relative text-xl font-bold tracking-tight leading-snug"
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
+                  transition={{ delay: 0.15, duration: 0.2 }}
                 >
                   {activeNode.title}
                 </motion.h3>
@@ -475,7 +471,7 @@ export default function ConstellationTimeline() {
                   }}
                   initial={{ scaleX: 0, originX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.4, delay: 0.12 }}
+                  transition={{ duration: 0.3, delay: 0.18 }}
                 />
               </div>
 
@@ -483,9 +479,9 @@ export default function ConstellationTimeline() {
               <div className="px-6 pb-5">
                 <motion.p
                   className="text-sm text-white/50 leading-relaxed"
-                  initial={{ opacity: 0, y: 6 }}
+                  initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
+                  transition={{ delay: 0.2, duration: 0.2 }}
                 >
                   {activeNode.description}
                 </motion.p>
@@ -495,7 +491,7 @@ export default function ConstellationTimeline() {
                   className="flex items-center gap-3 mt-5 font-mono text-[10px] text-white/20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
+                  transition={{ delay: 0.25, duration: 0.2 }}
                 >
                   <span>{String(activeIndex + 1).padStart(2, "0")}</span>
                   <div className="flex-1 h-px bg-white/[0.06]" />

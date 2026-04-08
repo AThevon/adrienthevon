@@ -66,8 +66,8 @@ const sectionConfig: Record<SectionType, {
     friction: 0.97,
   },
   noise: {
-    color: COLORS.secondary.cyan,
-    secondaryColor: "#00ff88",
+    color: COLORS.accent,
+    secondaryColor: "#ffcc66",
     maxAge: 70,
     intensity: 0.5,
     particleCount: 50,
@@ -96,8 +96,8 @@ const sectionConfig: Record<SectionType, {
     friction: 0.97,
   },
   skills: {
-    color: COLORS.secondary.green,
-    secondaryColor: "#44ff88",
+    color: COLORS.accent,
+    secondaryColor: "#ffcc66",
     maxAge: 45,
     intensity: 0.3,
     particleCount: 30,

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono, Syne, Major_Mono_Display } from "next/font/google";
+import { Dela_Gothic_One, Space_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
@@ -10,35 +10,19 @@ import PageTransition from "@/components/navigation/PageTransition";
 import CursorWrapper from "@/components/effects/CursorWrapper";
 import { PageTransitionProvider } from "@/hooks/usePageTransition";
 
-// Primary sans-serif - Bold geometric font for headings
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Monospace - Premium coding font for technical elements
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Display font - Expressive font for special accents
-const syne = Syne({
+// Display - Thick Japanese/brutal style for titles
+const delaGothicOne = Dela_Gothic_One({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400"],
   display: "swap",
 });
 
-// Particle hero font - Monospace display
-const majorMonoDisplay = Major_Mono_Display({
-  variable: "--font-particle",
+// Mono - Retro-futuristic monospace for body + labels + everything else
+const spaceMono = Space_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -110,7 +94,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${syne.variable} ${majorMonoDisplay.variable} antialiased grain`}
+        className={`${delaGothicOne.variable} ${spaceMono.variable} antialiased grain`}
       >
         <NextIntlClientProvider messages={messages}>
           <PageTransitionProvider>

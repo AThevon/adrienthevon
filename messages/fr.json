@@ -73,6 +73,7 @@
     "loading": "CHARGEMENT DU RÉSEAU...",
     "clickNode": "Cliquez sur un node → Voir les projets",
     "tapNode": "Touchez un node → Voir les projets",
+    "expandSheet": "Glissez vers le haut",
     "hoverExplore": "Survolez → Explorer les connexions",
     "projectsUsing": "PROJETS UTILISANT CETTE COMPÉTENCE",
     "projectCount": "{count} projet",
@@ -148,15 +149,15 @@
   "about": {
     "sectionNumber": "005",
     "title": "À PROPOS",
-    "tagline": "Obsédé par les détails qui font la diff.",
-    "oneliner": "Dev créatif basé à Toulouse. Je build des trucs qui ont du caractère.",
+    "tagline": "Le genre de dev qui passe 2h sur un hover",
+    "oneliner": "Basé à Toulouse\nJe fais du web, du CLI, du natif - tant que c'est fun à construire et agréable à utiliser",
     "techStack": "STACK TECHNIQUE",
     "stats": {
       "years": "ANNÉES D'XP",
       "yearsHidden": "à demander à Claude",
       "projects": "PROJETS LIVRÉS",
       "projectsHidden": "onglets ChatGPT ouverts",
-      "coffees": "CAFÉS BUS",
+      "coffees": "TABS OUVERTS",
       "coffeesHidden": "toujours vrai"
     },
     "cta": "ME CONTACTER",
@@ -300,31 +301,6 @@
         }
       }
     },
-    "depenseMan": {
-      "category": "WEB APP",
-      "description": "Application de gestion de finances personnelles simple et efficace.",
-      "longDescription": "Dépense Man est une application web progressive (PWA) pour gérer ses finances mensuelles de manière simple et intuitive. Pas de complexité inutile, juste les fonctionnalités essentielles pour suivre ses dépenses.\n\nUne approche minimaliste du budget personnel, accessible sur tous les appareils avec une interface claire et des visualisations pertinentes.",
-      "role": "DÉVELOPPEUR FULL-STACK",
-      "client": "PROJET PERSO",
-      "sections": {
-        "intro": {
-          "title": "LE BESOIN",
-          "content": "Une app de budget sans la complexité des solutions bancaires. Simple, rapide, efficace."
-        },
-        "challenge": {
-          "title": "LE DÉFI",
-          "content": "Rendre la gestion de budget agréable. Créer une interface qui donne envie d'être utilisée régulièrement."
-        },
-        "process": {
-          "title": "LE PROCESS",
-          "content": "PWA pour l'accès offline. Interface épurée. Visualisations claires des dépenses. Catégorisation intelligente."
-        },
-        "result": {
-          "title": "LE RÉSULTAT",
-          "content": "Une app que j'utilise au quotidien pour gérer mes finances. Simple, mais qui fait exactement ce qu'on lui demande."
-        }
-      }
-    },
     "linekut": {
       "category": "OUTIL CRÉATIF",
       "description": "Convertisseur d'images en patrons découpables pour scie à chantourner, laser et vinyl.",
@@ -375,10 +351,10 @@
         }
       }
     },
-    "wt": {
+    "worktigre": {
       "category": "OUTIL CLI",
-      "description": "Git worktree manager avec intégration GitHub CLI, fzf et Claude AI.",
-      "longDescription": "WT (Worktree Tiger) est un outil CLI qui simplifie radicalement la gestion des branches Git via les worktrees.\nFini le jonglage entre les branches comme un numéro de cirque.\n\nL'outil intègre GitHub CLI pour gérer les PRs et issues, fzf pour la navigation fuzzy, et Claude AI pour l'assistance intelligente (fix CI, review PRs, résolution de problèmes).",
+      "description": "Git worktree manager interactif avec intégration GitHub CLI, fzf et Claude AI.",
+      "longDescription": "WorkTigre simplifie radicalement la gestion des branches Git via les worktrees. Un seul outil pour naviguer, créer, supprimer et switcher entre tes worktrees.\n\nIntégration GitHub CLI pour les PRs et issues, fzf pour la navigation fuzzy, et Claude AI pour l'assistance intelligente. Fix CI, review PRs, résolution de problèmes - le tout depuis le terminal.",
       "role": "CRÉATEUR & DÉVELOPPEUR",
       "client": "OPEN SOURCE",
       "sections": {
@@ -396,7 +372,132 @@
         },
         "result": {
           "title": "LE RÉSULTAT",
-          "content": "Un outil open source distribué via Homebrew qui transforme la gestion des worktrees en jeu d'enfant."
+          "content": "Un outil open source distribué via Homebrew, Nix et script universel. Utilisé au quotidien pour gérer des dizaines de worktrees."
+        }
+      }
+    },
+    "tokeneater": {
+      "category": "APP MACOS",
+      "description": "App native macOS pour surveiller ta consommation Claude AI en temps réel.",
+      "longDescription": "TokenEater vit dans ta menu bar et surveille ton utilisation de Claude AI. Pourcentages live, seuils colorés, widgets natifs WidgetKit, et un overlay flottant qui montre tes sessions Claude Code actives.\n\nSmart pacing pour savoir si tu brûles tes tokens ou si tu cruises. Clic sur une session dans l'overlay pour sauter directement au bon terminal.",
+      "role": "CRÉATEUR & DÉVELOPPEUR",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "LE BESOIN",
+          "content": "Savoir en temps réel combien de tokens il me reste sur Claude. Sans ouvrir le navigateur, sans interrompre le flow."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Créer une app macOS native performante avec menu bar, widgets WidgetKit, et un overlay flottant. Le tout en Swift pur."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "SwiftUI pour l'UI, WidgetKit pour les widgets desktop, scraping intelligent de l'API Claude. Distribution via DMG et Homebrew."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Une app que j'utilise toute la journée. Menu bar discrète, widgets sur le bureau, overlay qui me montre mes sessions actives."
+        }
+      }
+    },
+    "pix2paint": {
+      "category": "IMAGE PROCESSING",
+      "description": "Transforme n'importe quelle image en grille paint-by-numbers. 100% navigateur.",
+      "longDescription": "Drop ton image, ajuste les paramètres, récupère une grille numérotée prête à peindre. Deux modes : pixel classique et smooth avec contours organiques.\n\nQuantification de couleurs (max 20), numérotation par région, export PNG. Tout le traitement tourne dans un Web Worker, zéro lag UI. Persistence IndexedDB pour reprendre où tu en étais.",
+      "role": "CRÉATEUR & DÉVELOPPEUR",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "L'IDÉE",
+          "content": "Transformer une photo en grille paint-by-numbers en quelques clics. Gratuit, sans compte, 100% dans le navigateur."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Traitement d'image lourd côté client sans bloquer l'UI. Quantification de couleurs précise et contours organiques."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Vite + TypeScript vanilla, zéro framework. Web Worker pour le processing, Canvas 2D pour le rendu, IndexedDB pour la persistence."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un outil fluide qui transforme n'importe quelle image en grille prête à peindre. Export PNG haute résolution."
+        }
+      }
+    },
+    "yeetbg": {
+      "category": "IMAGE PROCESSING",
+      "description": "Background removal par IA + éditeur de couleurs interactif. Zéro serveur.",
+      "longDescription": "Drop une image, l'IA retire le fond, tu recolores ce que tu veux. Segmentation ONNX dans un Web Worker pour zéro lag. Clustering K-means++ en espace Lab pour regrouper les couleurs similaires.\n\nÉditeur interactif : clique sur le canvas ou la palette pour supprimer des couleurs. Recolore individuellement. Export PNG, JPG ou WebP. Undo/redo complet.",
+      "role": "CRÉATEUR & DÉVELOPPEUR",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "L'IDÉE",
+          "content": "Supprimer le fond d'une image et recolorer les zones restantes. Le tout dans le navigateur, sans upload."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Faire tourner un modèle IA (ONNX) côté client sans exploser les perfs. Clustering de couleurs précis en espace Lab."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Vite + TypeScript vanilla. @imgly/background-removal dans un Web Worker. K-means++ pour le clustering. Design brutaliste noir/blanc."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un outil rapide et privacy-first. Drop, remove, recolor, export. Rien ne quitte ton navigateur."
+        }
+      }
+    },
+    "nixdash": {
+      "category": "CLI / TUI",
+      "description": "Interface terminal interactive pour gérer tes packages Nix.",
+      "longDescription": "NixDash donne une interface humaine à Nix. Browse tes packages installés, recherche fuzzy dans 177k+ nixpkgs, installe ou supprime avec preview de diff.\n\nShells temporaires pour tester un package avant de l'installer. Gestion de flakes externes. Raccourcis clavier pour tout. Compatible Home Manager, NixOS et tout setup Nix flake.",
+      "role": "CRÉATEUR & DÉVELOPPEUR",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "L'IDÉE",
+          "content": "Rendre Nix accessible. Un TUI interactif qui remplace les commandes cryptiques par une expérience fluide."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Parser l'écosystème Nix (177k+ packages) et offrir une recherche fuzzy rapide. Gérer les différents setups (Home Manager, NixOS)."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "100% Shell avec fzf, gum et jq. Nix flake pour la distribution. Preview de diff avant chaque changement."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un hub interactif pour Nix. Browse, search, install, shell temporaire - tout en quelques touches."
+        }
+      }
+    },
+    "envora": {
+      "category": "OUTIL SÉCURITÉ",
+      "description": "Vault chiffré pour tes .env. Push/pull entre machines, chiffrement age.",
+      "longDescription": "Tes .env contiennent des secrets qui ne peuvent pas aller dans git. Mais ils doivent exister sur chaque machine. Envora les stocke dans un repo git privé, chiffrés avec age.\n\nUne clé age, stockée dans ton password manager, déverrouille tout le vault. Push chiffre et stocke, pull déchiffre et restaure. Même si le repo est compromis, tes secrets restent safe.",
+      "role": "CRÉATEUR & DÉVELOPPEUR",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "LE PROBLÈME",
+          "content": "Les .env ne vont pas dans git. Mais tu bosses sur 3 machines. Envora résout ce dilemme avec du chiffrement."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Chiffrement transparent, zéro friction. Une seule clé pour tout débloquer. Cross-platform (macOS, Linux, WSL)."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Shell + age encryption + git comme transport. Nix flake pour la distribution. Interface fzf/gum pour la sélection."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "ev push, ev pull. Deux commandes. Tous tes secrets synchronisés et chiffrés."
         }
       }
     }

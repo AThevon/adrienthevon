@@ -211,6 +211,15 @@ export default function NeuralNetwork2D() {
       });
       hoveredNodeRef.current = currentHovered;
 
+      // Toggle data-cursor for custom cursor accent on node hover
+      if (canvas) {
+        if (currentHovered) {
+          canvas.setAttribute("data-cursor", "hover");
+        } else {
+          canvas.removeAttribute("data-cursor");
+        }
+      }
+
       // Update node positions based on mode
       if (selectedSkillId) {
         // FOCUS MODE: Selected node in center, connected in orbit, others fade
@@ -442,7 +451,7 @@ export default function NeuralNetwork2D() {
         if ((isHovered || isSelected) && !isFaded) {
           ctx.save();
           ctx.globalAlpha = opacity;
-          ctx.font = "12px 'Geist Mono', monospace";
+          ctx.font = "14px 'Geist Mono', monospace";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
           ctx.textBaseline = "top";
@@ -552,29 +561,24 @@ export default function NeuralNetwork2D() {
             transition={{ type: "spring", damping: 28, stiffness: 220 }}
             className="fixed top-28 right-6 w-[340px] max-h-[calc(100dvh-140px)] z-20 pointer-events-auto"
           >
-            {/* Animated gradient border */}
-            <div className="absolute -inset-px rounded-2xl overflow-hidden">
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `conic-gradient(from 0deg, ${selectedSkill.color}40, transparent 40%, transparent 60%, ${selectedSkill.color}25, transparent)`,
-                }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-
             {/* Main container */}
-            <div className="relative h-full bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl border border-white/[0.06] flex flex-col overflow-hidden">
+            <div
+              className="relative h-full bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl flex flex-col overflow-hidden"
+              style={{
+                border: '1px solid',
+                borderImage: `linear-gradient(135deg, ${selectedSkill.color}33, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.06)) 1`,
+              }}
+            >
+              {/* Top accent line */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[2px]"
+                style={{
+                  background: `linear-gradient(90deg, ${selectedSkill.color}55, transparent 60%)`,
+                }}
+              />
+
               {/* Header */}
               <div className="relative p-5 pb-4 shrink-0">
-                {/* Subtle gradient wash */}
-                <div
-                  className="absolute inset-0 opacity-[0.07] rounded-t-2xl"
-                  style={{
-                    background: `radial-gradient(ellipse at 30% 0%, ${selectedSkill.color}, transparent 70%)`,
-                  }}
-                />
 
                 {/* Close */}
                 <button
@@ -589,12 +593,9 @@ export default function NeuralNetwork2D() {
 
                 {/* Skill identity */}
                 <div className="relative flex items-center gap-3.5">
-                  <motion.div
-                    className="relative w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: `${selectedSkill.color}12` }}
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", damping: 15, stiffness: 300, delay: 0.05 }}
+                  <div
+                    className="relative w-12 h-12 rounded-xl flex items-center justify-center shrink-0 sidebar-scale"
+                    style={{ backgroundColor: `${selectedSkill.color}12`, animationDelay: "50ms", animationFillMode: "backwards" }}
                   >
                     {/* Breathing ring */}
                     <motion.div
@@ -609,55 +610,60 @@ export default function NeuralNetwork2D() {
                       className="w-6 h-6"
                       style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }}
                     />
-                  </motion.div>
+                  </div>
 
                   <div className="min-w-0">
-                    <motion.div
-                      className="font-mono text-[10px] uppercase tracking-[0.15em] mb-0.5"
-                      style={{ color: `${selectedSkill.color}99` }}
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 }}
+                    <div
+                      className="font-mono text-[10px] uppercase tracking-[0.15em] mb-0.5 sidebar-slide"
+                      style={{ color: `${selectedSkill.color}99`, animationDelay: "100ms", animationFillMode: "backwards" }}
                     >
                       {t(`categories.${selectedSkill.category}`)}
-                    </motion.div>
-                    <motion.h3
-                      className="text-lg font-bold tracking-tight leading-tight"
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.12 }}
+                    </div>
+                    <h3
+                      className="text-lg font-bold tracking-tight leading-tight sidebar-slide"
+                      style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
                     >
                       {selectedSkill.name}
-                    </motion.h3>
+                    </h3>
                   </div>
                 </div>
 
-                {/* Connections count */}
-                {selectedSkill.connections && selectedSkill.connections.length > 0 && (
-                  <motion.div
-                    className="flex items-center gap-2 mt-3.5 font-mono text-[10px] text-white/30"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <circle cx="3" cy="3" r="1.5" stroke="currentColor" strokeWidth="1" />
-                      <circle cx="9" cy="9" r="1.5" stroke="currentColor" strokeWidth="1" />
-                      <path d="M4.2 4.2L7.8 7.8" stroke="currentColor" strokeWidth="1" strokeDasharray="2 1" />
-                    </svg>
-                    <span>{selectedSkill.connections.length} connections</span>
-                  </motion.div>
-                )}
+                {/* Connections count - bidirectional, only visible nodes */}
+                {(() => {
+                  const visibleIds = new Set(Array.from(nodesRef.current.keys()));
+                  const connectedIds = new Set<string>();
+                  // Outgoing: this skill declares connection to X
+                  selectedSkill.connections.forEach(id => { if (visibleIds.has(id)) connectedIds.add(id); });
+                  // Incoming: X declares connection to this skill
+                  nodesRef.current.forEach((node, id) => {
+                    if (id !== selectedSkill.id && node.skill.connections.includes(selectedSkill.id)) {
+                      connectedIds.add(id);
+                    }
+                  });
+                  const visibleCount = connectedIds.size;
+                  return visibleCount > 0 ? (
+                    <div
+                      className="flex items-center gap-2 mt-3.5 font-mono text-[10px] text-white/30 sidebar-fade"
+                      style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="3" cy="3" r="1.5" stroke="currentColor" strokeWidth="1" />
+                        <circle cx="9" cy="9" r="1.5" stroke="currentColor" strokeWidth="1" />
+                        <path d="M4.2 4.2L7.8 7.8" stroke="currentColor" strokeWidth="1" strokeDasharray="2 1" />
+                      </svg>
+                      <span>{visibleCount} connections</span>
+                    </div>
+                  ) : null;
+                })()}
 
                 {/* Divider */}
-                <motion.div
-                  className="mt-4 h-px"
+                <div
+                  className="mt-4 h-px origin-left sidebar-fade"
                   style={{
                     background: `linear-gradient(90deg, ${selectedSkill.color}30, transparent)`,
+                    animationDelay: "150ms",
+                    animationFillMode: "backwards",
                   }}
-                  initial={{ scaleX: 0, originX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.4, delay: 0.15 }}
                 />
               </div>
 
@@ -667,17 +673,15 @@ export default function NeuralNetwork2D() {
                 style={{ overscrollBehavior: 'contain' }}
                 onWheel={(e) => e.stopPropagation()}
               >
-                <motion.div
-                  className="font-mono text-[10px] text-white/25 uppercase tracking-[0.2em] mb-3"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
+                <div
+                  className="font-mono text-[10px] text-white/25 uppercase tracking-[0.2em] mb-3 sidebar-fade"
+                  style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
                 >
                   {selectedSkill.projectIds.length > 1
                     ? t("projectCount_plural", { count: selectedSkill.projectIds.length })
                     : t("projectCount", { count: selectedSkill.projectIds.length })
                   }
-                </motion.div>
+                </div>
 
                 <div className="space-y-2">
                   {selectedSkill.projectIds.map((projectId, index) => {
@@ -685,13 +689,11 @@ export default function NeuralNetwork2D() {
                     if (!project) return null;
 
                     return (
-                      <motion.a
+                      <a
                         key={projectId}
-                        href={`/work/${projectId}`}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15 + index * 0.06, type: "spring", damping: 20, stiffness: 200 }}
-                        className="group relative block p-4 rounded-xl border border-white/[0.04] hover:border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 cursor-pointer overflow-hidden"
+                        href="/work"
+                        className="group relative block p-4 rounded-xl border border-white/[0.04] hover:border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 cursor-pointer overflow-hidden sidebar-slide"
+                        style={{ animationDelay: `${150 + index * 60}ms`, animationFillMode: "backwards" }}
                         data-cursor="hover"
                       >
                         {/* Hover shimmer */}
@@ -749,7 +751,7 @@ export default function NeuralNetwork2D() {
                             {tProject(`${kebabToCamel(projectId)}.category`)}
                           </span>
                         </div>
-                      </motion.a>
+                      </a>
                     );
                   })}
                 </div>
