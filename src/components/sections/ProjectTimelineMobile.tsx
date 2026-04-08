@@ -123,7 +123,7 @@ export default function ProjectTimelineMobile() {
   let globalIndex = 0;
 
   return (
-    <div className="relative px-6 py-8">
+    <div className="relative px-6 pt-28 pb-8">
       {/* Vertical axis line */}
       <div className="absolute left-6 top-0 bottom-0 w-px bg-foreground/10" />
 

@@ -75,6 +75,7 @@ export default function ProjectTimeline({
   const dimensionsRef = useRef({ width: 0, height: 0 });
   const activeIdRef = useRef<string | null>(activeProjectId);
   const compressedRef = useRef(compressed);
+  const mountTimeRef = useRef(performance.now());
 
   useEffect(() => {
     activeIdRef.current = activeProjectId;
@@ -444,8 +445,10 @@ export default function ProjectTimeline({
         });
       } else {
         // ---------------------------------------------------------------
-        // NORMAL MODE - gentle mouse repulsion + spring return
+        // NORMAL MODE - stagger entrance + gentle mouse repulsion
         // ---------------------------------------------------------------
+
+        const elapsed = (performance.now() - mountTimeRef.current) / 1000;
 
         nodes.forEach((node) => {
           // Mouse repulsion (gentle, like Journey page)
@@ -517,8 +520,16 @@ export default function ProjectTimeline({
         nodes.forEach((node, i) => {
           const isActive = node.projectId === activeId;
 
-          // Point on diagonal for this node (equal spacing, reversed)
+          // Stagger entrance: oldest first (reversed index)
           const ri = nn - 1 - i;
+          const staggerDelay = ri * 0.06;
+          const nodeAge = elapsed - staggerDelay;
+          const staggerAlpha = Math.max(0, Math.min(1, nodeAge / 0.35));
+
+          if (staggerAlpha <= 0) return;
+          ctx.globalAlpha = staggerAlpha;
+
+          // Point on diagonal for this node (equal spacing, reversed)
           const t = nn > 1 ? ri / (nn - 1) : 0.5;
           const diagPtX = dsx + t * ddx;
           const diagPtY = dsy + t * ddy;
@@ -559,6 +570,8 @@ export default function ProjectTimeline({
           ctx.font = "10px monospace";
           ctx.fillStyle = "#444";
           ctx.fillText(node.category, node.x + labelOffX, node.y + labelOffY + 14 * side);
+
+          ctx.globalAlpha = 1;
         });
       }
 

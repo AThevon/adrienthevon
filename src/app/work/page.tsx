@@ -8,6 +8,10 @@ const ProjectTimeline = dynamic(
   () => import("@/components/sections/ProjectTimeline"),
   { ssr: false }
 );
+const ProjectBadgeBar = dynamic(
+  () => import("@/components/sections/ProjectBadgeBar"),
+  { ssr: false }
+);
 const ProjectTakeover = dynamic(
   () => import("@/components/sections/ProjectTakeover"),
   { ssr: false }
@@ -48,23 +52,38 @@ export default function WorkPage() {
   const isOpen = activeProjectId !== null;
 
   return (
-    <main className="h-dvh overflow-hidden">
-      {/* Canvas timeline */}
-      <div style={{ height: isOpen ? "15vh" : "100vh", transition: "height 250ms ease-out" }}>
-        <ProjectTimeline
-          scrollProgress={0}
-          activeProjectId={hoveredProjectId || activeProjectId}
-          onProjectClick={handleProjectClick}
-          onProjectHover={handleHover}
-          compressed={isOpen}
-        />
-      </div>
+    <main className="h-dvh overflow-hidden flex flex-col">
+      {isOpen ? (
+        <>
+          {/* Badge bar replaces canvas when a project is open */}
+          <div className="shrink-0" style={{ height: "15vh" }}>
+            <ProjectBadgeBar
+              activeProjectId={activeProjectId}
+              onProjectClick={handleProjectClick}
+              onClose={handleClose}
+            />
+          </div>
 
-      {/* Takeover panel - slides up via CSS transform */}
-      <ProjectTakeover
-        projectId={activeProjectId}
-        onClose={handleClose}
-      />
+          {/* Detail panel fills the rest */}
+          <div className="flex-1 overflow-y-auto">
+            <ProjectTakeover
+              projectId={activeProjectId}
+              onClose={handleClose}
+            />
+          </div>
+        </>
+      ) : (
+        /* Full canvas timeline */
+        <div className="flex-1">
+          <ProjectTimeline
+            scrollProgress={0}
+            activeProjectId={hoveredProjectId}
+            onProjectClick={handleProjectClick}
+            onProjectHover={handleHover}
+            compressed={false}
+          />
+        </div>
+      )}
     </main>
   );
 }
