@@ -25,7 +25,7 @@ export default function WorkBadgeNav() {
 
   return (
     <div className="sticky top-0 z-40 bg-background/90 backdrop-blur-sm">
-      <div className="flex items-center gap-4 px-6 md:px-12 pt-20 pb-4">
+      <div className="flex items-center gap-4 px-6 md:px-12 pt-20 pb-6">
         {/* Back button - matches header style */}
         <button
           onClick={() => router.push("/work")}
@@ -42,7 +42,7 @@ export default function WorkBadgeNav() {
         {/* Badges */}
         <div
           ref={scrollRef}
-          className="flex items-center gap-3 overflow-x-auto scrollbar-hide flex-1"
+          className="flex items-center gap-3 overflow-x-auto overflow-y-visible scrollbar-hide flex-1"
         >
           {sorted.map((p) => {
             const isActive = p.id === slug;
