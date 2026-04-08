@@ -79,7 +79,7 @@ function MenuCell({
 
       {/* Label */}
       <span
-        className={`text-2xl md:text-4xl ${span ? "lg:text-5xl" : "lg:text-4xl"} tracking-tight transition-colors duration-150`}
+        className={`text-base md:text-4xl ${span ? "lg:text-5xl" : "lg:text-4xl"} tracking-tight transition-colors duration-150`}
         style={{
           fontFamily: "var(--font-display)",
           color: active ? "#ffaa00" : "#888",
