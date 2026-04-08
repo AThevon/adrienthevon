@@ -39,9 +39,9 @@ export default function ProjectPage() {
   const ctaLabel = isGithub ? "VIEW ON GITHUB" : "VIEW WEBSITE";
 
   return (
-    <div key={slug} className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
+    <div key={slug} className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto sidebar-fade" style={{ animationDuration: "300ms" }}>
       {/* Header */}
-      <div className="flex items-center justify-between gap-4 sidebar-slide" style={{ animationDelay: "0ms" }}>
+      <div className="flex items-center justify-between gap-4">
         <ProjectMeta slug={slug} year={project.year} />
         <a
           href={project.link}
@@ -58,17 +58,15 @@ export default function ProjectPage() {
       </div>
 
       {/* Title */}
-      <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none sidebar-slide" style={{ animationDelay: "60ms" }}>
+      <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none">
         {project.title}
       </h1>
 
       {/* Description */}
-      <div className="sidebar-slide" style={{ animationDelay: "120ms" }}>
-        <ProjectDescription slug={slug} />
-      </div>
+      <ProjectDescription slug={slug} />
 
       {/* Preview */}
-      <div className="sidebar-fade" style={{ animationDelay: "180ms" }}>
+      <div>
         {!isGithub ? (
           <div
             className="relative border border-foreground/10 overflow-hidden"
@@ -103,7 +101,7 @@ export default function ProjectPage() {
       </div>
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-2 sidebar-slide" style={{ animationDelay: "240ms" }}>
+      <div className="flex flex-wrap gap-2">
         {project.tags.map((tag) => (
           <span
             key={tag}
@@ -115,7 +113,7 @@ export default function ProjectPage() {
       </div>
 
       {/* Role + Client */}
-      <div className="sidebar-slide" style={{ animationDelay: "300ms" }}>
+      <div>
         <ProjectFooter slug={slug} client={project.client} />
       </div>
 
