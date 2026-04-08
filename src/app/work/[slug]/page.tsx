@@ -39,7 +39,7 @@ export default function ProjectPage() {
   const ctaLabel = isGithub ? "VIEW ON GITHUB" : "VIEW WEBSITE";
 
   return (
-    <div key={slug} className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto sidebar-fade" style={{ animationDuration: "300ms" }}>
+    <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <ProjectMeta slug={slug} year={project.year} />
