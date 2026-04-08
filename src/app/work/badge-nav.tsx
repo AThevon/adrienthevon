@@ -55,17 +55,18 @@ export default function WorkBadgeNav() {
                 className="shrink-0 group"
               >
                 <div
-                  className={`relative overflow-hidden ${!isActive ? "group-hover:scale-110 group-hover:brightness-125" : ""}`}
+                  className={`relative overflow-hidden ${!isActive ? "group-hover:brightness-125" : ""}`}
                   style={{
-                    width: isActive ? 48 : 38,
-                    height: isActive ? 48 : 38,
-                    borderRadius: isActive ? 14 : 10,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 10,
                     borderWidth: isActive ? 2 : 1,
                     borderStyle: "solid",
                     borderColor: isActive ? p.color : "#2a2a2a",
                     boxShadow: isActive ? `0 0 24px ${p.color}25` : "none",
                     background: p.id === "yeetbg" ? "#ffffff" : undefined,
-                    transition: "all 250ms cubic-bezier(0.33, 1, 0.68, 1)",
+                    transform: isActive ? "scale(1.15)" : "scale(1)",
+                    transition: "transform 250ms cubic-bezier(0.33, 1, 0.68, 1), border-color 200ms ease-out, box-shadow 200ms ease-out",
                   }}
                 >
                   {p.logo ? (
