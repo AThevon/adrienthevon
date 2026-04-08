@@ -93,19 +93,38 @@ export default function ProjectTimeline({
     const maxT = Math.max(...timestamps);
     const range = maxT - minT || 1;
 
-    const padX = width * 0.08;
-    const usableW = width - padX * 2;
-    const centerY = height / 2;
+    // Diagonal from top-left to bottom-right
+    const marginX = width * 0.12;
+    const marginY = height * 0.12;
+    const diagStartX = marginX;
+    const diagStartY = marginY;
+    const diagEndX = width - marginX;
+    const diagEndY = height - marginY;
 
     // Preserve loaded logo images if nodes already exist
     const existingLogos = new Map<string, HTMLImageElement | null>();
     nodesRef.current.forEach((n) => existingLogos.set(n.projectId, n.logoImage));
 
+    const n = projects.length;
+    const BADGE_OFFSET = 60; // perpendicular offset from diagonal
+
+    // Diagonal direction and perpendicular
+    const diagDx = diagEndX - diagStartX;
+    const diagDy = diagEndY - diagStartY;
+    const diagLen = Math.sqrt(diagDx * diagDx + diagDy * diagDy);
+    const perpX = -diagDy / diagLen; // perpendicular unit vector
+    const perpY = diagDx / diagLen;
+
     const nodes: TimelineNode[] = projects.map((p, i) => {
-      const fraction = (dateToTimestamp(p.date) - minT) / range;
-      const baseX = padX + fraction * usableW;
-      const above = i % 2 === 0;
-      const baseY = centerY + (above ? -80 : 80);
+      // Equal spacing along diagonal
+      const t = n > 1 ? i / (n - 1) : 0.5;
+      const diagX = diagStartX + t * diagDx;
+      const diagY = diagStartY + t * diagDy;
+
+      // Alternate offset above/below diagonal
+      const side = i % 2 === 0 ? 1 : -1;
+      const baseX = diagX + perpX * BADGE_OFFSET * side;
+      const baseY = diagY + perpY * BADGE_OFFSET * side;
 
       return {
         x: baseX,
@@ -119,7 +138,7 @@ export default function ProjectTimeline({
         category: p.category,
         date: p.date,
         color: p.color,
-        above,
+        above: i % 2 === 0,
         logoImage: existingLogos.get(p.id) ?? null,
       };
     });
@@ -451,57 +470,92 @@ export default function ProjectTimeline({
           node.y += node.vy;
         });
 
-        // Axis
+        // Diagonal axis geometry
+        const marginX = width * 0.12;
+        const marginY = height * 0.12;
+        const dsx = marginX;
+        const dsy = marginY;
+        const dex = width - marginX;
+        const dey = height - marginY;
+        const ddx = dex - dsx;
+        const ddy = dey - dsy;
+
+        // Draw diagonal axis
         ctx.strokeStyle = "#1a1a1a";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(padX, centerY);
-        ctx.lineTo(width - padX, centerY);
+        ctx.moveTo(dsx, dsy);
+        ctx.lineTo(dex, dey);
         ctx.stroke();
 
-        // Year markers
+        // Year markers on diagonal (proportional to dates)
         yearMarkers.forEach(({ year, fraction }) => {
-          const x = padX + Math.max(0, Math.min(1, fraction)) * usableW;
+          const f = Math.max(0, Math.min(1, fraction));
+          const mx = dsx + f * ddx;
+          const my = dsy + f * ddy;
+
           ctx.beginPath();
-          ctx.arc(x, centerY, 3, 0, Math.PI * 2);
+          ctx.arc(mx, my, 3, 0, Math.PI * 2);
           ctx.fillStyle = COLORS.accent;
           ctx.fill();
+
+          // Label offset perpendicular to diagonal
+          const diagLen = Math.sqrt(ddx * ddx + ddy * ddy);
+          const px = -ddy / diagLen;
+          const py = ddx / diagLen;
           ctx.font = "11px monospace";
           ctx.fillStyle = COLORS.accent;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(year, x, centerY + 18);
+          ctx.fillText(year, mx + px * 20, my + py * 20);
         });
 
-        // Nodes
-        nodes.forEach((node) => {
+        // Nodes - connecting line to nearest point on diagonal + badge
+        const nn = nodes.length;
+        nodes.forEach((node, i) => {
           const isActive = node.projectId === activeId;
 
-          // Connecting line to axis
-          ctx.strokeStyle = isActive ? node.color + "30" : "#1a1a1a";
+          // Point on diagonal for this node (equal spacing)
+          const t = nn > 1 ? i / (nn - 1) : 0.5;
+          const diagPtX = dsx + t * ddx;
+          const diagPtY = dsy + t * ddy;
+
+          // Connecting line from badge to diagonal point
+          ctx.strokeStyle = isActive ? node.color + "40" : "#1a1a1a";
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
-          ctx.lineTo(node.x, centerY);
+          ctx.lineTo(diagPtX, diagPtY);
           ctx.stroke();
+
+          // Small dot on diagonal at connection point
+          ctx.beginPath();
+          ctx.arc(diagPtX, diagPtY, 2, 0, Math.PI * 2);
+          ctx.fillStyle = isActive ? node.color : "#333";
+          ctx.fill();
 
           const badgeSize = isActive ? BADGE + 6 : BADGE;
           const badgeRadius = isActive ? RADIUS + 2 : RADIUS;
           drawBadge(node, badgeSize, badgeRadius, isActive);
 
-          // Title label
-          const labelY = node.above ? node.y - badgeSize / 2 - 14 : node.y + badgeSize / 2 + 18;
+          // Title label (offset further from diagonal than badge)
+          const diagLenFull = Math.sqrt(ddx * ddx + ddy * ddy);
+          const perpXn = -ddy / diagLenFull;
+          const perpYn = ddx / diagLenFull;
+          const side = i % 2 === 0 ? 1 : -1;
+          const labelOffX = perpXn * (side > 0 ? 28 : -28);
+          const labelOffY = perpYn * (side > 0 ? 28 : -28);
+
           ctx.font = isActive ? "bold 13px monospace" : "13px monospace";
           ctx.fillStyle = isActive ? COLORS.foreground : "#888";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(node.title, node.x, labelY);
+          ctx.fillText(node.title, node.x + labelOffX, node.y + labelOffY);
 
           // Category
-          const catY = node.above ? labelY - 16 : labelY + 16;
           ctx.font = "10px monospace";
           ctx.fillStyle = "#444";
-          ctx.fillText(node.category, node.x, catY);
+          ctx.fillText(node.category, node.x + labelOffX, node.y + labelOffY + 14 * side);
         });
       }
 
