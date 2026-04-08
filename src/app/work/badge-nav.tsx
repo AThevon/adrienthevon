@@ -59,31 +59,37 @@ export default function WorkBadgeNav() {
                   transition: "margin 250ms cubic-bezier(0.33, 1, 0.68, 1)",
                 }}
               >
-                {/* Parentheses - left and right arcs */}
+                {/* Stylized parentheses - brackets with folded ends */}
                 {isActive && (
                   <>
+                    {/* Left parenthesis */}
                     <span
                       style={{
                         position: "absolute",
-                        left: -7,
-                        top: "15%",
-                        bottom: "15%",
-                        width: 3,
-                        borderRadius: "3px 0 0 3px",
-                        background: p.color,
-                        opacity: 0.6,
+                        left: -8,
+                        top: "5%",
+                        bottom: "5%",
+                        width: 6,
+                        borderLeft: `2px solid ${p.color}`,
+                        borderTop: `2px solid ${p.color}`,
+                        borderBottom: `2px solid ${p.color}`,
+                        borderRight: "none",
+                        borderRadius: "4px 0 0 4px",
                       }}
                     />
+                    {/* Right parenthesis */}
                     <span
                       style={{
                         position: "absolute",
-                        right: -7,
-                        top: "15%",
-                        bottom: "15%",
-                        width: 3,
-                        borderRadius: "0 3px 3px 0",
-                        background: p.color,
-                        opacity: 0.6,
+                        right: -8,
+                        top: "5%",
+                        bottom: "5%",
+                        width: 6,
+                        borderRight: `2px solid ${p.color}`,
+                        borderTop: `2px solid ${p.color}`,
+                        borderBottom: `2px solid ${p.color}`,
+                        borderLeft: "none",
+                        borderRadius: "0 4px 4px 0",
                       }}
                     />
                   </>
