@@ -1,302 +1,258 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
-import Image from "next/image";
+import { useRef, useCallback, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import TextReveal from "@/components/ui/TextReveal";
+import { projects, getProjectById } from "@/data/projects";
 import MagneticButton from "@/components/ui/MagneticButton";
-import { getProjectById, getNextProject } from "@/data/projects";
-import { useScrollDirection, useDeviceDetect } from "@/hooks";
 
-// Letter by letter reveal component that respects word boundaries
-function LetterReveal({ text, delay = 0 }: { text: string; delay?: number }) {
-  const words = text.split(" ");
-  let letterIndex = 0;
-
-  return (
-    <>
-      {words.map((word, wordIdx) => (
-        <span key={wordIdx} style={{ display: "inline-block", whiteSpace: "nowrap" }}>
-          {word.split("").map((letter, letterIdx) => {
-            const currentIndex = letterIndex++;
-            return (
-              <motion.span
-                key={letterIdx}
-                initial={{ opacity: 0, y: 50, rotateX: -90 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: delay + currentIndex * 0.03,
-                  ease: [0.33, 1, 0.68, 1],
-                }}
-                style={{ display: "inline-block", transformOrigin: "bottom" }}
-              >
-                {letter}
-              </motion.span>
-            );
-          })}
-          {wordIdx < words.length - 1 && "\u00A0"}
-        </span>
-      ))}
-    </>
-  );
-}
-
-// Helper to convert kebab-case to camelCase for i18n keys
-function kebabToCamel(str: string): string {
-  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+function toCamelCase(str: string): string {
+  return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
 }
 
 export default function ProjectPage() {
   const params = useParams();
   const router = useRouter();
-  const containerRef = useRef<HTMLDivElement>(null);
   const slug = params.slug as string;
-  const t = useTranslations("projectPage");
-  const tProject = useTranslations(`projectsData.${kebabToCamel(slug)}`);
-  const scrollDirection = useScrollDirection();
-  const { isMobile } = useDeviceDetect();
-
   const project = getProjectById(slug);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const shimmerRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  const handleIframeLoad = useCallback(() => {
+    if (iframeRef.current) iframeRef.current.style.opacity = "1";
+    if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
+  }, []);
 
-  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.9]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-
-  // Gradient opacity that fades drastically as you scroll
-  const gradientOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-
-  // Hide back button on scroll down (mobile only)
-  const shouldHideBackButton = isMobile && scrollDirection === "down";
+  // Reset iframe on slug change
+  useEffect(() => {
+    if (iframeRef.current) iframeRef.current.style.opacity = "0";
+    if (shimmerRef.current) shimmerRef.current.style.opacity = "1";
+  }, [slug]);
 
   if (!project) {
     return (
-      <div className="min-h-dvh flex items-center justify-center">
-        <p>{t("notFound")}</p>
+      <div className="h-dvh flex items-center justify-center font-mono text-muted">
+        Project not found
       </div>
     );
   }
 
-  const nextProject = getNextProject(slug);
+  const isGithub = project.link.includes("github.com");
+  const iframeSrc = project.link.startsWith("https://") ? project.link : `https://${project.link}`;
+  const ctaLabel = isGithub ? "VIEW ON GITHUB" : "VIEW WEBSITE";
+
+  // Sorted chronologically (oldest first) for badge bar
+  const sorted = [...projects].reverse();
 
   return (
-    <>
-      {/* Fixed gradient background that fades with scroll */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          opacity: gradientOpacity,
-          willChange: "opacity",
-        }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse 140% 140% at 50% 0%, ${project.color}40 0%, ${project.color}25 25%, ${project.color}15 45%, ${project.color}08 60%, transparent 75%)`,
-          }}
-        />
-      </motion.div>
+    <main className="min-h-dvh">
+      {/* Badge bar - sticky top */}
+      <div className="sticky top-0 z-30 bg-background border-b border-foreground/5">
+        <div className="flex items-center justify-center gap-3 px-8 py-4 overflow-x-auto scrollbar-hide max-w-full">
+          {sorted.map((p) => {
+            const isActive = p.id === slug;
+            return (
+              <button
+                key={p.id}
+                data-cursor="hover"
+                onClick={() => router.push(`/work/${p.id}`)}
+                className="shrink-0"
+              >
+                <div
+                  className="relative overflow-hidden transition-all duration-200"
+                  style={{
+                    width: isActive ? 44 : 32,
+                    height: isActive ? 44 : 32,
+                    borderRadius: isActive ? 12 : 8,
+                    border: `${isActive ? 2 : 1}px solid ${isActive ? p.color : "#2a2a2a"}`,
+                    boxShadow: isActive ? `0 0 20px ${p.color}30` : "none",
+                    background: p.id === "yeetbg" ? "#ffffff" : undefined,
+                  }}
+                >
+                  {p.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.logo} alt={p.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div
+                      className="w-full h-full flex items-center justify-center font-mono text-[10px] font-bold"
+                      style={{ color: p.color, background: "#141414" }}
+                    >
+                      {p.title.slice(0, 2)}
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
 
-      <main ref={containerRef} className="min-h-dvh relative">
-        {/* Hero - Immersive style */}
-        <section className="h-dvh flex flex-col justify-center items-center relative overflow-hidden">
-          {/* Back button */}
-          <motion.a
-            href="/work"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{
-              opacity: 1,
-              y: shouldHideBackButton ? -100 : 0
-            }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-24 left-8 z-40 font-mono text-sm text-muted hover:text-foreground transition-colors bg-background/80 backdrop-blur-sm border border-foreground/10 px-4 py-2"
+        {/* Back to timeline */}
+        <div className="flex justify-center -mt-1 pb-2">
+          <button
+            onClick={() => router.push("/work")}
+            data-cursor="hover"
+            className="w-7 h-7 flex items-center justify-center border border-foreground/10 hover:border-accent hover:text-accent transition-colors text-muted"
+            aria-label="Retour timeline"
+          >
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Project content */}
+      <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between gap-4">
+          <ProjectMeta slug={slug} year={project.year} />
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="project-cta"
             data-cursor="hover"
           >
-            ← {t("backToWork")}
-          </motion.a>
+            <span className="cta-label">{ctaLabel}</span>
+            <svg className="cta-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+          </a>
+        </div>
 
-          {/* Category */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="font-mono text-sm mb-8"
-            style={{ color: project.color }}
+        {/* Title */}
+        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none">
+          {project.title}
+        </h1>
+
+        {/* Description */}
+        <ProjectDescription slug={slug} />
+
+        {/* Preview */}
+        {!isGithub ? (
+          <div
+            className="relative border border-foreground/10 overflow-hidden"
+            style={{ aspectRatio: "16 / 9" }}
           >
-            {tProject("category")} — {project.year}
-          </motion.div>
+            <div
+              ref={shimmerRef}
+              className="absolute inset-0 bg-foreground/5"
+              style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
+            />
+            {/* Scale trick: iframe renders at 1.5x width then scaled down for higher res */}
+            <iframe
+              ref={iframeRef}
+              key={slug}
+              src={iframeSrc}
+              sandbox="allow-scripts allow-same-origin"
+              style={{
+                width: "150%",
+                height: "150%",
+                transform: "scale(0.6667)",
+                transformOrigin: "top left",
+                opacity: 0,
+                transition: "opacity 500ms ease-out",
+                border: "none",
+              }}
+              onLoad={handleIframeLoad}
+              title={project.title}
+            />
+          </div>
+        ) : (
+          <GithubPreview project={project} />
+        )}
 
-          {/* Title with letter reveal */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-[8vw] font-bold tracking-tighter text-center px-4 md:px-8 max-w-full leading-[0.9] wrap-break-word">
-            <LetterReveal text={project.title} delay={0.5} />
-          </h1>
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="font-mono text-xs uppercase tracking-widest border border-foreground/20 px-3 py-1 text-muted hover:border-accent hover:text-accent transition-colors cursor-default"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
 
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
-            className="mt-8 text-xl text-muted text-center max-w-xl px-8"
+        {/* Role + Client */}
+        <ProjectFooter slug={slug} client={project.client} />
+
+        <div className="h-16" />
+      </div>
+    </main>
+  );
+}
+
+function GithubPreview({ project }: { project: NonNullable<ReturnType<typeof getProjectById>> }) {
+  return (
+    <div className="border border-foreground/10 p-8 md:p-12 flex items-center gap-8">
+      <div className="shrink-0">
+        {project.logo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={project.logo}
+            alt={project.title}
+            className="w-20 h-20 md:w-24 md:h-24 object-contain"
+            style={{ borderRadius: 16 }}
+          />
+        ) : (
+          <div
+            className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center font-display text-2xl"
+            style={{ borderRadius: 16, background: "#141414", color: project.color }}
           >
-            {tProject("description")}
-          </motion.p>
-
-          {/* Scroll prompt */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-            className="absolute bottom-12 flex flex-col items-center gap-4"
-          >
-            <span className="font-mono text-xs text-muted">{t("scroll")}</span>
-            <motion.div
-              className="w-6 h-10 border border-foreground/30 rounded-full flex justify-center pt-2"
-              animate={{ borderColor: [project.color + "50", project.color, project.color + "50"] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <motion.div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: project.color }}
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>
-          </motion.div>
-        </section>
-
-        {/* Project image */}
-        <section className="px-8 md:px-16 py-16">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <Image
-                src={project.image}
-                alt={project.title}
-                width={1920}
-                height={1080}
-                className="w-full h-auto"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1280px"
-              />
-              <div className="absolute inset-0 border border-foreground/10 pointer-events-none" />
-            </motion.div>
+            {project.title.slice(0, 2)}
           </div>
-        </section>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="font-mono text-xs text-muted tracking-widest uppercase mb-2">OPEN SOURCE</div>
+        <div className="font-mono text-sm text-foreground/70 leading-relaxed mb-4">{project.description}</div>
+        <div className="flex items-center gap-3">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-muted">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span className="font-mono text-xs text-muted tracking-wider">
+            {project.link.replace("https://github.com/", "")}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* Project details */}
-        <section className="px-8 md:px-16 py-32">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-12 gap-8">
-              {/* Left column - meta */}
-              <div className="col-span-12 md:col-span-4">
-                <div className="sticky top-32 space-y-8">
-                  <div>
-                    <h4 className="font-mono text-xs text-muted mb-2">{t("role")}</h4>
-                    <p className="text-lg">{tProject("role")}</p>
-                  </div>
+function ProjectMeta({ slug, year }: { slug: string; year: string }) {
+  const tProject = useTranslations(`projectsData.${toCamelCase(slug)}`);
+  return (
+    <div className="flex items-center gap-3 font-mono text-xs text-muted uppercase tracking-widest">
+      <span>{tProject("category")}</span>
+      <span className="opacity-40">-</span>
+      <span>{year}</span>
+    </div>
+  );
+}
 
-                  <div>
-                    <h4 className="font-mono text-xs text-muted mb-2">{t("client")}</h4>
-                    <p className="text-lg">{tProject.has("client") ? tProject("client") : project.client}</p>
-                  </div>
+function ProjectDescription({ slug }: { slug: string }) {
+  const tProject = useTranslations(`projectsData.${toCamelCase(slug)}`);
+  return (
+    <p className="font-mono text-sm text-muted max-w-3xl leading-relaxed whitespace-pre-line">
+      {tProject("longDescription")}
+    </p>
+  );
+}
 
-                  <div>
-                    <h4 className="font-mono text-xs text-muted mb-2">{t("year")}</h4>
-                    <p className="text-lg">{project.year}</p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-mono text-xs text-muted mb-4">{t("stack")}</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 text-xs font-mono border border-foreground/20"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <MagneticButton>
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-background text-sm font-medium hover:bg-foreground transition-colors"
-                      data-cursor="hover"
-                    >
-                      {t("viewLive")}
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path
-                          d="M4 12L12 4M12 4H6M12 4V10"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                        />
-                      </svg>
-                    </a>
-                  </MagneticButton>
-                </div>
-              </div>
-
-              {/* Right column - description */}
-              <div className="col-span-12 md:col-span-8">
-                <TextReveal className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
-                  {t("aboutProject")}
-                </TextReveal>
-
-                <div className="text-lg text-muted leading-relaxed whitespace-pre-line">
-                  {tProject("longDescription")}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Next project */}
-        <section
-          className="py-32 px-8 md:px-16 border-t border-foreground/10 relative"
-          style={{
-            background: `radial-gradient(ellipse 120% 100% at 50% 50%, ${nextProject.color}10 0%, transparent 60%)`,
-          }}
-        >
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <span className="font-mono text-sm text-muted">{t("nextProject")}</span>
-
-              <motion.a
-                href={`/work/${nextProject.id}`}
-                className="block mt-8 group"
-                whileHover={{ scale: 0.98 }}
-                data-cursor="hover"
-              >
-                <h2
-                  className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter group-hover:opacity-60 transition-opacity"
-                  style={{ color: nextProject.color }}
-                >
-                  {nextProject.title}
-                </h2>
-              </motion.a>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-    </>
+function ProjectFooter({ slug, client }: { slug: string; client: string }) {
+  const tProject = useTranslations(`projectsData.${toCamelCase(slug)}`);
+  const tPage = useTranslations("projectPage");
+  return (
+    <div className="grid grid-cols-2 gap-6 font-mono text-xs text-muted">
+      <div className="space-y-1">
+        <div className="uppercase tracking-widest opacity-50">{tPage("role")}</div>
+        <div className="uppercase tracking-widest">{tProject("role")}</div>
+      </div>
+      <div className="space-y-1">
+        <div className="uppercase tracking-widest opacity-50">{tPage("client")}</div>
+        <div className="uppercase tracking-widest">{client}</div>
+      </div>
+    </div>
   );
 }
