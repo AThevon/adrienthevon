@@ -53,6 +53,11 @@ export default function WorkBadgeNav() {
                 data-cursor="hover"
                 onClick={() => router.push(`/work/${p.id}`)}
                 className="shrink-0 group"
+                style={{
+                  marginLeft: isActive ? 6 : 0,
+                  marginRight: isActive ? 6 : 0,
+                  transition: "margin 250ms cubic-bezier(0.33, 1, 0.68, 1)",
+                }}
               >
                 <div
                   className={`relative overflow-hidden ${!isActive ? "group-hover:brightness-125" : ""}`}
