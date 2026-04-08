@@ -128,7 +128,7 @@ export default function MainNav() {
     <>
       {/* Fixed Header */}
       <motion.header
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-5 md:px-12 pointer-events-none"
+        className="fixed top-0 left-0 right-0 z-[70] px-6 py-5 md:px-12 pointer-events-none"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
