@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useDeviceDetect } from "@/hooks";
-import { projects } from "@/data/projects";
 
 const ProjectTimeline = dynamic(
   () => import("@/components/sections/ProjectTimeline"),
@@ -19,20 +18,15 @@ const ProjectTimelineMobile = dynamic(
 );
 
 export default function WorkPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const { isMobile, isHydrated } = useDeviceDetect();
 
   const handleProjectClick = useCallback(
     (projectId: string) => {
-      if (activeProjectId === projectId) {
-        setActiveProjectId(null);
-      } else {
-        setActiveProjectId(projectId);
-      }
+      setActiveProjectId((prev) => (prev === projectId ? null : projectId));
     },
-    [activeProjectId]
+    []
   );
 
   const handleClose = useCallback(() => {
@@ -43,7 +37,6 @@ export default function WorkPage() {
     setHoveredProjectId(projectId);
   }, []);
 
-  // Mobile
   if (isHydrated && isMobile) {
     return (
       <main className="min-h-dvh">
@@ -54,29 +47,18 @@ export default function WorkPage() {
 
   const isOpen = activeProjectId !== null;
 
-  // Desktop
   return (
-    <main
-      ref={containerRef}
-      style={{
-        height: isOpen ? "auto" : `${projects.length * 60}vh`,
-      }}
-    >
-      {/* Sticky canvas */}
-      <div
-        className="sticky top-0 z-10"
-        style={{ height: isOpen ? "25vh" : "100vh" }}
-      >
-        <ProjectTimeline
-          scrollProgress={0}
-          activeProjectId={hoveredProjectId || activeProjectId}
-          onProjectClick={handleProjectClick}
-          onProjectHover={handleHover}
-          compressed={isOpen}
-        />
-      </div>
+    <main className="h-dvh overflow-hidden">
+      {/* Canvas timeline - shrinks when takeover is open */}
+      <ProjectTimeline
+        scrollProgress={0}
+        activeProjectId={hoveredProjectId || activeProjectId}
+        onProjectClick={handleProjectClick}
+        onProjectHover={handleHover}
+        compressed={isOpen}
+      />
 
-      {/* Takeover panel - always rendered, CSS transition handles show/hide */}
+      {/* Takeover panel - slides up via CSS transform */}
       <ProjectTakeover
         projectId={activeProjectId}
         onClose={handleClose}

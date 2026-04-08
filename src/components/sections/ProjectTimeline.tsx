@@ -9,11 +9,11 @@ import { COLORS } from "@/lib/constants";
 // ---------------------------------------------------------------------------
 
 interface ProjectTimelineProps {
-  scrollProgress: number; // 0-1 from parent useScroll
+  scrollProgress: number;
   activeProjectId: string | null;
   onProjectClick: (projectId: string) => void;
   onProjectHover: (projectId: string | null) => void;
-  compressed: boolean; // true when takeover panel is open
+  compressed: boolean;
 }
 
 interface TimelineNode {
@@ -21,50 +21,23 @@ interface TimelineNode {
   y: number;
   baseX: number;
   baseY: number;
-  vx: number;
-  vy: number;
   projectId: string;
   title: string;
   category: string;
   date: string;
   color: string;
-  above: boolean; // zigzag above/below axis
+  above: boolean;
+  logoImage: HTMLImageElement | null;
 }
-
-// ---------------------------------------------------------------------------
-// Pre-compute shared-skill adjacency (outside component to run once)
-// ---------------------------------------------------------------------------
-
-type AdjacencyMap = Map<string, Map<string, number>>;
-
-function buildAdjacency(): AdjacencyMap {
-  const map: AdjacencyMap = new Map();
-  for (let i = 0; i < projects.length; i++) {
-    const a = projects[i];
-    const inner = new Map<string, number>();
-    for (let j = 0; j < projects.length; j++) {
-      if (i === j) continue;
-      const b = projects[j];
-      const shared = a.skills.filter((s) => b.skills.includes(s)).length;
-      if (shared > 0) inner.set(b.id, shared);
-    }
-    map.set(a.id, inner);
-  }
-  return map;
-}
-
-const adjacency = buildAdjacency();
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Parse "YYYY-MM" into a timestamp for proportional positioning. */
 function dateToTimestamp(dateStr: string): number {
   return new Date(dateStr + "-01").getTime();
 }
 
-/** Extract unique years from projects sorted chronologically. */
 function getYearMarkers(): { year: string; fraction: number }[] {
   const timestamps = projects.map((p) => dateToTimestamp(p.date));
   const minT = Math.min(...timestamps);
@@ -101,7 +74,6 @@ export default function ProjectTimeline({
   const activeIdRef = useRef<string | null>(activeProjectId);
   const compressedRef = useRef(compressed);
 
-  // Keep refs in sync with props so the rAF loop always has fresh values.
   useEffect(() => {
     activeIdRef.current = activeProjectId;
   }, [activeProjectId]);
@@ -123,6 +95,10 @@ export default function ProjectTimeline({
     const usableW = width - padX * 2;
     const centerY = height / 2;
 
+    // Preserve loaded logo images if nodes already exist
+    const existingLogos = new Map<string, HTMLImageElement | null>();
+    nodesRef.current.forEach((n) => existingLogos.set(n.projectId, n.logoImage));
+
     const nodes: TimelineNode[] = projects.map((p, i) => {
       const fraction = (dateToTimestamp(p.date) - minT) / range;
       const baseX = padX + fraction * usableW;
@@ -134,18 +110,33 @@ export default function ProjectTimeline({
         y: baseY,
         baseX,
         baseY,
-        vx: 0,
-        vy: 0,
         projectId: p.id,
         title: p.title,
         category: p.category,
         date: p.date,
         color: p.color,
         above,
+        logoImage: existingLogos.get(p.id) ?? null,
       };
     });
 
     return nodes;
+  }, []);
+
+  // -------------------------------------------------------------------
+  // Load project logos
+  // -------------------------------------------------------------------
+
+  useEffect(() => {
+    projects.forEach((p) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = p.image; // e.g. /images/projects/worktigre-medium.png
+      img.onload = () => {
+        const node = nodesRef.current.find((n) => n.projectId === p.id);
+        if (node) node.logoImage = img;
+      };
+    });
   }, []);
 
   // -------------------------------------------------------------------
@@ -180,12 +171,11 @@ export default function ProjectTimeline({
     return () => window.removeEventListener("resize", updateDimensions);
   }, [initNodes]);
 
-  // Re-init when compressed changes (height changes -> need new positions)
+  // Re-init when compressed changes
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Small delay to let the style transition settle
     const timer = setTimeout(() => {
       const rect = canvas.getBoundingClientRect();
       const width = rect.width;
@@ -209,7 +199,7 @@ export default function ProjectTimeline({
   }, [compressed, initNodes]);
 
   // -------------------------------------------------------------------
-  // Mouse tracking
+  // Mouse tracking + hover
   // -------------------------------------------------------------------
 
   useEffect(() => {
@@ -220,8 +210,7 @@ export default function ProjectTimeline({
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
 
-      // Hit-test for hover
-      const hitRadius = compressedRef.current ? 20 : 30;
+      const hitRadius = compressedRef.current ? 20 : 35;
       let found: string | null = null;
       for (const node of nodesRef.current) {
         const dx = mouseRef.current.x - node.x;
@@ -267,7 +256,7 @@ export default function ProjectTimeline({
       const rect = canvas.getBoundingClientRect();
       const mx = e.clientX - rect.left;
       const my = e.clientY - rect.top;
-      const hitRadius = compressedRef.current ? 20 : 30;
+      const hitRadius = compressedRef.current ? 20 : 35;
 
       for (const node of nodesRef.current) {
         const dx = mx - node.x;
@@ -320,10 +309,10 @@ export default function ProjectTimeline({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let time = 0;
+    const LOGO_SIZE = 40;
+    const LOGO_SIZE_COMPRESSED = 20;
 
     const animate = () => {
-      time += 0.016;
       const { width, height } = dimensionsRef.current;
 
       if (width === 0 || height === 0) {
@@ -337,224 +326,162 @@ export default function ProjectTimeline({
       const isCompressed = compressedRef.current;
       const activeId = activeIdRef.current;
       const centerY = height / 2;
-
-      // -- Compute compressed target positions (even spacing, single line) --
-      const compPadX = width * 0.08;
-      const compUsableW = width - compPadX * 2;
+      const padX = width * 0.08;
+      const usableW = width - padX * 2;
 
       if (isCompressed) {
         // ---------------------------------------------------------------
-        // COMPRESSED MODE
+        // COMPRESSED MODE - single line, small icons, no labels
         // ---------------------------------------------------------------
 
         nodes.forEach((node, index) => {
-          const targetX = compPadX + (index / Math.max(nodes.length - 1, 1)) * compUsableW;
+          const targetX = padX + (index / Math.max(nodes.length - 1, 1)) * usableW;
           const targetY = centerY;
-
-          // Smooth interpolation toward target
-          node.x += (targetX - node.x) * 0.1;
-          node.y += (targetY - node.y) * 0.1;
-          node.vx = 0;
-          node.vy = 0;
+          node.x += (targetX - node.x) * 0.12;
+          node.y += (targetY - node.y) * 0.12;
         });
 
-        // Draw axis line
-        ctx.strokeStyle = "#333";
+        // Axis
+        ctx.strokeStyle = "#222";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(compPadX, centerY);
-        ctx.lineTo(width - compPadX, centerY);
+        ctx.moveTo(padX, centerY);
+        ctx.lineTo(width - padX, centerY);
         ctx.stroke();
 
-        // Draw nodes (compressed)
+        // Nodes
         nodes.forEach((node) => {
           const isActive = node.projectId === activeId;
+          const size = LOGO_SIZE_COMPRESSED;
 
-          // Active glow
+          // Glow for active
           if (isActive) {
-            [20, 14, 8].forEach((radius, i) => {
-              const opacity = [0.1, 0.2, 0.35][i];
-              const gradient = ctx.createRadialGradient(
-                node.x, node.y, 0,
-                node.x, node.y, radius
-              );
-              gradient.addColorStop(0, COLORS.accent + Math.floor(opacity * 255).toString(16).padStart(2, "0"));
-              gradient.addColorStop(1, COLORS.accent + "00");
-              ctx.fillStyle = gradient;
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-              ctx.fill();
-            });
+            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 8);
+            gradient.addColorStop(0, node.color + "40");
+            gradient.addColorStop(1, node.color + "00");
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size + 8, 0, Math.PI * 2);
+            ctx.fill();
           }
 
-          // Node circle
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, 4, 0, Math.PI * 2);
-          ctx.fillStyle = isActive ? COLORS.accent : "#333";
-          ctx.fill();
+          // Logo or circle fallback
+          if (node.logoImage) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(node.logoImage, node.x - size / 2, node.y - size / 2, size, size);
+            ctx.restore();
+
+            // Border
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
+            ctx.strokeStyle = isActive ? node.color : "#333";
+            ctx.lineWidth = isActive ? 2 : 1;
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
+            ctx.fillStyle = isActive ? node.color : "#333";
+            ctx.fill();
+          }
         });
       } else {
         // ---------------------------------------------------------------
-        // NORMAL MODE
+        // NORMAL MODE - static positions, logos, labels
         // ---------------------------------------------------------------
 
-        // Update physics
-        nodes.forEach((node, index) => {
-          const isActive = node.projectId === activeId;
-
-          // Floating
-          const floatX = Math.sin(time * 0.8 + index) * 5;
-          const floatY = Math.cos(time * 0.6 + index * 0.5) * 8;
-
-          // Mouse repulsion
-          const dx = node.x - mouseRef.current.x;
-          const dy = node.y - mouseRef.current.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const repulsionRadius = isActive ? 180 : 120;
-
-          if (distance < repulsionRadius && distance > 0) {
-            const force = (1 - distance / repulsionRadius) * (isActive ? 0.3 : 0.2);
-            node.vx += (dx / distance) * force;
-            node.vy += (dy / distance) * force;
-          }
-
-          // Apply velocity with damping
-          node.x += node.vx;
-          node.y += node.vy;
-          node.vx *= 0.9;
-          node.vy *= 0.9;
-
-          // Spring return
-          const springForce = 0.05;
-          node.vx += (node.baseX + floatX - node.x) * springForce;
-          node.vy += (node.baseY + floatY - node.y) * springForce;
+        // Nodes stay at base position (no floating, no physics)
+        nodes.forEach((node) => {
+          node.x += (node.baseX - node.x) * 0.12;
+          node.y += (node.baseY - node.y) * 0.12;
         });
 
-        // Draw axis
-        ctx.strokeStyle = "#333";
+        // Axis
+        ctx.strokeStyle = "#222";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(width * 0.08, centerY);
-        ctx.lineTo(width * 0.92, centerY);
+        ctx.moveTo(padX, centerY);
+        ctx.lineTo(width - padX, centerY);
         ctx.stroke();
 
-        // Draw year markers
-        const padX = width * 0.08;
-        const usableW = width - padX * 2;
-        const timestamps = projects.map((p) => dateToTimestamp(p.date));
-        const minT = Math.min(...timestamps);
-        const maxT = Math.max(...timestamps);
-        const range = maxT - minT || 1;
-
+        // Year markers
         yearMarkers.forEach(({ year, fraction }) => {
-          // Clamp fraction to 0-1
           const clampedFraction = Math.max(0, Math.min(1, fraction));
           const markerX = padX + clampedFraction * usableW;
 
-          // Dot
           ctx.beginPath();
-          ctx.arc(markerX, centerY, 5, 0, Math.PI * 2);
+          ctx.arc(markerX, centerY, 3, 0, Math.PI * 2);
           ctx.fillStyle = COLORS.accent;
           ctx.fill();
 
-          // Label
           ctx.font = "11px monospace";
           ctx.fillStyle = COLORS.accent;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(year, markerX, centerY + 20);
+          ctx.fillText(year, markerX, centerY + 18);
         });
 
-        // Draw constellation lines (shared skills)
-        for (let i = 0; i < nodes.length; i++) {
-          const nodeA = nodes[i];
-          const neighbors = adjacency.get(nodeA.projectId);
-          if (!neighbors) continue;
-
-          for (let j = i + 1; j < nodes.length; j++) {
-            const nodeB = nodes[j];
-            const sharedCount = neighbors.get(nodeB.projectId);
-            if (!sharedCount) continue;
-
-            const aIsActive = nodeA.projectId === activeId;
-            const bIsActive = nodeB.projectId === activeId;
-            const eitherActive = aIsActive || bIsActive;
-
-            if (eitherActive) {
-              // Illuminated line
-              const opacity = Math.min(0.6, 0.15 + sharedCount * 0.08);
-              ctx.strokeStyle =
-                COLORS.accent +
-                Math.floor(opacity * 255)
-                  .toString(16)
-                  .padStart(2, "0");
-              ctx.lineWidth = 1;
-            } else {
-              // Faint background line
-              ctx.strokeStyle = "rgba(255, 255, 255, 0.012)";
-              ctx.lineWidth = 1;
-            }
-
-            ctx.beginPath();
-            ctx.moveTo(nodeA.x, nodeA.y);
-            ctx.lineTo(nodeB.x, nodeB.y);
-            ctx.stroke();
-          }
-        }
-
-        // Draw nodes (normal)
+        // Draw nodes
         nodes.forEach((node) => {
           const isActive = node.projectId === activeId;
+          const size = LOGO_SIZE;
 
-          // Connecting line from node to axis
-          ctx.strokeStyle = "#222";
+          // Connecting line to axis
+          ctx.strokeStyle = isActive ? node.color + "40" : "#1a1a1a";
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(node.x, centerY);
           ctx.stroke();
 
-          // Glow rings for active node
+          // Glow for active/hovered
           if (isActive) {
-            [30, 22, 14].forEach((radius, i) => {
-              const opacity = [0.1, 0.2, 0.35][i];
-              const gradient = ctx.createRadialGradient(
-                node.x, node.y, 0,
-                node.x, node.y, radius
-              );
-              gradient.addColorStop(
-                0,
-                COLORS.accent +
-                  Math.floor(opacity * 255)
-                    .toString(16)
-                    .padStart(2, "0")
-              );
-              gradient.addColorStop(1, COLORS.accent + "00");
-              ctx.fillStyle = gradient;
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-              ctx.fill();
-            });
+            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 12);
+            gradient.addColorStop(0, node.color + "30");
+            gradient.addColorStop(1, node.color + "00");
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size + 12, 0, Math.PI * 2);
+            ctx.fill();
           }
 
-          // Node circle
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, 6, 0, Math.PI * 2);
-          ctx.fillStyle = isActive ? COLORS.accent : "#333";
-          ctx.fill();
+          // Logo or circle fallback
+          if (node.logoImage) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(node.logoImage, node.x - size / 2, node.y - size / 2, size, size);
+            ctx.restore();
+
+            // Border ring
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
+            ctx.strokeStyle = isActive ? node.color : "#333";
+            ctx.lineWidth = isActive ? 2 : 1;
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
+            ctx.fillStyle = isActive ? node.color : "#333";
+            ctx.fill();
+          }
 
           // Title label
-          ctx.font = isActive ? "bold 14px monospace" : "14px monospace";
-          ctx.fillStyle = isActive ? COLORS.foreground : "#999";
+          const labelY = node.above ? node.y - size / 2 - 14 : node.y + size / 2 + 18;
+          ctx.font = isActive ? "bold 13px monospace" : "13px monospace";
+          ctx.fillStyle = isActive ? COLORS.foreground : "#888";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          const labelY = node.above ? node.y - 24 : node.y + 24;
           ctx.fillText(node.title, node.x, labelY);
 
           // Category label
-          ctx.font = "11px monospace";
-          ctx.fillStyle = "#555";
-          ctx.fillText(node.category, node.x, node.above ? labelY - 18 : labelY + 18);
+          const catY = node.above ? labelY - 16 : labelY + 16;
+          ctx.font = "10px monospace";
+          ctx.fillStyle = "#444";
+          ctx.fillText(node.category, node.x, catY);
         });
       }
 
