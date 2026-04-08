@@ -42,7 +42,7 @@ export default function WorkBadgeNav() {
         {/* Badges */}
         <div
           ref={scrollRef}
-          className="flex items-center gap-2.5 overflow-x-auto scrollbar-hide flex-1"
+          className="flex items-center gap-4 overflow-x-auto scrollbar-hide flex-1"
         >
           {sorted.map((p) => {
             const isActive = p.id === slug;
