@@ -39,9 +39,9 @@ export default function ProjectPage() {
   const ctaLabel = isGithub ? "VIEW ON GITHUB" : "VIEW WEBSITE";
 
   return (
-    <div className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
+    <div key={slug} className="px-6 md:px-12 py-8 space-y-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 sidebar-slide" style={{ animationDelay: "0ms" }}>
         <ProjectMeta slug={slug} year={project.year} />
         <a
           href={project.link}
@@ -58,48 +58,52 @@ export default function ProjectPage() {
       </div>
 
       {/* Title */}
-      <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none">
+      <h1 className="font-display text-4xl md:text-6xl lg:text-7xl uppercase leading-none sidebar-slide" style={{ animationDelay: "60ms" }}>
         {project.title}
       </h1>
 
       {/* Description */}
-      <ProjectDescription slug={slug} />
+      <div className="sidebar-slide" style={{ animationDelay: "120ms" }}>
+        <ProjectDescription slug={slug} />
+      </div>
 
       {/* Preview */}
-      {!isGithub ? (
-        <div
-          className="relative border border-foreground/10 overflow-hidden"
-          style={{ aspectRatio: "16 / 9" }}
-        >
+      <div className="sidebar-fade" style={{ animationDelay: "180ms" }}>
+        {!isGithub ? (
           <div
-            ref={shimmerRef}
-            className="absolute inset-0 bg-foreground/5"
-            style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
-          />
-          <iframe
-            ref={iframeRef}
-            key={slug}
-            src={iframeSrc}
-            sandbox="allow-scripts allow-same-origin"
-            style={{
-              width: "150%",
-              height: "150%",
-              transform: "scale(0.6667)",
-              transformOrigin: "top left",
-              opacity: 0,
-              transition: "opacity 500ms ease-out",
-              border: "none",
-            }}
-            onLoad={handleIframeLoad}
-            title={project.title}
-          />
-        </div>
-      ) : (
-        <GithubPreview project={project} />
-      )}
+            className="relative border border-foreground/10 overflow-hidden"
+            style={{ aspectRatio: "16 / 9" }}
+          >
+            <div
+              ref={shimmerRef}
+              className="absolute inset-0 bg-foreground/5"
+              style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
+            />
+            <iframe
+              ref={iframeRef}
+              key={slug}
+              src={iframeSrc}
+              sandbox="allow-scripts allow-same-origin"
+              style={{
+                width: "150%",
+                height: "150%",
+                transform: "scale(0.6667)",
+                transformOrigin: "top left",
+                opacity: 0,
+                transition: "opacity 500ms ease-out",
+                border: "none",
+              }}
+              onLoad={handleIframeLoad}
+              title={project.title}
+            />
+          </div>
+        ) : (
+          <GithubPreview project={project} />
+        )}
+      </div>
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 sidebar-slide" style={{ animationDelay: "240ms" }}>
         {project.tags.map((tag) => (
           <span
             key={tag}
@@ -111,7 +115,9 @@ export default function ProjectPage() {
       </div>
 
       {/* Role + Client */}
-      <ProjectFooter slug={slug} client={project.client} />
+      <div className="sidebar-slide" style={{ animationDelay: "300ms" }}>
+        <ProjectFooter slug={slug} client={project.client} />
+      </div>
 
       <div className="h-16" />
     </div>
