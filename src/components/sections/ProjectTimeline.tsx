@@ -561,15 +561,17 @@ export default function ProjectTimeline({
           const labelOffX = perpXn * labelDist * side;
           const labelOffY = perpYn * labelDist * side;
 
-          ctx.font = isActive ? "bold 13px monospace" : "13px monospace";
-          ctx.fillStyle = isActive ? COLORS.foreground : "#888";
+          // Title in display font (Dela Gothic One)
+          ctx.font = isActive ? "bold 16px 'Dela Gothic One', sans-serif" : "15px 'Dela Gothic One', sans-serif";
+          ctx.fillStyle = isActive ? COLORS.foreground : "#999";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(node.title, node.x + labelOffX, node.y + labelOffY);
 
-          ctx.font = "10px monospace";
-          ctx.fillStyle = "#444";
-          ctx.fillText(node.category, node.x + labelOffX, node.y + labelOffY + 14 * side);
+          // Category in mono
+          ctx.font = "11px monospace";
+          ctx.fillStyle = "#555";
+          ctx.fillText(node.category, node.x + labelOffX, node.y + labelOffY + 18 * side);
 
           ctx.globalAlpha = 1;
         });
