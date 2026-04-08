@@ -36,21 +36,6 @@ export default function ProjectTakeover({
     if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
   }, []);
 
-  // Overscroll to close
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || !isOpen) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY < -50 && el.scrollTop <= 0) {
-        onClose();
-      }
-    };
-
-    el.addEventListener("wheel", handleWheel, { passive: true });
-    return () => el.removeEventListener("wheel", handleWheel);
-  }, [onClose, isOpen]);
-
   // Scroll to top when project changes
   useEffect(() => {
     if (scrollRef.current && projectId) {

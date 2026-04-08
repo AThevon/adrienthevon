@@ -129,9 +129,10 @@ export default function ProjectTimeline({
 
   useEffect(() => {
     projects.forEach((p) => {
+      if (!p.logo) return;
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.src = p.image; // e.g. /images/projects/worktigre-medium.png
+      img.src = p.logo;
       img.onload = () => {
         const node = nodesRef.current.find((n) => n.projectId === p.id);
         if (node) node.logoImage = img;
@@ -306,11 +307,75 @@ export default function ProjectTimeline({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const maybeCtx = canvas.getContext("2d");
+    if (!maybeCtx) return;
+    const ctx = maybeCtx;
 
-    const LOGO_SIZE = 40;
-    const LOGO_SIZE_COMPRESSED = 20;
+    const BADGE = 48; // iOS badge size normal
+    const BADGE_SM = 28; // compressed
+    const RADIUS = 12; // border-radius for iOS look
+    const RADIUS_SM = 7;
+
+    /** Draw a rounded rect path (iOS badge shape). */
+    function roundedRect(x: number, y: number, w: number, h: number, r: number) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    /** Draw a badge (logo or text fallback) at node position. */
+    function drawBadge(node: TimelineNode, size: number, r: number, isActive: boolean) {
+      const half = size / 2;
+      const bx = node.x - half;
+      const by = node.y - half;
+
+      // Glow
+      if (isActive) {
+        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 10);
+        gradient.addColorStop(0, node.color + "25");
+        gradient.addColorStop(1, node.color + "00");
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, size + 10, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Background
+      roundedRect(bx, by, size, size, r);
+      ctx.fillStyle = "#141414";
+      ctx.fill();
+
+      // Logo image or text fallback
+      if (node.logoImage) {
+        ctx.save();
+        roundedRect(bx, by, size, size, r);
+        ctx.clip();
+        ctx.drawImage(node.logoImage, bx, by, size, size);
+        ctx.restore();
+      } else {
+        // Text initials fallback
+        ctx.font = `bold ${Math.round(size * 0.35)}px monospace`;
+        ctx.fillStyle = node.color;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const initials = node.title.slice(0, 2);
+        ctx.fillText(initials, node.x, node.y);
+      }
+
+      // Border
+      roundedRect(bx, by, size, size, r);
+      ctx.strokeStyle = isActive ? node.color : "#2a2a2a";
+      ctx.lineWidth = isActive ? 2 : 1;
+      ctx.stroke();
+    }
 
     const animate = () => {
       const { width, height } = dimensionsRef.current;
@@ -331,7 +396,7 @@ export default function ProjectTimeline({
 
       if (isCompressed) {
         // ---------------------------------------------------------------
-        // COMPRESSED MODE - single line, small icons, no labels
+        // COMPRESSED MODE
         // ---------------------------------------------------------------
 
         nodes.forEach((node, index) => {
@@ -342,64 +407,28 @@ export default function ProjectTimeline({
         });
 
         // Axis
-        ctx.strokeStyle = "#222";
+        ctx.strokeStyle = "#1a1a1a";
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(padX, centerY);
         ctx.lineTo(width - padX, centerY);
         ctx.stroke();
 
-        // Nodes
         nodes.forEach((node) => {
-          const isActive = node.projectId === activeId;
-          const size = LOGO_SIZE_COMPRESSED;
-
-          // Glow for active
-          if (isActive) {
-            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 8);
-            gradient.addColorStop(0, node.color + "40");
-            gradient.addColorStop(1, node.color + "00");
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size + 8, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // Logo or circle fallback
-          if (node.logoImage) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(node.logoImage, node.x - size / 2, node.y - size / 2, size, size);
-            ctx.restore();
-
-            // Border
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
-            ctx.strokeStyle = isActive ? node.color : "#333";
-            ctx.lineWidth = isActive ? 2 : 1;
-            ctx.stroke();
-          } else {
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
-            ctx.fillStyle = isActive ? node.color : "#333";
-            ctx.fill();
-          }
+          drawBadge(node, BADGE_SM, RADIUS_SM, node.projectId === activeId);
         });
       } else {
         // ---------------------------------------------------------------
-        // NORMAL MODE - static positions, logos, labels
+        // NORMAL MODE
         // ---------------------------------------------------------------
 
-        // Nodes stay at base position (no floating, no physics)
         nodes.forEach((node) => {
           node.x += (node.baseX - node.x) * 0.12;
           node.y += (node.baseY - node.y) * 0.12;
         });
 
         // Axis
-        ctx.strokeStyle = "#222";
+        ctx.strokeStyle = "#1a1a1a";
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(padX, centerY);
@@ -408,76 +437,41 @@ export default function ProjectTimeline({
 
         // Year markers
         yearMarkers.forEach(({ year, fraction }) => {
-          const clampedFraction = Math.max(0, Math.min(1, fraction));
-          const markerX = padX + clampedFraction * usableW;
-
+          const x = padX + Math.max(0, Math.min(1, fraction)) * usableW;
           ctx.beginPath();
-          ctx.arc(markerX, centerY, 3, 0, Math.PI * 2);
+          ctx.arc(x, centerY, 3, 0, Math.PI * 2);
           ctx.fillStyle = COLORS.accent;
           ctx.fill();
-
           ctx.font = "11px monospace";
           ctx.fillStyle = COLORS.accent;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(year, markerX, centerY + 18);
+          ctx.fillText(year, x, centerY + 18);
         });
 
-        // Draw nodes
+        // Nodes
         nodes.forEach((node) => {
           const isActive = node.projectId === activeId;
-          const size = LOGO_SIZE;
 
           // Connecting line to axis
-          ctx.strokeStyle = isActive ? node.color + "40" : "#1a1a1a";
+          ctx.strokeStyle = isActive ? node.color + "30" : "#1a1a1a";
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(node.x, centerY);
           ctx.stroke();
 
-          // Glow for active/hovered
-          if (isActive) {
-            const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size + 12);
-            gradient.addColorStop(0, node.color + "30");
-            gradient.addColorStop(1, node.color + "00");
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size + 12, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // Logo or circle fallback
-          if (node.logoImage) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(node.logoImage, node.x - size / 2, node.y - size / 2, size, size);
-            ctx.restore();
-
-            // Border ring
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
-            ctx.strokeStyle = isActive ? node.color : "#333";
-            ctx.lineWidth = isActive ? 2 : 1;
-            ctx.stroke();
-          } else {
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2);
-            ctx.fillStyle = isActive ? node.color : "#333";
-            ctx.fill();
-          }
+          drawBadge(node, BADGE, RADIUS, isActive);
 
           // Title label
-          const labelY = node.above ? node.y - size / 2 - 14 : node.y + size / 2 + 18;
+          const labelY = node.above ? node.y - BADGE / 2 - 14 : node.y + BADGE / 2 + 18;
           ctx.font = isActive ? "bold 13px monospace" : "13px monospace";
           ctx.fillStyle = isActive ? COLORS.foreground : "#888";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(node.title, node.x, labelY);
 
-          // Category label
+          // Category
           const catY = node.above ? labelY - 16 : labelY + 16;
           ctx.font = "10px monospace";
           ctx.fillStyle = "#444";

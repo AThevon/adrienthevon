@@ -19,6 +19,7 @@ export interface Project {
   client: string;
   link: string;
   image: string;
+  logo?: string; // Path to project logo/icon for timeline
   ogImage?: string;
   sections: ProjectSection[];
 }
@@ -41,6 +42,7 @@ Intégration GitHub CLI pour les PRs et issues, fzf pour la navigation fuzzy, et
     client: "OPEN SOURCE",
     link: "https://worktigre.vercel.app",
     image: "/images/projects/wt-tiger-medium.png",
+    logo: "/images/logos/worktigre.png",
     sections: [
       {
         type: "intro",
@@ -81,6 +83,7 @@ Smart pacing pour savoir si tu brûles tes tokens ou si tu cruises. Clic sur une
     client: "OPEN SOURCE",
     link: "https://tokeneater.vercel.app",
     image: "/images/projects/tokeneater-medium.png",
+    logo: "/images/logos/tokeneater.png",
     sections: [
       {
         type: "intro",
@@ -121,6 +124,7 @@ Quantification de couleurs (max 20), numérotation par région, export PNG. Tout
     client: "OPEN SOURCE",
     link: "https://pix2paint.vercel.app",
     image: "/images/projects/pix2paint-medium.png",
+    logo: "/images/logos/pix2paint.png",
     sections: [
       {
         type: "intro",
@@ -161,6 +165,7 @@ Quantification de couleurs (max 20), numérotation par région, export PNG. Tout
     client: "OPEN SOURCE",
     link: "https://yeetbg.vercel.app",
     image: "/images/projects/yeetbg-medium.png",
+    logo: "/images/logos/yeetbg.svg",
     sections: [
       {
         type: "intro",
@@ -201,6 +206,7 @@ Shells temporaires pour tester un package avant de l'installer. Gestion de flake
     client: "OPEN SOURCE",
     link: "https://nixdash.vercel.app",
     image: "/images/projects/nixdash-medium.png",
+    logo: "/images/logos/nixdash.png",
     sections: [
       {
         type: "intro",
@@ -241,6 +247,7 @@ Une clé age, stockée dans ton password manager, déverrouille tout le vault. P
     client: "OPEN SOURCE",
     link: "https://github.com/AThevon/envora",
     image: "/images/projects/envora-medium.png",
+    logo: "/images/logos/envora.svg",
     sections: [
       {
         type: "intro",
@@ -284,6 +291,7 @@ rendant accessible un processus habituellement complexe.`,
     client: "PROJET PERSONNEL",
     link: "https://linekut.vercel.app",
     image: "/images/projects/linekut-medium.png",
+    logo: "/images/logos/linekut.webp",
     sections: [
       {
         type: "intro",
@@ -327,6 +335,7 @@ avec une direction artistique forte et moderne.`,
     client: "UNDER THE FLOW",
     link: "https://undertheflow.com",
     image: "/images/projects/under-the-flow-medium.png",
+    logo: "/images/logos/under-the-flow.png",
     sections: [
       {
         type: "intro",
@@ -411,6 +420,7 @@ L'objectif : inspirer confiance et démontrer expertise à travers une identité
     client: "BLENKDEV",
     link: "https://blenkdev.vercel.app",
     image: "/images/projects/blenkdev-medium.png",
+    logo: "/images/logos/blenkdev.png",
     sections: [
       {
         type: "intro",
