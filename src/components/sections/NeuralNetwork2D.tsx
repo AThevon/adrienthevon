@@ -691,7 +691,7 @@ export default function NeuralNetwork2D() {
                     return (
                       <a
                         key={projectId}
-                        href="/work"
+                        href={`/work/${project.id}`}
                         className="group relative block p-4 rounded-xl border border-white/[0.04] hover:border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 cursor-pointer overflow-hidden sidebar-slide"
                         style={{ animationDelay: `${150 + index * 60}ms`, animationFillMode: "backwards" }}
                         data-cursor="hover"
