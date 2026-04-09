@@ -36,6 +36,7 @@ interface AsciiBlocksProps {
   verticalAlign?: "center" | "top" | "bottom";
   padding?: number;
   onBoundsComputed?: (bounds: { left: number; top: number; right: number; bottom: number }) => void;
+  disturbancePointsRef?: React.RefObject<{ x: number; y: number }[] | null>;
 }
 
 const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiBlocks({
@@ -50,6 +51,7 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
   verticalAlign = "center",
   padding = 0,
   onBoundsComputed,
+  disturbancePointsRef,
 }, ref) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chunksRef = useRef<ColChunk[]>([]);
@@ -199,6 +201,21 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
       const entranceDone = elapsed > entranceEnd;
       const spring = entranceDone ? POST_SPRING : ENTRANCE_SPRING;
       const damping = entranceDone ? POST_DAMPING : ENTRANCE_DAMPING;
+
+      // Gather disturbance sources: mouse + external points (floating icons)
+      const srcX: number[] = [];
+      const srcY: number[] = [];
+      if (mx > -500) { srcX.push(mx); srcY.push(my); }
+      const extraPts = disturbancePointsRef?.current;
+      if (extraPts && extraPts.length > 0) {
+        const cRect = canvas.getBoundingClientRect();
+        for (let p = 0; p < extraPts.length; p++) {
+          srcX.push(extraPts[p].x - cRect.left);
+          srcY.push(extraPts[p].y - cRect.top);
+        }
+      }
+      const srcCount = srcX.length;
+
       // ============ BLOCK PHYSICS ============
       for (let c = 0; c < chunks.length; c++) {
         const chunk = chunks[c];
@@ -211,20 +228,28 @@ const AsciiBlocks = forwardRef<HTMLDivElement, AsciiBlocksProps>(function AsciiB
         for (let i = 0; i < blocks.length; i++) {
           const b = blocks[i];
 
-          // Mouse repulsion - smooth exploded view
-          const dx = mx - b.originX;
-          const dy = my - b.originY;
-          const distSq = dx * dx + dy * dy;
+          // Find closest disturbance source
+          let bestDistSq = Infinity;
+          let bestDx = 0;
+          let bestDy = 0;
+          for (let s = 0; s < srcCount; s++) {
+            const sdx = srcX[s] - b.originX;
+            const sdy = srcY[s] - b.originY;
+            const sdSq = sdx * sdx + sdy * sdy;
+            if (sdSq < bestDistSq) {
+              bestDistSq = sdSq;
+              bestDx = sdx;
+              bestDy = sdy;
+            }
+          }
 
-          if (distSq < mouseRadiusSq && distSq > 0) {
-            const dist = Math.sqrt(distSq);
-            const t = 1 - dist / mouseRadius; // 1 at center, 0 at edge
-            const pushDist = t * t * mouseRadius * 0.6; // quadratic falloff
+          if (bestDistSq < mouseRadiusSq && bestDistSq > 0) {
+            const dist = Math.sqrt(bestDistSq);
+            const t = 1 - dist / mouseRadius;
+            const pushDist = t * t * mouseRadius * 0.6;
             const invDist = 1 / dist;
-            // Target position = origin pushed away from cursor
-            const targetX = b.originX - dx * invDist * pushDist;
-            const targetY = b.originY - dy * invDist * pushDist;
-            // Smoothly interpolate toward target (no velocity impulse)
+            const targetX = b.originX - bestDx * invDist * pushDist;
+            const targetY = b.originY - bestDy * invDist * pushDist;
             b.x += (targetX - b.x) * 0.12;
             b.y += (targetY - b.y) * 0.12;
           } else {

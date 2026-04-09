@@ -41,6 +41,7 @@ export default function Hero() {
   const { isMobile, isHydrated } = useDeviceDetect();
   const gridRef = useRef<HTMLDivElement>(null);
   const asciiBoundsRef = useRef<BoundingBox | null>(null);
+  const iconPositionsRef = useRef<{ x: number; y: number }[]>([]);
 
   const handleAsciiBounds = useCallback((bounds: BoundingBox) => {
     asciiBoundsRef.current = bounds;
@@ -71,13 +72,14 @@ export default function Hero() {
         verticalAlign="top"
         padding={96}
         onBoundsComputed={handleAsciiBounds}
+        disturbancePointsRef={iconPositionsRef}
       />
 
       {/* ClipPath nav grid - bottom right */}
       <ClipPathGrid ref={gridRef} />
 
       {/* Floating social icons */}
-      <FloatingSocialIcons asciiBoundsRef={asciiBoundsRef} gridRef={gridRef} />
+      <FloatingSocialIcons asciiBoundsRef={asciiBoundsRef} gridRef={gridRef} iconPositionsRef={iconPositionsRef} />
 
       {/* Accessible nav links (sr-only) */}
       <nav className="sr-only" aria-label="Navigation principale">

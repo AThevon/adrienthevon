@@ -28,6 +28,7 @@ export interface BoundingBox {
 interface FloatingSocialIconsProps {
   asciiBoundsRef: React.RefObject<BoundingBox | null>;
   gridRef: React.RefObject<HTMLDivElement | null>;
+  iconPositionsRef?: React.MutableRefObject<{ x: number; y: number }[]>;
 }
 
 interface FloatingIcon {
@@ -121,7 +122,7 @@ function pushOutOfBox(icon: FloatingIcon, box: BoundingBox) {
   }
 }
 
-export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: FloatingSocialIconsProps) {
+export default function FloatingSocialIcons({ asciiBoundsRef, gridRef, iconPositionsRef }: FloatingSocialIconsProps) {
   const iconsRef = useRef<FloatingIcon[]>([]);
   const elRefs = useRef<(HTMLAnchorElement | null)[]>([null, null]);
   const hoveredRef = useRef<number>(-1);
@@ -261,6 +262,17 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef }: Floatin
       for (let i = 0; i < 2; i++) {
         const el = elRefs.current[i];
         if (el) el.style.transform = `translate(${icons[i].x - HALF}px, ${icons[i].y - HALF}px)`;
+      }
+
+      // Share positions with external consumers (e.g. AsciiBlocks disturbance)
+      if (iconPositionsRef) {
+        const pos = iconPositionsRef.current;
+        if (pos.length < 2) {
+          iconPositionsRef.current = [{ x: icons[0].x, y: icons[0].y }, { x: icons[1].x, y: icons[1].y }];
+        } else {
+          pos[0].x = icons[0].x; pos[0].y = icons[0].y;
+          pos[1].x = icons[1].x; pos[1].y = icons[1].y;
+        }
       }
 
       rafRef.current = requestAnimationFrame(loop);
