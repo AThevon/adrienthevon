@@ -40,7 +40,7 @@ Intégration GitHub CLI pour les PRs et issues, fzf pour la navigation fuzzy, et
     skills: ["shell", "git", "github", "nix"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
-    link: "https://worktigre.vercel.app",
+    link: "https://worktigre.athevon.dev",
     image: "/images/projects/wt-tiger-medium.png",
     logo: "/images/logos/worktigre.png",
     sections: [
@@ -81,7 +81,7 @@ Smart pacing pour savoir si tu brûles tes tokens ou si tu cruises. Clic sur une
     skills: ["swift"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
-    link: "https://tokeneater.vercel.app",
+    link: "https://tokeneater.athevon.dev",
     image: "/images/projects/tokeneater-medium.png",
     logo: "/images/logos/tokeneater.png",
     sections: [
@@ -122,7 +122,7 @@ Quantification de couleurs (max 20), numérotation par région, export PNG. Tout
     skills: ["typescript", "vite", "canvas"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
-    link: "https://pix2paint.vercel.app",
+    link: "https://pix2paint.athevon.dev",
     image: "/images/projects/pix2paint-medium.png",
     logo: "/images/logos/pix2paint.png",
     sections: [
@@ -163,7 +163,7 @@ Quantification de couleurs (max 20), numérotation par région, export PNG. Tout
     skills: ["typescript", "vite", "canvas"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
-    link: "https://yeetbg.vercel.app",
+    link: "https://yeetbg.athevon.dev",
     image: "/images/projects/yeetbg-medium.png",
     logo: "/images/logos/yeetbg.svg",
     sections: [
@@ -204,7 +204,7 @@ Shells temporaires pour tester un package avant de l'installer. Gestion de flake
     skills: ["shell", "nix"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
-    link: "https://nixdash.vercel.app",
+    link: "https://nixdash.athevon.dev",
     image: "/images/projects/nixdash-medium.png",
     logo: "/images/logos/nixdash.png",
     sections: [
@@ -289,7 +289,7 @@ rendant accessible un processus habituellement complexe.`,
     skills: ["nextjs", "react", "typescript", "tailwind", "canvas", "git", "vercel", "figma"],
     role: "DÉVELOPPEUR FRONT-END",
     client: "PROJET PERSONNEL",
-    link: "https://linekut.vercel.app",
+    link: "https://linekut.athevon.dev",
     image: "/images/projects/linekut-medium.png",
     logo: "/images/logos/linekut.webp",
     sections: [
@@ -418,7 +418,7 @@ L'objectif : inspirer confiance et démontrer expertise à travers une identité
     skills: ["nextjs", "react", "typescript", "tailwind", "motion", "git", "vercel", "figma"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "BLENKDEV",
-    link: "https://blenkdev.vercel.app",
+    link: "https://blenkdev.athevon.dev",
     image: "/images/projects/blenkdev-medium.png",
     logo: "/images/logos/blenkdev.png",
     sections: [
