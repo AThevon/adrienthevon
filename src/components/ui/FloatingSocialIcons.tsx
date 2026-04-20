@@ -18,6 +18,14 @@ function LinkedinIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function XIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z" />
+    </svg>
+  );
+}
+
 export interface BoundingBox {
   left: number;
   top: number;
@@ -53,7 +61,10 @@ const MARGIN = 8; // extra margin around boxes for bounce
 const ICONS_DATA = [
   { id: 'github', url: 'https://github.com/AThevon', label: 'GitHub', icon: GithubIcon, iconSize: 22 },
   { id: 'linkedin', url: 'https://linkedin.com/in/adrien-thevon-74b134100', label: 'LinkedIn', icon: LinkedinIcon, iconSize: 18 },
+  { id: 'x', url: 'https://x.com/athevon_dev', label: 'X', icon: XIcon, iconSize: 17 },
 ] as const;
+
+const N = ICONS_DATA.length;
 
 // Bounce icon off a bounding box. Handles both edge collision and fully-inside case.
 function bounceOffBox(icon: FloatingIcon, box: BoundingBox) {
@@ -124,9 +135,9 @@ function pushOutOfBox(icon: FloatingIcon, box: BoundingBox) {
 
 export default function FloatingSocialIcons({ asciiBoundsRef, gridRef, iconPositionsRef }: FloatingSocialIconsProps) {
   const iconsRef = useRef<FloatingIcon[]>([]);
-  const elRefs = useRef<(HTMLAnchorElement | null)[]>([null, null]);
+  const elRefs = useRef<(HTMLAnchorElement | null)[]>(Array(N).fill(null));
   const hoveredRef = useRef<number>(-1);
-  const cooldownUntilRef = useRef<number[]>([0, 0]); // timestamp until hover damping is ignored
+  const cooldownUntilRef = useRef<number[]>(Array(N).fill(0)); // timestamp until hover damping is ignored
   const dragRef = useRef<{
     index: number;
     offsetX: number;
@@ -146,18 +157,28 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef, iconPosit
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const x1 = vw * (0.45 + Math.random() * 0.15);
-    const y1 = vh * (0.2 + Math.random() * 0.15);
+    const cx = vw * (0.5 + Math.random() * 0.1);
+    const cy = vh * (0.25 + Math.random() * 0.1);
+    const ringR = 80;
+    const angleOffset = Math.random() * Math.PI * 2;
 
-    iconsRef.current = [
-      { x: x1, y: y1, vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.8 },
-      { x: x1 + 90, y: y1 + 50, vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.8 },
-    ];
+    iconsRef.current = ICONS_DATA.map((_, i) => {
+      const a = angleOffset + (i / N) * Math.PI * 2;
+      return {
+        x: cx + Math.cos(a) * ringR,
+        y: cy + Math.sin(a) * ringR,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+      };
+    });
 
     // Entrance animation: fade + rotate container (icon counter-rotates to stay upright)
-    const entranceDelays = [Math.random() * 0.4 + 0.3, Math.random() * 0.4 + 0.3];
-    const entranceRotations = [90 + Math.random() * 90, -(90 + Math.random() * 90)]; // random 90-180deg
-    for (let i = 0; i < 2; i++) {
+    const entranceDelays = ICONS_DATA.map(() => Math.random() * 0.4 + 0.3);
+    const entranceRotations = ICONS_DATA.map((_, i) => {
+      const mag = 90 + Math.random() * 90; // random 90-180deg
+      return i % 2 === 0 ? mag : -mag;
+    });
+    for (let i = 0; i < N; i++) {
       const el = elRefs.current[i];
       if (el) {
         const rot = entranceRotations[i];
@@ -193,14 +214,14 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef, iconPosit
   useEffect(() => {
     const loop = () => {
       const icons = iconsRef.current;
-      if (icons.length < 2) { rafRef.current = requestAnimationFrame(loop); return; }
+      if (icons.length < N) { rafRef.current = requestAnimationFrame(loop); return; }
 
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const asciiBounds = asciiBoundsRef.current;
       const gridBox = gridRef.current?.getBoundingClientRect() ?? null;
 
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < N; i++) {
         const icon = icons[i];
         const isDragging = dragRef.current?.index === i && dragRef.current.isDragging;
         if (isDragging) continue;
@@ -247,19 +268,23 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef, iconPosit
         if (gridBox) bounceOffBox(icon, gridBox);
       }
 
-      // Icon-icon repulsion
-      const a = icons[0], b = icons[1];
-      const dx = b.x - a.x, dy = b.y - a.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < REPULSE_DIST && dist > 0) {
-        const nx = dx / dist, ny = dy / dist;
-        const force = REPULSE_FORCE * (1 - dist / REPULSE_DIST);
-        if (!(dragRef.current?.index === 0 && dragRef.current.isDragging)) { a.vx -= nx * force; a.vy -= ny * force; }
-        if (!(dragRef.current?.index === 1 && dragRef.current.isDragging)) { b.vx += nx * force; b.vy += ny * force; }
+      // Icon-icon repulsion (pairwise)
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const a = icons[i], b = icons[j];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < REPULSE_DIST && dist > 0) {
+            const nx = dx / dist, ny = dy / dist;
+            const force = REPULSE_FORCE * (1 - dist / REPULSE_DIST);
+            if (!(dragRef.current?.index === i && dragRef.current.isDragging)) { a.vx -= nx * force; a.vy -= ny * force; }
+            if (!(dragRef.current?.index === j && dragRef.current.isDragging)) { b.vx += nx * force; b.vy += ny * force; }
+          }
+        }
       }
 
       // Apply to DOM
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < N; i++) {
         const el = elRefs.current[i];
         if (el) el.style.transform = `translate(${icons[i].x - HALF}px, ${icons[i].y - HALF}px)`;
       }
@@ -267,11 +292,10 @@ export default function FloatingSocialIcons({ asciiBoundsRef, gridRef, iconPosit
       // Share positions with external consumers (e.g. AsciiBlocks disturbance)
       if (iconPositionsRef) {
         const pos = iconPositionsRef.current;
-        if (pos.length < 2) {
-          iconPositionsRef.current = [{ x: icons[0].x, y: icons[0].y }, { x: icons[1].x, y: icons[1].y }];
+        if (pos.length !== N) {
+          iconPositionsRef.current = icons.map((ic) => ({ x: ic.x, y: ic.y }));
         } else {
-          pos[0].x = icons[0].x; pos[0].y = icons[0].y;
-          pos[1].x = icons[1].x; pos[1].y = icons[1].y;
+          for (let i = 0; i < N; i++) { pos[i].x = icons[i].x; pos[i].y = icons[i].y; }
         }
       }
 

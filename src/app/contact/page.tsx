@@ -126,6 +126,15 @@ const SOCIAL_LINKS = [
       </svg>
     ),
   },
+  {
+    name: "X",
+    url: "https://x.com/athevon_dev",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z" />
+      </svg>
+    ),
+  },
 ];
 
 // --- Bouncing Toast ---
@@ -300,7 +309,7 @@ export default function ContactPage() {
 
         {/* Social links */}
         <motion.div
-          className="flex items-center gap-4 md:gap-6"
+          className="flex flex-wrap items-center justify-center gap-4 md:gap-6"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.25 }}
@@ -312,7 +321,7 @@ export default function ContactPage() {
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="hover"
-              className="group relative flex flex-col items-center justify-center w-[140px] md:w-[160px] h-[100px] md:h-[120px] border border-[#1a1a1a] bg-[#0a0a0a] overflow-hidden transition-all duration-150 hover:bg-[#111] hover:border-[#333]"
+              className="group relative flex flex-col items-center justify-center w-[100px] sm:w-[130px] md:w-[150px] h-[90px] sm:h-[105px] md:h-[120px] border border-[#1a1a1a] bg-[#0a0a0a] overflow-hidden transition-all duration-150 hover:bg-[#111] hover:border-[#333]"
             >
               {/* Top accent line - visible on hover */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#ffaa00] scale-x-0 origin-left transition-transform duration-200 group-hover:scale-x-100" />
