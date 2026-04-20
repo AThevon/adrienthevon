@@ -60,7 +60,7 @@ const MARGIN = 8; // extra margin around boxes for bounce
 
 const ICONS_DATA = [
   { id: 'github', url: 'https://github.com/AThevon', label: 'GitHub', icon: GithubIcon, iconSize: 22 },
-  { id: 'linkedin', url: 'https://linkedin.com/in/adrien-thevon-74b134100', label: 'LinkedIn', icon: LinkedinIcon, iconSize: 18 },
+  { id: 'linkedin', url: 'https://linkedin.com/in/adrien-thevon', label: 'LinkedIn', icon: LinkedinIcon, iconSize: 18 },
   { id: 'x', url: 'https://x.com/athevon_dev', label: 'X', icon: XIcon, iconSize: 17 },
 ] as const;
 

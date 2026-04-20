@@ -89,7 +89,7 @@ export default function Hero() {
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
         <a href="https://github.com/AThevon" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://linkedin.com/in/adrien-thevon-74b134100" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://linkedin.com/in/adrien-thevon" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="https://x.com/athevon_dev" target="_blank" rel="noopener noreferrer">X</a>
       </nav>
     </section>

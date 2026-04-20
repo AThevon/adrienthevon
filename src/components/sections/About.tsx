@@ -200,7 +200,7 @@ export default function About() {
                 </motion.span>
               </a>
               <a
-                href="https://linkedin.com/in/adrienthevon"
+                href="https://linkedin.com/in/adrien-thevon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent transition-colors duration-300"
