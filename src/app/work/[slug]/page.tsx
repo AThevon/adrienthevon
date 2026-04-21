@@ -82,6 +82,7 @@ export default function ProjectPage() {
               key={slug}
               src={iframeSrc}
               sandbox="allow-scripts allow-same-origin"
+              scrolling="no"
               style={{
                 width: "150%",
                 height: "150%",
@@ -90,6 +91,7 @@ export default function ProjectPage() {
                 opacity: 0,
                 transition: "opacity 500ms ease-out",
                 border: "none",
+                pointerEvents: "none",
               }}
               onLoad={handleIframeLoad}
               title={project.title}
