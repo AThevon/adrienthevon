@@ -35,6 +35,7 @@ const iconMapping: Record<string, string> = {
   vite: "vite",
   shell: "gnubash",
   nix: "nixos",
+  claude: "claude",
 
   // Design
   figma: "figma",
@@ -63,6 +64,7 @@ const logoColors: Record<string, string> = {
   vite: "#646CFF",
   shell: "#4EAA25",
   nix: "#5277C3",
+  claude: "#D97757",
   figma: "#F24E1E",
 };
 

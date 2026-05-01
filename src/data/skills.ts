@@ -150,14 +150,14 @@ export const skills: Skill[] = [
     id: "git",
     name: "Git",
     category: "tools",
-    connections: ["github", "vercel", "shell", "nix"],
+    connections: ["github", "vercel", "shell", "nix", "claude"],
     description: "Versionning, branching, workflows",
   },
   {
     id: "github",
     name: "GitHub",
     category: "tools",
-    connections: ["git", "vercel", "shell"],
+    connections: ["git", "vercel", "shell", "claude"],
     description: "CI/CD, Actions, collaboration",
   },
   {
@@ -178,7 +178,7 @@ export const skills: Skill[] = [
     id: "shell",
     name: "Shell",
     category: "tools",
-    connections: ["git", "github", "nix"],
+    connections: ["git", "github", "nix", "claude"],
     description: "Bash/Zsh, scripts CLI, automation",
   },
   {
@@ -187,6 +187,13 @@ export const skills: Skill[] = [
     category: "tools",
     connections: ["shell", "git"],
     description: "Nix flakes, packages, reproducible builds",
+  },
+  {
+    id: "claude",
+    name: "Claude",
+    category: "tools",
+    connections: ["shell", "git", "github"],
+    description: "Skills, plugins, et automation pour Claude Code et claude.ai",
   },
 
   // Design

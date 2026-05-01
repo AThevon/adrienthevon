@@ -26,6 +26,47 @@ export interface Project {
 
 const allProjects: Project[] = [
   {
+    id: "genjutsu",
+    title: "GENJUTSU",
+    category: "CLAUDE PLUGIN",
+    year: "2026",
+    date: "2026-05",
+    color: "#b11522",
+    description: "Plugin Claude Code et claude.ai de creative coding. Cast motion, paint signatures, zero AI slop.",
+    longDescription: `Genjutsu, l'art de l'illusion. Deux orchestrateurs (cast et paint) et 13 sub-skills internes pour transformer n'importe quelle interface de fonctionnelle à exceptionnelle.
+
+Couvre Web (React, Vue, GSAP, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) et Apple (SwiftUI iOS + macOS). Détection auto du stack, thèse d'interaction avant de toucher au code, audit final sur reduced-motion, perfs et accessibilité.`,
+    tags: ["CLAUDE CODE", "PLUGIN", "SHELL", "CREATIVE CODING"],
+    skills: ["claude", "shell", "git", "github"],
+    role: "CRÉATEUR & DÉVELOPPEUR",
+    client: "OPEN SOURCE",
+    link: "https://github.com/AThevon/genjutsu",
+    image: "/images/projects/genjutsu-medium.png",
+    logo: "/images/logos/genjutsu.png",
+    sections: [
+      {
+        type: "intro",
+        title: "L'IDÉE",
+        content: "Pousser Claude au-delà du code fonctionnel. Lui donner le vocabulaire du creative coding pour que chaque interaction respire.",
+      },
+      {
+        type: "challenge",
+        title: "LE DÉFI",
+        content: "Couvrir Web, Compose et SwiftUI sans tout charger d'un coup. Le scan détecte le stack, charge les bons sub-skills, propose une thèse avant d'écrire du code.",
+      },
+      {
+        type: "process",
+        title: "LE PROCESS",
+        content: "Architecture metaskills + subskills. cast pour les illusions ciblées, paint pour les univers visuels complets. Audit final sur reduced-motion, perfs et accessibilité.",
+      },
+      {
+        type: "result",
+        title: "LE RÉSULTAT",
+        content: "Plugin v3.0 distribué via GitHub Releases et /plugin marketplace. 15 sub-skills, 2 orchestrateurs, zero AI slop.",
+      },
+    ],
+  },
+  {
     id: "worktigre",
     title: "WORKTIGRE",
     category: "CLI TOOL",

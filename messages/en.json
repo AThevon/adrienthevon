@@ -253,6 +253,31 @@
     "notFound": "Project not found"
   },
   "projectsData": {
+    "genjutsu": {
+      "category": "CLAUDE PLUGIN",
+      "description": "Claude Code and claude.ai creative coding plugin. Cast motion, paint signatures, zero AI slop.",
+      "longDescription": "Genjutsu, the art of illusion. Two orchestrators (cast and paint) and 13 internal sub-skills to transform any interface from functional to exceptional.\n\nCovers Web (React, Vue, GSAP, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) and Apple (SwiftUI iOS + macOS). Automatic stack detection, interaction thesis before touching code, final audit on reduced-motion, performance and accessibility.",
+      "role": "CREATOR & DEVELOPER",
+      "client": "OPEN SOURCE",
+      "sections": {
+        "intro": {
+          "title": "THE IDEA",
+          "content": "Push Claude beyond functional code. Give it the creative coding vocabulary so every interaction breathes."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Cover Web, Compose and SwiftUI without loading everything at once. The scan detects the stack, loads the right sub-skills, proposes a thesis before writing code."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Metaskills + subskills architecture. cast for targeted illusions, paint for full visual universes. Final audit on reduced-motion, performance and accessibility."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "v3.0 plugin distributed via GitHub Releases and /plugin marketplace. 15 sub-skills, 2 orchestrators, zero AI slop."
+        }
+      }
+    },
     "underTheFlow": {
       "category": "WEB PLATFORM",
       "description": "Hip-hop live sessions platform with an immersive experience for artists and fans.",
