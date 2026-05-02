@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getProjectById } from "@/data/projects";
 
@@ -9,22 +9,50 @@ function toCamelCase(str: string): string {
   return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
 }
 
+type PreviewStatus = "checking" | "ok" | "blocked";
+
 export default function ProjectPage() {
   const params = useParams();
   const slug = params.slug as string;
   const project = getProjectById(slug);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const shimmerRef = useRef<HTMLDivElement>(null);
+  const [previewStatus, setPreviewStatus] = useState<PreviewStatus>("checking");
 
   const handleIframeLoad = useCallback(() => {
     if (iframeRef.current) iframeRef.current.style.opacity = "1";
     if (shimmerRef.current) shimmerRef.current.style.opacity = "0";
   }, []);
 
+  const isGithub = project?.link.includes("github.com") ?? false;
+  const iframeSrc = project ? (project.link.startsWith("https://") ? project.link : `https://${project.link}`) : "";
+
   useEffect(() => {
     if (iframeRef.current) iframeRef.current.style.opacity = "0";
     if (shimmerRef.current) shimmerRef.current.style.opacity = "1";
-  }, [slug]);
+
+    if (!iframeSrc || isGithub) return;
+
+    setPreviewStatus("checking");
+    const controller = new AbortController();
+
+    fetch(iframeSrc, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-store",
+      credentials: "omit",
+      redirect: "follow",
+      signal: controller.signal,
+    })
+      .then((res) => {
+        setPreviewStatus(res.ok ? "ok" : "blocked");
+      })
+      .catch(() => {
+        setPreviewStatus("blocked");
+      });
+
+    return () => controller.abort();
+  }, [slug, iframeSrc, isGithub]);
 
   if (!project) {
     return (
@@ -34,8 +62,6 @@ export default function ProjectPage() {
     );
   }
 
-  const isGithub = project.link.includes("github.com");
-  const iframeSrc = project.link.startsWith("https://") ? project.link : `https://${project.link}`;
   const ctaLabel = isGithub ? "VIEW ON GITHUB" : "VIEW WEBSITE";
 
   return (
@@ -68,35 +94,57 @@ export default function ProjectPage() {
       {/* Preview */}
       <div>
         {!isGithub ? (
-          <div
-            className="relative border border-foreground/10 overflow-hidden"
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="hover"
+            className="relative block border border-foreground/10 overflow-hidden group"
             style={{ aspectRatio: "16 / 9" }}
           >
             <div
               ref={shimmerRef}
-              className="absolute inset-0 bg-foreground/5"
-              style={{ transition: "opacity 500ms ease-out", pointerEvents: "none" }}
-            />
-            <iframe
-              ref={iframeRef}
-              key={slug}
-              src={iframeSrc}
-              sandbox="allow-scripts allow-same-origin"
-              scrolling="no"
+              className="absolute inset-0"
               style={{
-                width: "150%",
-                height: "150%",
-                transform: "scale(0.6667)",
-                transformOrigin: "top left",
-                opacity: 0,
                 transition: "opacity 500ms ease-out",
-                border: "none",
                 pointerEvents: "none",
+                backgroundImage: `url(${project.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "top center",
+                backgroundColor: "rgba(255,255,255,0.03)",
               }}
-              onLoad={handleIframeLoad}
-              title={project.title}
             />
-          </div>
+            {previewStatus === "ok" && (
+              <iframe
+                ref={iframeRef}
+                key={slug}
+                src={iframeSrc}
+                sandbox="allow-scripts allow-same-origin"
+                scrolling="no"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                style={{
+                  width: "150%",
+                  height: "150%",
+                  transform: "scale(0.6667)",
+                  transformOrigin: "top left",
+                  opacity: 0,
+                  transition: "opacity 500ms ease-out",
+                  border: "none",
+                  pointerEvents: "none",
+                }}
+                onLoad={handleIframeLoad}
+                title={project.title}
+              />
+            )}
+            {previewStatus === "blocked" && (
+              <div className="absolute inset-0 flex items-end justify-start p-6 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none">
+                <span className="font-mono text-xs uppercase tracking-widest text-foreground/80">
+                  CLICK TO OPEN <span aria-hidden>↗</span>
+                </span>
+              </div>
+            )}
+          </a>
         ) : (
           <GithubPreview project={project} />
         )}
