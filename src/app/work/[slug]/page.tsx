@@ -36,16 +36,12 @@ export default function ProjectPage() {
     setPreviewStatus("checking");
     const controller = new AbortController();
 
-    fetch(iframeSrc, {
-      method: "GET",
-      mode: "cors",
-      cache: "no-store",
-      credentials: "omit",
-      redirect: "follow",
+    fetch(`/api/preview-check?url=${encodeURIComponent(iframeSrc)}`, {
       signal: controller.signal,
     })
-      .then((res) => {
-        setPreviewStatus(res.ok ? "ok" : "blocked");
+      .then((res) => res.json())
+      .then((data: { ok: boolean }) => {
+        setPreviewStatus(data.ok ? "ok" : "blocked");
       })
       .catch(() => {
         setPreviewStatus("blocked");
