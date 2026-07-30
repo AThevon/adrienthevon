@@ -256,7 +256,7 @@
     "genjutsu": {
       "category": "CLAUDE PLUGIN",
       "description": "Plugin Claude Code et claude.ai de creative coding. Cast motion, paint signatures, zero AI slop.",
-      "longDescription": "Genjutsu, l'art de l'illusion. Deux orchestrateurs (cast et paint) et 13 sub-skills internes pour transformer n'importe quelle interface de fonctionnelle à exceptionnelle.\n\nCouvre Web (React, Vue, GSAP, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) et Apple (SwiftUI iOS + macOS). Détection auto du stack, thèse d'interaction avant de toucher au code, audit final sur reduced-motion, perfs et accessibilité.",
+      "longDescription": "Genjutsu, l'art de l'illusion. Deux orchestrateurs (cast et paint) et 15 sub-skills internes pour transformer n'importe quelle interface de fonctionnelle à exceptionnelle.\n\nCouvre Web (React, Vue, Svelte, CSS natif, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) et Apple (SwiftUI iOS + macOS). Détection auto du stack, thèse d'interaction avant de toucher au code, audit final sur reduced-motion, perfs et accessibilité.\n\nLe site est un manifeste : encre sumi dessinée en live au canvas, cinq chapitres, zéro image.",
       "role": "CRÉATEUR & DÉVELOPPEUR",
       "client": "OPEN SOURCE",
       "sections": {
@@ -274,7 +274,7 @@
         },
         "result": {
           "title": "LE RÉSULTAT",
-          "content": "Plugin v3.0 distribué via GitHub Releases et /plugin marketplace. 15 sub-skills, 2 orchestrateurs, zero AI slop."
+          "content": "Plugin v3.1 distribué via GitHub Releases, /plugin marketplace et bundle claude.ai. 15 sub-skills, 2 orchestrateurs, zero AI slop."
         }
       }
     },
@@ -304,8 +304,8 @@
     },
     "victorDenay": {
       "category": "PORTFOLIO",
-      "description": "Portfolio créatif pour un vidéaste et photographe professionnel.",
-      "longDescription": "Portfolio sur-mesure pour Victor Denay, vidéaste et photographe.\nUn design épuré qui laisse toute la place au travail visuel de l'artiste, avec des transitions fluides et une navigation intuitive.\n\nL'objectif était de créer un écrin digital qui sublime les créations tout en offrant une expérience de navigation mémorable.",
+      "description": "Portfolio sur-mesure pour un monteur et photographe : filmographie, galerie photo et back-office maison.",
+      "longDescription": "Portfolio sur-mesure pour Victor Denay, monteur et photographe. 39 projets, 24 clients, un showreel en fond de hero et une filmographie qui se parcourt comme un générique.\n\nLe site s'efface pour laisser passer les images : typo massive, fond noir, un accent vert et rien d'autre. Vidéos Vimeo chargées seulement après consentement, visuels servis en AVIF/WebP.\n\nDerrière, un back-office complet : Victor gère ses projets, ses plans et ses photos lui-même. Base Turso, uploads S3, sauvegardes scriptées.",
       "role": "DÉVELOPPEUR FULL-STACK",
       "sections": {
         "intro": {
@@ -314,15 +314,15 @@
         },
         "challenge": {
           "title": "LE DÉFI",
-          "content": "Présenter du contenu vidéo et photo de haute qualité sans compromettre les temps de chargement. Créer une galerie fluide et intuitive."
+          "content": "Servir de la vidéo et de la photo lourdes sans plomber le chargement, et garder le texte lisible par-dessus un showreel qui change de plan toutes les deux secondes."
         },
         "process": {
           "title": "LE PROCESS",
-          "content": "Design mobile-first. Lazy loading intelligent. Transitions soignées entre les projets. Typographie minimaliste."
+          "content": "Nuxt 4 et GSAP pour les transitions, @nuxt/image pour les visuels, Turso et Drizzle côté données, S3 pour les uploads. Consentement cookies avant toute vidéo."
         },
         "result": {
           "title": "LE RÉSULTAT",
-          "content": "Un portfolio élégant qui met en valeur le travail de Victor tout en offrant une expérience utilisateur premium."
+          "content": "Un portfolio que Victor administre seul : il ajoute un projet, ses plans et ses photos depuis son back-office, sans passer par moi."
         }
       }
     },
@@ -348,31 +348,6 @@
         "result": {
           "title": "LE RÉSULTAT",
           "content": "Un outil utilisé par des makers et artisans pour créer rapidement des patrons de découpe personnalisés."
-        }
-      }
-    },
-    "blenkdev": {
-      "category": "AGENCE WEB",
-      "description": "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
-      "longDescription": "BlenkDev est le site vitrine d'une activité freelance en développement web.\nUne plateforme qui présente des services, approches et portfolio de manière claire et professionnelle.\n\nL'objectif : inspirer confiance et démontrer mon expertise à travers une identité visuelle moderne et des études de cas détaillées.",
-      "role": "DÉVELOPPEUR FULL-STACK",
-      "client": "BLENKDEV",
-      "sections": {
-        "intro": {
-          "title": "LA MISSION",
-          "content": "Créer une présence en ligne professionnelle pour une activité freelance. Un site qui inspire confiance."
-        },
-        "challenge": {
-          "title": "LE DÉFI",
-          "content": "Se démarquer dans un marché saturé en mettant en avant mes compétences uniques et mon approche centrée sur le client."
-        },
-        "process": {
-          "title": "LE PROCESS",
-          "content": "Design moderne et épuré. Mise en avant des projets réalisés. Section services claire. Témoignages clients pour la crédibilité."
-        },
-        "result": {
-          "title": "LE RÉSULTAT",
-          "content": "Un site vitrine qui convertit les visiteurs en clients potentiels et reflète mon identité professionnelle."
         }
       }
     },

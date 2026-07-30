@@ -115,15 +115,21 @@ Source priority:
 3. Files matching `**/{banner,hero,screenshot,demo,cover}.{png,jpg,webp}` in the repo.
 4. If still nothing, ask the user.
 
-Save the source as `public/images/projects/<slug>.png`, then generate the variants:
+Pick the format from the content, because `-medium` is the placeholder shown while the live iframe loads and must be light:
+- **Flat / UI-heavy** (dashboards, terminals, text-heavy pages) → PNG, it compresses well and keeps type crisp.
+- **Photographic** (video frames, photo heroes) → WebP at quality ~86. A photographic PNG at 1200px weighs ~1 MB, the same frame in WebP weighs ~75 KB.
+
+Save the source as `public/images/projects/<slug>.<ext>`, then generate the variants (swap `png` for `webp` when the source is photographic):
 
 ```bash
 SRC="public/images/projects/<slug>.png"
-magick "$SRC" -resize 1200x "public/images/projects/<slug>-medium.png"
-magick "$SRC" -resize 600x  "public/images/projects/<slug>-small.png"
+magick "$SRC" -resize 1200x -strip "public/images/projects/<slug>-medium.png"
+magick "$SRC" -resize 600x  -strip "public/images/projects/<slug>-small.png"
 ```
 
-If the source isn't already PNG, convert it first with `magick <source> public/images/projects/<slug>.png`.
+The `image` field must carry the real extension (e.g. `/images/projects/<slug>-medium.webp`) - it is the only place these paths are referenced.
+
+If the source isn't already PNG or WebP, convert it first with `magick <source> public/images/projects/<slug>.png`.
 
 If the source is much smaller than 1200px wide, warn the user and ask whether to upscale (not recommended) or use a smaller image.
 

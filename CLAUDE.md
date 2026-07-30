@@ -176,10 +176,9 @@ interface Project {
 
 **Projets actuels :**
 - **Under The Flow** (2024) - Plateforme de sessions live hip-hop
-- **Victor Denay** (2024) - Portfolio vidéaste/photographe
+- **Victor Denay** (2024) - Portfolio monteur/photographe
 - **Dépense Man** (2024) - App de gestion de finances (PWA)
 - **Linekut** (2024) - Convertisseur d'images en patrons découpables
-- **BlenkDev** (2024) - Site vitrine agence freelance
 
 Les textes des projets sont traduits via `projectsData.{slug}` dans les fichiers de traduction.
 

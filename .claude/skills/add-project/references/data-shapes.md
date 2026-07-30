@@ -105,9 +105,11 @@ Place under `public/images/`:
 | Asset | Path | Notes |
 |---|---|---|
 | Project logo | `/images/logos/<slug>.<ext>` | png, svg, webp, etc. — keep source ext |
-| Project hero (full) | `/images/projects/<slug>.png` | original resolution |
-| Project hero (medium) | `/images/projects/<slug>-medium.png` | 1200px wide |
-| Project hero (small) | `/images/projects/<slug>-small.png` | 600px wide |
+| Project hero (full) | `/images/projects/<slug>.<png\|webp>` | original resolution |
+| Project hero (medium) | `/images/projects/<slug>-medium.<png\|webp>` | 1200px wide |
+| Project hero (small) | `/images/projects/<slug>-small.<png\|webp>` | 600px wide |
+
+PNG for flat/UI-heavy captures, WebP (quality ~86) for photographic ones — see the Main image section of `SKILL.md`.
 
 Aspect ratio: keep the source ratio. Existing projects are around 16:9 but it's not strict.
 

@@ -256,7 +256,7 @@
     "genjutsu": {
       "category": "CLAUDE PLUGIN",
       "description": "Claude Code and claude.ai creative coding plugin. Cast motion, paint signatures, zero AI slop.",
-      "longDescription": "Genjutsu, the art of illusion. Two orchestrators (cast and paint) and 13 internal sub-skills to transform any interface from functional to exceptional.\n\nCovers Web (React, Vue, GSAP, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) and Apple (SwiftUI iOS + macOS). Automatic stack detection, interaction thesis before touching code, final audit on reduced-motion, performance and accessibility.",
+      "longDescription": "Genjutsu, the art of illusion. Two orchestrators (cast and paint) and 15 internal sub-skills to transform any interface from functional to exceptional.\n\nCovers Web (React, Vue, Svelte, native CSS, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) and Apple (SwiftUI iOS + macOS). Automatic stack detection, interaction thesis before touching code, final audit on reduced-motion, performance and accessibility.\n\nThe site is a manifesto: sumi ink drawn live on canvas, five chapters, zero images.",
       "role": "CREATOR & DEVELOPER",
       "client": "OPEN SOURCE",
       "sections": {
@@ -274,7 +274,7 @@
         },
         "result": {
           "title": "THE RESULT",
-          "content": "v3.0 plugin distributed via GitHub Releases and /plugin marketplace. 15 sub-skills, 2 orchestrators, zero AI slop."
+          "content": "v3.1 plugin distributed via GitHub Releases, /plugin marketplace and a claude.ai bundle. 15 sub-skills, 2 orchestrators, zero AI slop."
         }
       }
     },
@@ -304,8 +304,8 @@
     },
     "victorDenay": {
       "category": "PORTFOLIO",
-      "description": "Creative portfolio for a professional videographer and photographer.",
-      "longDescription": "Custom portfolio for Victor Denay, videographer and photographer.\nA clean design that gives center stage to the artist's visual work, with smooth transitions and intuitive navigation.\n\nThe goal was to create a digital showcase that elevates the work while offering a memorable browsing experience.",
+      "description": "Custom portfolio for a film editor and photographer: filmography, photo gallery and a homegrown back-office.",
+      "longDescription": "Custom portfolio for Victor Denay, film editor and photographer. 39 projects, 24 clients, a showreel behind the hero and a filmography you scroll through like end credits.\n\nThe site steps back to let the images through: massive type, black background, one green accent and nothing else. Vimeo videos load only after consent, visuals served as AVIF/WebP.\n\nBehind it, a full back-office: Victor manages his projects, his shots and his photos himself. Turso database, S3 uploads, scripted backups.",
       "role": "FULL-STACK DEVELOPER",
       "sections": {
         "intro": {
@@ -314,15 +314,15 @@
         },
         "challenge": {
           "title": "THE CHALLENGE",
-          "content": "Presenting high-quality video and photo content without compromising load times. Creating a smooth, intuitive gallery."
+          "content": "Serving heavy video and photo without wrecking load times, and keeping the text readable over a showreel that cuts to a new shot every two seconds."
         },
         "process": {
           "title": "THE PROCESS",
-          "content": "Mobile-first design. Smart lazy loading. Polished transitions between projects. Minimalist typography."
+          "content": "Nuxt 4 and GSAP for transitions, @nuxt/image for visuals, Turso and Drizzle for data, S3 for uploads. Cookie consent before any video."
         },
         "result": {
           "title": "THE RESULT",
-          "content": "An elegant portfolio that showcases Victor's work while delivering a premium user experience."
+          "content": "A portfolio Victor runs on his own: he adds a project, its shots and its photos from his back-office, without going through me."
         }
       }
     },
@@ -348,31 +348,6 @@
         "result": {
           "title": "THE RESULT",
           "content": "A tool used by makers and craftspeople to quickly create custom cutting patterns."
-        }
-      }
-    },
-    "blenkdev": {
-      "category": "WEB AGENCY",
-      "description": "Showcase website for a freelance web development agency specialized in custom solutions.",
-      "longDescription": "BlenkDev is the showcase website for freelance web development activity.\nA platform that presents services, approach and portfolio in a clear and professional manner.\n\nThe goal: inspire trust and demonstrate expertise through a modern visual identity and detailed case studies.",
-      "role": "FULL-STACK DEVELOPER",
-      "client": "BLENKDEV",
-      "sections": {
-        "intro": {
-          "title": "THE MISSION",
-          "content": "Create a professional online presence for freelance activity. A website that inspires trust and demonstrates technical expertise."
-        },
-        "challenge": {
-          "title": "THE CHALLENGE",
-          "content": "Stand out in a saturated market by highlighting my unique skills and client-centered approach."
-        },
-        "process": {
-          "title": "THE PROCESS",
-          "content": "Modern and clean design. Showcase of completed projects. Clear services section. Client testimonials for credibility."
-        },
-        "result": {
-          "title": "THE RESULT",
-          "content": "A showcase website that converts visitors into potential clients and reflects my professional identity."
         }
       }
     },

@@ -67,8 +67,7 @@ npm run lint     # Linting
 - **Linekut** (2025) - Convertisseur d'images en patrons découpables
 - **Dépense Man** (2025) - App de gestion de finances (PWA)
 - **Under The Flow** (2025) - Plateforme de sessions live hip-hop
-- **BlenkDev** (2024) - Site vitrine agence freelance
-- **Victor Denay** (2024) - Portfolio vidéaste/photographe
+- **Victor Denay** (2024) - Portfolio monteur/photographe
 
 ## Status
 

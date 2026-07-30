@@ -31,16 +31,18 @@ const allProjects: Project[] = [
     category: "CLAUDE PLUGIN",
     year: "2026",
     date: "2026-05",
-    color: "#b11522",
+    color: "#b11523",
     description: "Plugin Claude Code et claude.ai de creative coding. Cast motion, paint signatures, zero AI slop.",
-    longDescription: `Genjutsu, l'art de l'illusion. Deux orchestrateurs (cast et paint) et 13 sub-skills internes pour transformer n'importe quelle interface de fonctionnelle à exceptionnelle.
+    longDescription: `Genjutsu, l'art de l'illusion. Deux orchestrateurs (cast et paint) et 15 sub-skills internes pour transformer n'importe quelle interface de fonctionnelle à exceptionnelle.
 
-Couvre Web (React, Vue, GSAP, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) et Apple (SwiftUI iOS + macOS). Détection auto du stack, thèse d'interaction avant de toucher au code, audit final sur reduced-motion, perfs et accessibilité.`,
-    tags: ["CLAUDE CODE", "PLUGIN", "SHELL", "CREATIVE CODING"],
-    skills: ["claude", "shell", "git", "github"],
+Couvre Web (React, Vue, Svelte, CSS natif, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) et Apple (SwiftUI iOS + macOS). Détection auto du stack, thèse d'interaction avant de toucher au code, audit final sur reduced-motion, perfs et accessibilité.
+
+Le site est un manifeste : encre sumi dessinée en live au canvas, cinq chapitres, zéro image.`,
+    tags: ["CLAUDE CODE", "PLUGIN", "SHELL", "CREATIVE CODING", "ASTRO"],
+    skills: ["claude", "shell", "canvas", "git", "github"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
-    link: "https://github.com/AThevon/genjutsu",
+    link: "https://genjutsu.athevon.dev",
     image: "/images/projects/genjutsu-medium.png",
     logo: "/images/logos/genjutsu.png",
     sections: [
@@ -62,7 +64,7 @@ Couvre Web (React, Vue, GSAP, Three.js, Canvas), Android (Jetpack Compose, Compo
       {
         type: "result",
         title: "LE RÉSULTAT",
-        content: "Plugin v3.0 distribué via GitHub Releases et /plugin marketplace. 15 sub-skills, 2 orchestrateurs, zero AI slop.",
+        content: "Plugin v3.1 distribué via GitHub Releases, /plugin marketplace et bundle claude.ai. 15 sub-skills, 2 orchestrateurs, zero AI slop.",
       },
     ],
   },
@@ -407,19 +409,19 @@ avec une direction artistique forte et moderne.`,
     year: "2024",
     date: "2024-08",
     color: "#08C566",
-    description: "Portfolio créatif pour un vidéaste et photographe professionnel.",
-    longDescription: `Portfolio sur-mesure pour Victor Denay, vidéaste et photographe.
-Un design épuré qui laisse toute la place au travail visuel de l'artiste,
-avec des transitions fluides et une navigation intuitive.
+    description: "Portfolio sur-mesure pour un monteur et photographe : filmographie, galerie photo et back-office maison.",
+    longDescription: `Portfolio sur-mesure pour Victor Denay, monteur et photographe. 39 projets, 24 clients, un showreel en fond de hero et une filmographie qui se parcourt comme un générique.
 
-L'objectif était de créer un écrin digital qui sublime les créations
-tout en offrant une expérience de navigation mémorable.`,
-    tags: ["NUXT", "TAILWIND", "MOTION", "THREE.JS", "SUPABASE"],
-    skills: ["typescript", "nuxt", "vue", "tailwind", "motion", "threejs", "postgresql", "drizzle", "figma", "git", "vercel"],
+Le site s'efface pour laisser passer les images : typo massive, fond noir, un accent vert et rien d'autre. Vidéos Vimeo chargées seulement après consentement, visuels servis en AVIF/WebP.
+
+Derrière, un back-office complet : Victor gère ses projets, ses plans et ses photos lui-même. Base Turso, uploads S3, sauvegardes scriptées.`,
+    tags: ["NUXT", "TAILWIND", "GSAP", "TURSO", "DRIZZLE"],
+    skills: ["typescript", "nuxt", "vue", "tailwind", "gsap", "drizzle", "figma", "git", "vercel"],
     role: "DÉVELOPPEUR FULL-STACK",
     client: "VICTOR DENAY",
     link: "https://victordenay.vercel.app",
-    image: "/images/projects/victor-denay-medium.png",
+    image: "/images/projects/victor-denay-medium.webp",
+    logo: "/images/logos/victor-denay.png",
     sections: [
       {
         type: "intro",
@@ -429,59 +431,17 @@ tout en offrant une expérience de navigation mémorable.`,
       {
         type: "challenge",
         title: "LE DÉFI",
-        content: "Présenter du contenu vidéo et photo de haute qualité sans compromettre les temps de chargement. Créer une galerie fluide et intuitive.",
+        content: "Servir de la vidéo et de la photo lourdes sans plomber le chargement, et garder le texte lisible par-dessus un showreel qui change de plan toutes les deux secondes.",
       },
       {
         type: "process",
         title: "LE PROCESS",
-        content: "Design mobile-first. Lazy loading intelligent. Transitions soignées entre les projets. Typographie minimaliste.",
+        content: "Nuxt 4 et GSAP pour les transitions, @nuxt/image pour les visuels, Turso et Drizzle côté données, S3 pour les uploads. Consentement cookies avant toute vidéo.",
       },
       {
         type: "result",
         title: "LE RÉSULTAT",
-        content: "Un portfolio élégant qui met en valeur le travail de Victor tout en offrant une expérience utilisateur premium.",
-      },
-    ],
-  },
-  {
-    id: "blenkdev",
-    title: "BLENKDEV",
-    category: "WEB AGENCY",
-    year: "2024",
-    date: "2024-04",
-    color: "#FE1832",
-    description: "Site vitrine pour une agence de développement web freelance spécialisée dans les solutions sur-mesure.",
-    longDescription: `BlenkDev est le site vitrine d'une activité freelance en développement web.
-Une plateforme qui présente des services, approches et portfolio de manière claire et professionnelle.
-
-L'objectif : inspirer confiance et démontrer expertise à travers une identité visuelle moderne et des études de cas détaillées.`,
-    tags: ["NEXT.JS", "TAILWIND", "MOTION", "SEO", "ANALYTICS"],
-    skills: ["nextjs", "react", "typescript", "tailwind", "motion", "git", "vercel", "figma"],
-    role: "DÉVELOPPEUR FULL-STACK",
-    client: "BLENKDEV",
-    link: "https://blenkdev.athevon.dev",
-    image: "/images/projects/blenkdev-medium.png",
-    logo: "/images/logos/blenkdev.png",
-    sections: [
-      {
-        type: "intro",
-        title: "LA MISSION",
-        content: "Créer une présence en ligne professionnelle pour une activité freelance. Un site qui inspire confiance et démontre expertise technique.",
-      },
-      {
-        type: "challenge",
-        title: "LE DÉFI",
-        content: "Se démarquer dans un marché saturé en mettant en avant compétences uniques et approche centrée sur le client.",
-      },
-      {
-        type: "process",
-        title: "LE PROCESS",
-        content: "Design moderne et épuré. Mise en avant des projets réalisés. Section services claire. Témoignages clients pour la crédibilité.",
-      },
-      {
-        type: "result",
-        title: "LE RÉSULTAT",
-        content: "Un site vitrine qui convertit les visiteurs en clients potentiels et reflète mon identité professionnelle.",
+        content: "Un portfolio que Victor administre seul : il ajoute un projet, ses plans et ses photos depuis son back-office, sans passer par moi.",
       },
     ],
   },
