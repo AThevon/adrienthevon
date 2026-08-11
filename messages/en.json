@@ -1,7 +1,29 @@
 {
   "meta": {
     "title": "Adrien Thevon - Creative Developer",
-    "description": "Creative portfolio of a developer passionate about unique web experiences"
+    "description": "Creative developer based in Toulouse. Web, CLI and native: React, Three.js, WebGL and motion design. Portfolio, projects and experiments.",
+    "pages": {
+      "work": {
+        "title": "Projects",
+        "description": "Selected work: web platforms, CLI tools, native apps and creative experiments. The full story behind each build, from concept to result."
+      },
+      "skills": {
+        "title": "Skills",
+        "description": "The tech I work with daily, laid out as an interactive neural network: React, Three.js, TypeScript, Rust, Swift and the rest."
+      },
+      "journey": {
+        "title": "Journey",
+        "description": "From discovering code in 2022 to today's creative tooling: degrees, a 3D configurator at Airbus, image processing and frontend work."
+      },
+      "about": {
+        "title": "About",
+        "description": "Creative developer in Toulouse. I do web, CLI, native - as long as it's fun to build and nice to use."
+      },
+      "contact": {
+        "title": "Contact",
+        "description": "Got a cool project, an idea to explore, or just want to chat? Drop me a line, I reply fast."
+      }
+    }
   },
   "nav": {
     "home": "Home",

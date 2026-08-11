@@ -1,7 +1,29 @@
 {
   "meta": {
     "title": "Adrien Thevon - Creative Developer",
-    "description": "Portfolio créatif d'un développeur passionné par les expériences web uniques"
+    "description": "Développeur créatif basé à Toulouse. Web, CLI et natif : React, Three.js, WebGL et motion design. Portfolio, projets et expérimentations.",
+    "pages": {
+      "work": {
+        "title": "Projets",
+        "description": "Une sélection de projets : plateformes web, outils CLI, apps natives et expérimentations créatives. Le détail de chaque build, du concept au résultat."
+      },
+      "skills": {
+        "title": "Skills",
+        "description": "Les technos que j'utilise au quotidien, présentées comme un réseau neuronal interactif : React, Three.js, TypeScript, Rust, Swift et le reste."
+      },
+      "journey": {
+        "title": "Parcours",
+        "description": "De la découverte du code en 2022 aux outils créatifs d'aujourd'hui : diplômes, configurateur 3D chez Airbus, image processing et frontend."
+      },
+      "about": {
+        "title": "À propos",
+        "description": "Développeur créatif à Toulouse. Je fais du web, du CLI, du natif - tant que c'est fun à construire et agréable à utiliser."
+      },
+      "contact": {
+        "title": "Contact",
+        "description": "Un projet cool, une idée à explorer ou juste envie d'échanger ? Écrivez-moi, je réponds vite."
+      }
+    }
   },
   "nav": {
     "home": "Accueil",

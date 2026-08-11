@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Dela_Gothic_One, Space_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 import SmoothScrollProvider from "@/providers/SmoothScrollProvider";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import MainNav from "@/components/navigation/MainNav";
 import PageTransition from "@/components/navigation/PageTransition";
 import CursorWrapper from "@/components/effects/CursorWrapper";
+import { SiteJsonLd } from "@/components/seo/JsonLd";
 import { PageTransitionProvider } from "@/hooks/usePageTransition";
+import { SITE, SITE_URL } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
 
 // Display - Thick Japanese/brutal style for titles
 const delaGothicOne = Dela_Gothic_One({
@@ -26,48 +28,63 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: SITE.colors.background,
+  colorScheme: "dark",
+};
+
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "meta" });
 
+  const base = buildMetadata({
+    title: t("title"),
+    description: t("description"),
+    path: "/",
+    locale,
+    type: "profile",
+    // La racine a son propre opengraph-image.tsx : on laisse la convention
+    // de fichier fournir l'image (avec son hash de cache).
+    image: null,
+  });
+
   return {
-    metadataBase: new URL(
-      process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000"
-    ),
+    ...base,
+    metadataBase: new URL(SITE_URL),
     title: {
       default: t("title"),
-      template: `%s | ${t("title")}`,
+      template: `%s | ${SITE.name}`,
     },
-    description: t("description"),
+    applicationName: SITE.name,
+    category: "technology",
     keywords: [
-      "creative developer",
+      "Adrien Thevon",
       "développeur créatif",
-      "web developer",
-      "portfolio",
+      "creative developer",
+      "creative coding",
+      "développeur freelance Toulouse",
+      "portfolio développeur",
       "three.js",
       "webgl",
       "react",
       "next.js",
-      "creative coding",
-      "interactive design",
       "motion design",
+      "interactive design",
     ],
-    authors: [{ name: "Adrien Thevon" }],
-    creator: "Adrien Thevon",
-    openGraph: {
-      type: "website",
-      locale: locale === "fr" ? "fr_FR" : "en_US",
-      alternateLocale: locale === "fr" ? ["en_US"] : ["fr_FR"],
-      siteName: t("title"),
-      title: t("title"),
-      description: t("description"),
+    authors: [{ name: SITE.name, url: SITE.url }],
+    creator: SITE.name,
+    publisher: SITE.name,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
     },
-    twitter: {
-      card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
+    appleWebApp: {
+      capable: true,
+      title: SITE.shortName,
+      statusBarStyle: "black-translucent",
     },
     robots: {
       index: true,
@@ -96,6 +113,7 @@ export default async function RootLayout({
       <body
         className={`${delaGothicOne.variable} ${spaceMono.variable} antialiased grain`}
       >
+        <SiteJsonLd locale={locale} />
         <NextIntlClientProvider messages={messages}>
           <PageTransitionProvider>
             {/* Global Custom Cursor */}

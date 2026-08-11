@@ -1,22 +1,18 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  const t = await getTranslations({ locale, namespace: "about" });
+  const t = await getTranslations({ locale, namespace: "meta.pages.about" });
 
-  return {
-    title: `${t("title")} - Adrien Thevon`,
-    description: t("oneliner"),
-    openGraph: {
-      title: `${t("title")} - Adrien Thevon`,
-      description: t("oneliner"),
-    },
-    twitter: {
-      title: `${t("title")} - Adrien Thevon`,
-      description: t("oneliner"),
-    },
-  };
+  return buildMetadata({
+    title: t("title"),
+    description: t("description"),
+    path: "/about",
+    locale,
+    type: "profile",
+  });
 }
 
 export default function AboutLayout({

@@ -1,24 +1,18 @@
 import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import WorkBadgeNav from "./badge-nav";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  const t = await getTranslations({ locale, namespace: "projects" });
+  const t = await getTranslations({ locale, namespace: "meta.pages.work" });
 
-  return {
+  return buildMetadata({
     title: t("title"),
-    description: t("intro"),
-    openGraph: {
-      title: t("title"),
-      description: t("intro"),
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("title"),
-      description: t("intro"),
-    },
-  };
+    description: t("description"),
+    path: "/work",
+    locale,
+  });
 }
 
 export default function WorkLayout({
