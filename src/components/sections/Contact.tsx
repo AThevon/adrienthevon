@@ -81,7 +81,7 @@ export default function Contact() {
         >
           <MagneticButton strength={0.2}>
             <a
-              href="mailto:hello@adrienthevon.com"
+              href="mailto:athevon.pro@gmail.com"
               className="group inline-flex items-center gap-6 text-4xl md:text-6xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
               data-cursor="hover"
             >

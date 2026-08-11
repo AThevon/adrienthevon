@@ -86,6 +86,9 @@ src/
 │   └── request.ts            # Config next-intl (cookie + Accept-Language fallback)
 ├── lib/
 │   ├── constants.ts          # Couleurs et constantes globales
+│   ├── site.ts               # SEO: domaine canonique, identité, routes du sitemap
+│   ├── seo.ts                # SEO: buildMetadata() + clampDescription()
+│   ├── og.ts                 # OG: chargement polices/logo, helpers de rendu
 │   └── skillLogos.ts         # URLs des logos Simple Icons pour skills
 └── providers/
     └── SmoothScrollProvider.tsx  # Provider Lenis
@@ -191,6 +194,36 @@ Les textes des projets sont traduits via `projectsData.{slug}` dans les fichiers
 
 ---
 
+## SEO / Metadata / Open Graph
+
+Domaine canonique : **https://athevon.dev** (défini dans `src/lib/site.ts`).
+
+### Règles
+
+1. **Toute nouvelle page passe par `buildMetadata()`** (`src/lib/seo.ts`). Ne jamais
+   écrire un objet `openGraph` ou `twitter` partiel : Next.js merge les metadata de
+   façon *shallow*, un objet partiel dans un layout enfant écrase intégralement celui
+   du parent (perte de `siteName`, `summary_large_image` et surtout de l'image OG).
+2. **`metadataBase` ne doit jamais dépendre de `VERCEL_URL`** : cette variable pointe
+   vers l'URL unique du déploiement, pas vers le domaine. `site.ts` gère la résolution
+   (prod -> domaine canonique, preview -> URL du déploiement, local -> localhost).
+3. **Image OG** : `image: null` sur un segment qui possède son propre
+   `opengraph-image.tsx` (racine et `/work/[slug]`), sinon l'image racine par défaut.
+4. **Descriptions** : `clampDescription()` supprime les retours à la ligne et tronque
+   à 165 caractères. Ne jamais passer un `longDescription` multi-paragraphes.
+
+### Fichiers
+
+- `src/app/robots.ts` - bloque l'indexation hors production
+- `src/app/sitemap.ts` - pages statiques + projets (pas les `/immersive`, canonical
+  pointant vers le case study standard)
+- `src/app/manifest.ts` - PWA, icônes dans `public/icons/`
+- `src/components/seo/JsonLd.tsx` - schema Person + WebSite (global) et CreativeWork (projets)
+- `assets/og/` - polices sous-ensemblées + logo pour le rendu des images OG.
+  Déclaré dans `outputFileTracingIncludes` (next.config.ts), sinon ENOENT en prod.
+
+---
+
 ## Points d'Attention
 
 1. **Preloader** - Durée de 4.5s, ne pas raccourcir (feedback utilisateur)
@@ -198,6 +231,12 @@ Les textes des projets sont traduits via `projectsData.{slug}` dans les fichiers
 3. **Composants 3D** - Toujours vérifier `enable3D` du hook usePerformance
 4. **LanguageSwitcher** - Positionné `top-6 right-6 z-50`, attention aux overlaps
 5. **Images** - Actuellement des placeholders, pas de vraies images
+6. **Formulaire de contact** - `/api/contact` ne fait qu'un `console.log`, aucun email
+   n'est envoyé. `Contact.tsx` et `ContactForm.tsx` ne sont importés nulle part.
+   Le seul point de contact actif est le mailto canvas de `/contact`.
+7. **i18n et SEO** - La locale vient d'un cookie, pas de l'URL. Il n'existe donc pas
+   d'URL distincte par langue : pas de `hreflang` possible, Google n'indexe que la
+   version servie par défaut (FR).
 
 ---
 
@@ -240,4 +279,4 @@ npm run lint     # Linting
 
 ---
 
-*Dernière mise à jour: Janvier 2026*
+*Dernière mise à jour: Août 2026*

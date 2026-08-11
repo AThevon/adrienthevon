@@ -185,7 +185,7 @@ export default function About() {
               className="mt-6 lg:mt-8 flex flex-wrap gap-4 lg:gap-6"
             >
               <a
-                href="https://github.com/adrienthevon"
+                href="https://github.com/AThevon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent transition-colors duration-300"
