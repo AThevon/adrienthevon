@@ -1,16 +1,26 @@
 import { ImageResponse } from "next/og";
 import { getProjectById } from "@/data/projects";
+import {
+  getOgAssets,
+  OG_SIZE,
+  OG_CONTENT_TYPE,
+  fitDisplaySize,
+  withAlpha,
+  ogClamp,
+} from "@/lib/og";
+import { SITE } from "@/lib/site";
 
-// Image metadata
-export const alt = "Project Details";
-export const size = {
-  width: 1200,
-  height: 630,
-};
-export const contentType = "image/png";
+export const size = OG_SIZE;
+export const contentType = OG_CONTENT_TYPE;
+export const alt = "Adrien Thevon - Project";
 
-// Image generation with dynamic params
-export default async function Image({
+const BG = SITE.colors.background;
+const FG = SITE.colors.foreground;
+const MUTED = SITE.colors.muted;
+const PADDING = 68;
+
+/** Un alt descriptif par projet, plutôt qu'un "Project Details" générique */
+export async function generateImageMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -18,273 +28,238 @@ export default async function Image({
   const { slug } = await params;
   const project = getProjectById(slug);
 
-  if (!project) {
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            fontSize: 60,
-            background: "#0a0a0a",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fafafa",
-            fontFamily: "monospace",
-          }}
-        >
-          Project Not Found
-        </div>
-      ),
-      { ...size }
-    );
-  }
+  return [
+    {
+      id: "og",
+      alt: project
+        ? `${project.title} - ${project.category} (${project.year}) par Adrien Thevon`
+        : alt,
+      size: OG_SIZE,
+      contentType: OG_CONTENT_TYPE,
+    },
+  ];
+}
+
+export default async function Image({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = getProjectById(slug);
+  const { fonts, logo } = await getOgAssets();
+
+  const accent = project?.color ?? SITE.colors.accent;
+  const title = project?.title ?? "ADRIEN THEVON";
+  const category = project?.category ?? "PORTFOLIO";
+  const year = project?.year ?? String(new Date().getFullYear());
+  const description = ogClamp(
+    project?.description ?? "Développeur créatif basé à Toulouse.",
+    108
+  );
+  const tags = (project?.tags ?? []).slice(0, 3).join(" · ");
 
   return new ImageResponse(
     (
       <div
         style={{
-          height: "100%",
           width: "100%",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          backgroundColor: project.color,
+          backgroundColor: BG,
           position: "relative",
-          padding: "80px",
+          fontFamily: "Space Mono",
         }}
       >
-        {/* Dark overlay for better text contrast */}
+        {/* Grille de fond */}
         <div
           style={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background:
-              "linear-gradient(135deg, rgba(10,10,10,0.85), rgba(10,10,10,0.6))",
+            inset: 0,
             display: "flex",
-          }}
-        />
-
-        {/* Diagonal grid pattern */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage:
-              "linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%), linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%)",
+            backgroundImage: `linear-gradient(${withAlpha(FG, 0.035)} 1px, transparent 1px), linear-gradient(90deg, ${withAlpha(FG, 0.035)} 1px, transparent 1px)`,
             backgroundSize: "60px 60px",
-            backgroundPosition: "0 0, 30px 30px",
-            display: "flex",
           }}
         />
 
-        {/* Geometric accent shapes */}
+        {/* Halo teinté par la couleur du projet */}
         <div
           style={{
             position: "absolute",
-            top: "10%",
-            right: "8%",
-            width: "180px",
-            height: "180px",
-            border: "3px solid rgba(255,255,255,0.15)",
-            transform: "rotate(15deg)",
+            bottom: -300,
+            right: -200,
+            width: 820,
+            height: 820,
             display: "flex",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: "15%",
-            left: "5%",
-            width: "120px",
-            height: "120px",
-            border: "3px solid rgba(255,255,255,0.1)",
-            transform: "rotate(-20deg)",
-            display: "flex",
+            borderRadius: 820,
+            backgroundImage: `radial-gradient(circle, ${withAlpha(accent, 0.28)} 0%, ${withAlpha(accent, 0)} 68%)`,
           }}
         />
 
-        {/* Scanline effect */}
+        {/* Barre accent bord gauche */}
         <div
           style={{
             position: "absolute",
-            top: "40%",
+            top: 0,
             left: 0,
-            right: 0,
-            height: "2px",
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+            bottom: 0,
+            width: 10,
             display: "flex",
+            backgroundColor: accent,
           }}
         />
 
-        {/* Content container */}
+        {/* ---------- Barre haute ---------- */}
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            position: "relative",
-            zIndex: 10,
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: `${PADDING - 16}px ${PADDING}px 26px ${PADDING}px`,
           }}
         >
-          {/* Category & Year tag */}
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            <img src={logo} width={52} height={52} alt="" />
+            <div
+              style={{
+                display: "flex",
+                fontSize: 22,
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: FG,
+              }}
+            >
+              ATHEVON.DEV / WORK
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 20,
+              letterSpacing: "0.26em",
+              color: MUTED,
+            }}
+          >
+            {year}
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            height: 1,
+            marginLeft: PADDING,
+            marginRight: PADDING,
+            backgroundColor: withAlpha(FG, 0.14),
+          }}
+        />
+
+        {/* ---------- Bloc central ---------- */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: `0 ${PADDING}px`,
+          }}
+        >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "20px",
-              marginBottom: "30px",
+              gap: 16,
+              marginBottom: 22,
             }}
           >
             <div
               style={{
-                fontSize: "24px",
-                fontFamily: "monospace",
-                color: "rgba(255,255,255,0.7)",
-                backgroundColor: "rgba(255,255,255,0.1)",
-                padding: "8px 20px",
-                border: "2px solid rgba(255,255,255,0.2)",
                 display: "flex",
-                letterSpacing: "0.2em",
-              }}
-            >
-              {project.category}
-            </div>
-            <div
-              style={{
-                fontSize: "24px",
-                fontFamily: "monospace",
-                color: "rgba(255,255,255,0.5)",
-                display: "flex",
-                letterSpacing: "0.2em",
-              }}
-            >
-              {project.year}
-            </div>
-          </div>
-
-          {/* Project title */}
-          <div
-            style={{
-              fontSize: "96px",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              color: "#fafafa",
-              lineHeight: 0.95,
-              marginBottom: "30px",
-              display: "flex",
-              textShadow: "4px 4px 0px rgba(0,0,0,0.3)",
-            }}
-          >
-            {project.title}
-          </div>
-
-          {/* Accent line */}
-          <div
-            style={{
-              width: "400px",
-              height: "4px",
-              background: "rgba(255,255,255,0.8)",
-              display: "flex",
-            }}
-          />
-        </div>
-
-        {/* Logo in top right corner */}
-        <div
-          style={{
-            position: "absolute",
-            top: "40px",
-            right: "40px",
-            width: "60px",
-            height: "60px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 20,
-            opacity: 0.9,
-          }}
-        >
-          <svg
-            width="60"
-            height="60"
-            viewBox="0 0 100 100"
-            style={{ display: "flex" }}
-          >
-            {/* A shape (triangle) */}
-            <polygon points="50,20 75,60 25,60" fill="#ffaa00" />
-            <polygon points="50,32 60,50 40,50" fill="rgba(10,10,10,0.85)" />
-
-            {/* T shape (cross) */}
-            <rect x="20" y="45" width="60" height="8" fill="#fafafa" />
-            <rect x="46" y="53" width="8" height="27" fill="#fafafa" />
-
-            {/* F shape overlay */}
-            <rect x="28" y="60" width="20" height="8" fill="#ffaa00" />
-            <rect x="28" y="60" width="8" height="20" fill="#ffaa00" />
-          </svg>
-        </div>
-
-        {/* Bottom corner accents */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "40px",
-            right: "40px",
-            width: "80px",
-            height: "80px",
-            borderBottom: "4px solid rgba(255,255,255,0.6)",
-            borderRight: "4px solid rgba(255,255,255,0.6)",
-            display: "flex",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: "40px",
-            left: "40px",
-            width: "60px",
-            height: "60px",
-            borderTop: "4px solid rgba(255,255,255,0.4)",
-            borderLeft: "4px solid rgba(255,255,255,0.4)",
-            display: "flex",
-          }}
-        />
-
-        {/* Decorative bars */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "50px",
-            right: "150px",
-            display: "flex",
-            gap: "12px",
-          }}
-        >
-          {[1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              style={{
-                width: "4px",
-                height: i === 2 ? "60px" : "40px",
-                background: "rgba(255,255,255,0.5)",
-                display: "flex",
+                width: 14,
+                height: 14,
+                backgroundColor: accent,
               }}
             />
-          ))}
+            <div
+              style={{
+                display: "flex",
+                fontSize: 24,
+                fontWeight: 700,
+                letterSpacing: "0.3em",
+                color: accent,
+              }}
+            >
+              {category}
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Dela Gothic One",
+              fontSize: fitDisplaySize(title),
+              lineHeight: 0.96,
+              letterSpacing: "-0.02em",
+              color: FG,
+              maxWidth: 1064,
+            }}
+          >
+            {title}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              width: 104,
+              height: 6,
+              backgroundColor: accent,
+              marginTop: 32,
+              marginBottom: 24,
+            }}
+          />
+
+          <div
+            style={{
+              display: "flex",
+              fontSize: 24,
+              lineHeight: 1.42,
+              color: MUTED,
+              maxWidth: 860,
+            }}
+          >
+            {description}
+          </div>
+        </div>
+
+        {/* ---------- Barre basse ---------- */}
+        <div
+          style={{
+            display: "flex",
+            height: 1,
+            marginLeft: PADDING,
+            marginRight: PADDING,
+            backgroundColor: withAlpha(FG, 0.14),
+          }}
+        />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: `26px ${PADDING}px ${PADDING - 16}px ${PADDING}px`,
+            fontSize: 19,
+            letterSpacing: "0.2em",
+            color: MUTED,
+          }}
+        >
+          <div style={{ display: "flex" }}>{tags}</div>
+          <div style={{ display: "flex", color: withAlpha(FG, 0.75) }}>
+            ADRIEN THEVON
+          </div>
         </div>
       </div>
     ),
-    {
-      ...size,
-    }
+    { ...size, fonts }
   );
 }

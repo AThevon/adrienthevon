@@ -1,2 +1,8 @@
-// Twitter image reuses the same OG image for the project
-export { default, alt, size, contentType } from "./opengraph-image";
+// La carte Twitter/X réutilise la même image que l'Open Graph du projet
+export {
+  default,
+  alt,
+  size,
+  contentType,
+  generateImageMetadata,
+} from "./opengraph-image";
