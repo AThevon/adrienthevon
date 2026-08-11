@@ -194,31 +194,9 @@
     }
   },
   "contact": {
-    "sectionNumber": "006",
     "title": "CONTACT",
     "subtitle": "CRÉONS QUELQUE CHOSE ENSEMBLE",
-    "headline": "DISCUTONS",
-    "intro": "Un projet cool ? Une idée à explorer ? Partager des trucs intéressants ? Je suis toujours chaud pour échanger.",
-    "cta": "DIS BONJOUR",
-    "connect": "ME SUIVRE",
-    "location": "LOCALISATION",
-    "locationValue": "TOULOUSE, FRANCE",
-    "availability": "DISPONIBLE PARTOUT",
-    "emailTitle": "EMAIL",
-    "emailSubtitle": "Pour les opportunités pro",
-    "formTitle": "OU ENVOIE-MOI UN MESSAGE",
-    "form": {
-      "name": "NOM",
-      "email": "EMAIL",
-      "subject": "SUJET",
-      "message": "MESSAGE",
-      "submit": "ENVOYER",
-      "sending": "ENVOI EN COURS...",
-      "success": "Message envoyé avec succès ! Je te réponds rapidement.",
-      "error": "Erreur lors de l'envoi. Réessaye ou contacte-moi directement par email."
-    },
-    "copyright": "© {year}",
-    "rights": "TOUS DROITS RÉSERVÉS"
+    "intro": "Un projet cool ? Une idée à explorer ? Partager des trucs intéressants ? Je suis toujours chaud pour échanger."
   },
   "lab": {
     "title": "LAB",

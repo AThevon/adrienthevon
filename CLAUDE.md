@@ -231,9 +231,10 @@ Domaine canonique : **https://athevon.dev** (défini dans `src/lib/site.ts`).
 3. **Composants 3D** - Toujours vérifier `enable3D` du hook usePerformance
 4. **LanguageSwitcher** - Positionné `top-6 right-6 z-50`, attention aux overlaps
 5. **Images** - Actuellement des placeholders, pas de vraies images
-6. **Formulaire de contact** - `/api/contact` ne fait qu'un `console.log`, aucun email
-   n'est envoyé. `Contact.tsx` et `ContactForm.tsx` ne sont importés nulle part.
-   Le seul point de contact actif est le mailto canvas de `/contact`.
+6. **Contact** - Pas de formulaire ni d'envoi d'email. Le seul point de contact est
+   l'adresse rendue en canvas sur `/contact` (anti-scraping, clic pour copier).
+   L'ancienne route `/api/contact` et ses composants ont été supprimés : ils ne
+   faisaient qu'un `console.log` et n'étaient importés nulle part.
 7. **i18n et SEO** - La locale vient d'un cookie, pas de l'URL. Il n'existe donc pas
    d'URL distincte par langue : pas de `hreflang` possible, Google n'indexe que la
    version servie par défaut (FR).
