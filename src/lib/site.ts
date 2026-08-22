@@ -43,7 +43,7 @@ export const SITE = {
     city: "Toulouse",
     country: "FR",
   },
-  email: "athevon.pro@gmail.com",
+  email: "contact@athevon.dev",
   twitterHandle: "@athevon_dev",
   colors: {
     background: "#0a0a0a",

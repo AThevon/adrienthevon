@@ -12,8 +12,8 @@ const ParticleNetwork = dynamic(
 );
 
 // Email split to avoid scraping from source
-const E_USER = "athevon.pro";
-const E_DOMAIN = "gmail.com";
+const E_USER = "contact";
+const E_DOMAIN = "athevon.dev";
 function getEmail() { return `${E_USER}@${E_DOMAIN}`; }
 
 // --- Canvas-rendered email (never in DOM, anti-scraping) ---
