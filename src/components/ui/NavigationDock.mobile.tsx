@@ -39,7 +39,7 @@ export function NavigationDockMobile({ items }: NavigationDockMobileProps) {
       >
         <motion.span
           className="w-6 h-0.5 bg-foreground"
-          animate={isOpen ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
+          animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
           transition={{ duration: 0.3 }}
         />
         <motion.span
@@ -49,7 +49,7 @@ export function NavigationDockMobile({ items }: NavigationDockMobileProps) {
         />
         <motion.span
           className="w-6 h-0.5 bg-foreground"
-          animate={isOpen ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
+          animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
           transition={{ duration: 0.3 }}
         />
       </button>
