@@ -170,7 +170,7 @@ export default function MainNav() {
                 className="block h-[1.5px] bg-foreground origin-center"
                 animate={{
                   rotate: isOpen ? 45 : 0,
-                  y: isOpen ? 5 : 0,
+                  y: isOpen ? 6.5 : 0,
                   width: isOpen ? 18 : 22,
                 }}
                 transition={{ duration: 0.25, ease: [0.33, 1, 0.68, 1] }}
@@ -187,7 +187,7 @@ export default function MainNav() {
                 className="block h-[1.5px] bg-foreground origin-center"
                 animate={{
                   rotate: isOpen ? -45 : 0,
-                  y: isOpen ? -5 : 0,
+                  y: isOpen ? -6.5 : 0,
                   width: isOpen ? 18 : 22,
                 }}
                 transition={{ duration: 0.25, ease: [0.33, 1, 0.68, 1] }}
