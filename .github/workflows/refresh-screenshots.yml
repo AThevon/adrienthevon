@@ -1,0 +1,43 @@
+name: Refresh project screenshots
+
+on:
+  schedule:
+    # Le 1er de chaque mois à 04:00 UTC
+    - cron: "0 4 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - run: node scripts/capture-screenshots.mjs
+
+      - name: Commit and push if screenshots changed
+        run: |
+          if [[ -n "$(git status --porcelain public/images/projects)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/images/projects
+            git commit -m "chore(images): refresh project screenshots"
+            git push
+          else
+            echo "No screenshot changes."
+          fi
