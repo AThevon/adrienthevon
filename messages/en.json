@@ -328,26 +328,26 @@
     },
     "linekut": {
       "category": "CREATIVE TOOL",
-      "description": "Image to cutting pattern converter for scroll saw, laser, and vinyl cutting.",
-      "longDescription": "Linekut transforms any image into a ready-to-cut pattern. Whether for scroll saw, laser cutting, vinyl, or stickers, the tool generates optimized files for each technique.\n\nA PWA that democratizes cutting pattern creation, making an usually complex process accessible.",
-      "role": "FRONT-END DEVELOPER",
+      "description": "Turns an image into a cutting template that holds in one piece, for scroll saw, laser and vinyl.",
+      "longDescription": "LineKut turns a photo, a drawing or a first name into a template ready to cut. It finds the pieces that would fall when cut, ties them back with bridges, checks that everything holds in one piece, then prints the template at its real size on A4 sheets.\n\nBuilt for a scroll-saw craftsman, the tool runs entirely in the browser: the image never leaves the device. Free, no account.",
+      "role": "DESIGN & DEVELOPMENT",
       "client": "PERSONAL PROJECT",
       "sections": {
         "intro": {
           "title": "THE IDEA",
-          "content": "Simplifying cutting pattern creation. Transform a photo into a machine-ready file in just a few clicks."
+          "content": "A scroll-saw template has to hold in one piece: every floating piece falls under the blade. LineKut shows what would fall, ties it back and proves it holds, in centimetres and millimetres rather than pixels."
         },
         "challenge": {
           "title": "THE CHALLENGE",
-          "content": "Client-side image processing for speed. Vectorization algorithms and contour simplification."
+          "content": "Placing clean bridges on complex images: no crumbs hanging from sticks, no bridge across an eye, and guaranteed connectivity. All of it live, without blocking the interface."
         },
         "process": {
           "title": "THE PROCESS",
-          "content": "Canvas API for image processing. Edge detection algorithms. Export in standard formats (SVG, DXF)."
+          "content": "A TypeScript engine on typed arrays, in a Web Worker: adaptive threshold with an integral image, 4-connected components, a bridge tree grown from the main body, marching-squares vectorisation. Headings cut as stencils by the engine itself, light and dark themes."
         },
         "result": {
           "title": "THE RESULT",
-          "content": "A tool used by makers and craftspeople to quickly create custom cutting patterns."
+          "content": "Real-size PNG export at 300 DPI, SVG in millimetres for LightBurn, Inkscape or Cricut, and printing on A4 sheets with alignment marks and a 5 cm calibration square."
         }
       }
     },

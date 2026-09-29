@@ -328,26 +328,26 @@
     },
     "linekut": {
       "category": "OUTIL CRÉATIF",
-      "description": "Convertisseur d'images en patrons découpables pour scie à chantourner, laser et vinyl.",
-      "longDescription": "Linekut transforme n'importe quelle image en patron prêt à découper. Que ce soit pour la scie à chantourner, la découpe laser, le vinyl ou les stickers, l'outil génère des fichiers optimisés pour chaque technique.\n\nUne PWA qui démocratise la création de patrons de découpe, rendant accessible un processus habituellement complexe.",
-      "role": "DÉVELOPPEUR FRONT-END",
+      "description": "Transforme une image en gabarit découpable d'un seul tenant, pour la scie à chantourner, le laser et le vinyle.",
+      "longDescription": "LineKut transforme une photo, un dessin ou un prénom en gabarit prêt à découper. Il repère les pièces qui tomberaient à la découpe, les relie par des ponts, vérifie que tout tient d'un seul tenant, puis imprime le gabarit à sa taille réelle sur des feuilles A4.\n\nPensé pour un artisan chantourneur, l'outil tourne entièrement dans le navigateur : l'image ne quitte jamais l'appareil. Gratuit, sans compte.",
+      "role": "DESIGN & DÉVELOPPEMENT",
       "client": "PROJET PERSO",
       "sections": {
         "intro": {
           "title": "L'IDÉE",
-          "content": "Simplifier la création de patrons de découpe. Transformer une photo en fichier prêt à usiner en quelques clics."
+          "content": "Un gabarit de chantournage doit tenir d'un seul tenant : chaque pièce qui flotte tombe sous la lame. LineKut montre ce qui tomberait, le relie et le prouve, en centimètres et en millimètres plutôt qu'en pixels."
         },
         "challenge": {
           "title": "LE DÉFI",
-          "content": "Traitement d'image côté client pour la rapidité. Algorithmes de vectorisation et de simplification des contours."
+          "content": "Poser des ponts propres sur des images complexes : pas de miettes accrochées à des tiges, pas de pont en travers d'un œil, et une connexité garantie. Le tout en direct, sans bloquer l'interface."
         },
         "process": {
           "title": "LE PROCESS",
-          "content": "Canvas API pour le traitement d'image. Algorithmes de détection de contours. Export en formats standards (SVG, DXF)."
+          "content": "Moteur en TypeScript sur tableaux typés, dans un Web Worker : seuil adaptatif par image intégrale, composantes 4-connexes, arbre de ponts construit depuis le corps du motif, vectorisation en marching squares. Titres découpés au pochoir par le moteur lui-même, thème clair et sombre."
         },
         "result": {
           "title": "LE RÉSULTAT",
-          "content": "Un outil utilisé par des makers et artisans pour créer rapidement des patrons de découpe personnalisés."
+          "content": "Export PNG 300 DPI à la taille réelle, SVG en millimètres pour LightBurn, Inkscape ou Cricut, et impression sur feuilles A4 avec repères de raccord et carré de contrôle de 5 cm."
         }
       }
     },
