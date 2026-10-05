@@ -32,14 +32,14 @@ const allProjects: Project[] = [
     year: "2026",
     date: "2026-05",
     color: "#b11523",
-    description: "Plugin Claude Code et claude.ai de creative coding. Cast motion, paint signatures, zero AI slop.",
-    longDescription: `Genjutsu, l'art de l'illusion. Deux orchestrateurs (cast et paint) et 15 sub-skills internes pour transformer n'importe quelle interface de fonctionnelle à exceptionnelle.
+    description: "Plugin Claude Code de creative coding. Il fait bouger une interface, donne une identité à un produit, et monte un site entier avec une équipe d'agents.",
+    longDescription: `Genjutsu, l'art de l'illusion. Trois pipelines, selon l'échelle du travail : cast fait bouger une interface, paint donne à un produit son identité visuelle et son design system, bunshin construit un site entier avec une équipe d'agents sous un seul directeur artistique.
 
-Couvre Web (React, Vue, Svelte, CSS natif, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) et Apple (SwiftUI iOS + macOS). Détection auto du stack, thèse d'interaction avant de toucher au code, audit final sur reduced-motion, perfs et accessibilité.
+17 modules internes couvrent le Web (React, Vue, Svelte, Astro, CSS natif, Three.js, Canvas), Android (Compose, Compose Multiplatform) et Apple (SwiftUI iOS et macOS). Genjutsu nomme le slop au lieu de le promettre : un catalogue des réflexes d'un LLM, un audit qui les relève avec leur file:line, et une correction avant le rapport.
 
-Le site est un manifeste : encre sumi dessinée en live au canvas, cinq chapitres, zéro image.`,
-    tags: ["CLAUDE CODE", "PLUGIN", "SHELL", "CREATIVE CODING", "ASTRO"],
-    skills: ["claude", "shell", "canvas", "git", "github"],
+Plus de 2 000 clones uniques toutes les deux semaines, via npx, le marketplace Claude Code et claude.ai. Les exemples sont de vrais runs enregistrés, publiés avec leurs conversations, leur code et des démos en ligne. Le site, construit avec genjutsu, s'ouvre sur un 幻 dont la loupe révèle le code de l'encre.`,
+    tags: ["CLAUDE CODE", "AGENT SKILLS", "MULTI-AGENT", "CREATIVE CODING", "ASTRO"],
+    skills: ["claude", "canvas", "motion", "gsap", "threejs", "swift", "shell", "github"],
     role: "CRÉATEUR & DÉVELOPPEUR",
     client: "OPEN SOURCE",
     link: "https://genjutsu.athevon.dev",
@@ -49,22 +49,22 @@ Le site est un manifeste : encre sumi dessinée en live au canvas, cinq chapitre
       {
         type: "intro",
         title: "L'IDÉE",
-        content: "Pousser Claude au-delà du code fonctionnel. Lui donner le vocabulaire du creative coding pour que chaque interaction respire.",
+        content: "Pousser Claude au-delà du code fonctionnel, sans retomber dans les réflexes génériques d'un LLM. Une thèse d'interaction validée avant la première ligne, et rien à l'écran qu'elle ne justifie.",
       },
       {
         type: "challenge",
         title: "LE DÉFI",
-        content: "Couvrir Web, Compose et SwiftUI sans tout charger d'un coup. Le scan détecte le stack, charge les bons sub-skills, propose une thèse avant d'écrire du code.",
+        content: "Trois plateformes, trois échelles et des centaines d'API qui bougent. Le scan détecte le stack et ne charge que les modules utiles, le même bundle tourne sur Claude Code, claude.ai, Cowork et npx, et chaque affirmation de version est vérifiée contre sa source.",
       },
       {
         type: "process",
         title: "LE PROCESS",
-        content: "Architecture metaskills + subskills. cast pour les illusions ciblées, paint pour les univers visuels complets. Audit final sur reduced-motion, perfs et accessibilité.",
+        content: "cast pour une interaction, paint pour un univers complet, bunshin pour un site entier : recherche en parallèle, une page par agent sur des fichiers disjoints, captures et tests scriptés, revues indépendantes et un regard neuf, jusqu'à une règle d'arrêt. Le module tells nomme le slop, l'audit le mesure.",
       },
       {
         type: "result",
         title: "LE RÉSULTAT",
-        content: "Plugin v3.1 distribué via GitHub Releases, /plugin marketplace et bundle claude.ai. 15 sub-skills, 2 orchestrateurs, zero AI slop.",
+        content: "v4.1.1, open source sous licence MIT, installé en une commande. 3 pipelines, 17 modules, une suite d'évals avec et sans genjutsu, et des exemples réels publiés avec leurs conversations, leur code et leurs démos.",
       },
     ],
   },
