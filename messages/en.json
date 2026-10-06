@@ -255,26 +255,26 @@
   "projectsData": {
     "genjutsu": {
       "category": "CLAUDE PLUGIN",
-      "description": "Claude Code and claude.ai creative coding plugin. Cast motion, paint signatures, zero AI slop.",
-      "longDescription": "Genjutsu, the art of illusion. Two orchestrators (cast and paint) and 15 internal sub-skills to transform any interface from functional to exceptional.\n\nCovers Web (React, Vue, Svelte, native CSS, Three.js, Canvas), Android (Jetpack Compose, Compose Multiplatform) and Apple (SwiftUI iOS + macOS). Automatic stack detection, interaction thesis before touching code, final audit on reduced-motion, performance and accessibility.\n\nThe site is a manifesto: sumi ink drawn live on canvas, five chapters, zero images.",
+      "description": "Creative coding plugin for Claude Code. It makes an interface move, gives a product its identity, and builds a whole site with a team of agents.",
+      "longDescription": "Genjutsu, the art of illusion. Three pipelines, by the size of the job: cast makes an interface move, paint gives a product its visual identity and design system, bunshin builds a whole website with a team of agents under one art director.\n\n17 internal modules cover the Web (React, Vue, Svelte, Astro, native CSS, Three.js, Canvas), Android (Compose, Compose Multiplatform) and Apple (SwiftUI iOS and macOS). Genjutsu names the slop instead of promising to avoid it: a catalogue of an LLM's reflexes, an audit that reports them with their file:line, and a fix before the report.\n\nOver 2,000 unique clones every two weeks, through npx, the Claude Code marketplace and claude.ai. The examples are real recorded runs, published with their conversations, their code and live demos. The site, built with genjutsu, opens on a 幻 whose lens reveals the code of the ink.",
       "role": "CREATOR & DEVELOPER",
       "client": "OPEN SOURCE",
       "sections": {
         "intro": {
           "title": "THE IDEA",
-          "content": "Push Claude beyond functional code. Give it the creative coding vocabulary so every interaction breathes."
+          "content": "Push Claude past functional code without falling back on an LLM's generic reflexes. An interaction thesis validated before the first line, and nothing on screen it does not justify."
         },
         "challenge": {
           "title": "THE CHALLENGE",
-          "content": "Cover Web, Compose and SwiftUI without loading everything at once. The scan detects the stack, loads the right sub-skills, proposes a thesis before writing code."
+          "content": "Three platforms, three scales and hundreds of moving APIs. The scan detects the stack and loads only the modules it needs, the same bundle runs on Claude Code, claude.ai, Cowork and npx, and every version claim is checked against its source."
         },
         "process": {
           "title": "THE PROCESS",
-          "content": "Metaskills + subskills architecture. cast for targeted illusions, paint for full visual universes. Final audit on reduced-motion, performance and accessibility."
+          "content": "cast for one interaction, paint for a whole universe, bunshin for a whole site: research in parallel, one page per agent on disjoint files, captures and scripted tests, independent reviews and cold eyes, until a stop rule. The tells module names the slop, the audit measures it."
         },
         "result": {
           "title": "THE RESULT",
-          "content": "v3.1 plugin distributed via GitHub Releases, /plugin marketplace and a claude.ai bundle. 15 sub-skills, 2 orchestrators, zero AI slop."
+          "content": "v4.1.1, open source under the MIT license, installed in one command. 3 pipelines, 17 modules, an eval suite with and without genjutsu, and real examples published with their conversations, their code and their demos."
         }
       }
     },
