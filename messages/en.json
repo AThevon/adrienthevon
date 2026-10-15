@@ -253,6 +253,31 @@
     "notFound": "Project not found"
   },
   "projectsData": {
+    "chefOvatio": {
+      "category": "SHOWCASE WEBSITE",
+      "description": "Bilingual site for a private chef and consultant: every screen is a Riviera travel poster, built for visitors landing from Instagram on their phone.",
+      "longDescription": "Site for Chef Ovatio, a private chef and culinary consultant based in Tours, cooking between Touraine, the South of France and Switzerland. Two audiences on one site: private clients (private dinners, villas, yachts, events) and food professionals, who get their own consulting page.\n\nThe direction is called The Riviera Poster: every screen is a travel poster in five flat inks, one hard horizon, and the chef's own plate seen from above as the sun. Bilingual French and English, designed for the phone first.\n\nThe content lives in plain files, with a guide for the AI assistant: the chef updates his copy, his plates and his photos himself, without breaking the design.",
+      "role": "DESIGN & DEVELOPMENT",
+      "client": "CHEF OVATIO",
+      "sections": {
+        "intro": {
+          "title": "THE BRIEF",
+          "content": "Make visitors hungry from the first photo as they land from Instagram on their phone, then walk them to a precise request: the occasion, the date, the place, the number of guests."
+        },
+        "challenge": {
+          "title": "THE CHALLENGE",
+          "content": "Speaking to two audiences without mixing them: a private client never wades through trade jargon, a restaurant owner finds a concrete consulting offer. And staying credible without making anything up: no reviews, no prices, no figures the chef did not give."
+        },
+        "process": {
+          "title": "THE PROCESS",
+          "content": "Astro, pages prerendered at build and deployed on Cloudflare Workers. A guided form sends the request by email through Resend from the Worker; if sending fails, it offers a pre-filled email or a copy of the request to paste into Instagram. Five inks as tokens, Josefin Sans and Brygada 1918."
+        },
+        "result": {
+          "title": "THE RESULT",
+          "content": "A site the chef runs on his own: copy, plates and photos in plain files, a guide for his AI assistant, a build check that lists what is still missing before launch, and every push to main goes live."
+        }
+      }
+    },
     "genjutsu": {
       "category": "CLAUDE PLUGIN",
       "description": "Creative coding plugin for Claude Code. It makes an interface move, gives a product its identity, and builds a whole site with a team of agents.",

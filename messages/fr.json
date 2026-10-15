@@ -253,6 +253,31 @@
     "notFound": "Projet non trouvé"
   },
   "projectsData": {
+    "chefOvatio": {
+      "category": "SITE VITRINE",
+      "description": "Site bilingue pour un chef privé et consultant : chaque écran est une affiche de la Riviera, pensé pour le visiteur qui arrive d'Instagram sur son téléphone.",
+      "longDescription": "Site de Chef Ovatio, chef privé et consultant culinaire basé à Tours, qui cuisine entre la Touraine, le Sud de la France et la Suisse. Deux publics sur un même site : les particuliers (dîners privés, villas, yachts, événements) et les professionnels de la restauration, qui ont leur propre page consulting.\n\nLa direction s'appelle L'Affiche de la Riviera : chaque écran est une affiche de voyage en cinq encres à plat, un horizon net, et l'assiette du chef vue du dessus en guise de soleil. Bilingue français et anglais, pensé d'abord pour le téléphone.\n\nLe contenu vit dans de simples fichiers, avec un guide pour l'assistant IA : le chef fait évoluer ses textes, ses assiettes et ses photos lui-même, sans casser le design.",
+      "role": "DESIGN & DÉVELOPPEMENT",
+      "client": "CHEF OVATIO",
+      "sections": {
+        "intro": {
+          "title": "LE BRIEF",
+          "content": "Donner envie dès la première photo à un visiteur qui arrive d'Instagram sur son téléphone, et l'amener jusqu'à une demande précise : l'occasion, la date, le lieu, le nombre de convives."
+        },
+        "challenge": {
+          "title": "LE DÉFI",
+          "content": "Parler à deux publics sans les mélanger : un particulier ne traverse jamais de jargon professionnel, un restaurateur trouve une offre de conseil concrète. Et rester crédible sans rien inventer : ni avis, ni prix, ni chiffres que le chef n'a pas donnés."
+        },
+        "process": {
+          "title": "LE PROCESS",
+          "content": "Astro, pages générées au build et déployées sur Cloudflare Workers. Un formulaire guidé envoie la demande par email via Resend depuis le Worker ; si l'envoi échoue, il propose un email pré-rempli ou de copier la demande pour Instagram. Cinq encres en tokens, Josefin Sans et Brygada 1918."
+        },
+        "result": {
+          "title": "LE RÉSULTAT",
+          "content": "Un site que le chef fait vivre seul : textes, assiettes du carnet et photos dans des fichiers simples, un guide pour son assistant IA, un contrôle au build qui liste ce qui manque avant la mise en ligne, et chaque push sur main part en production."
+        }
+      }
+    },
     "genjutsu": {
       "category": "CLAUDE PLUGIN",
       "description": "Plugin Claude Code de creative coding. Il fait bouger une interface, donne une identité à un produit, et monte un site entier avec une équipe d'agents.",

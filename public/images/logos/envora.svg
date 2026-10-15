@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="620" height="160" viewBox="0 0 620 160">
-  <rect width="620" height="160" rx="12" fill="#13111c"/>
-  <g font-family="'SFMono-Regular','Menlo','Consolas','Liberation Mono','Courier New',monospace" font-size="14" font-weight="bold" text-anchor="start">
-    <text xml:space="preserve" x="62" y="35" fill="#6EE7B7" textLength="496" lengthAdjust="spacing"> ▄▄▄▄▄▄▄ ▄▄▄    ▄▄▄ ▄▄▄▄  ▄▄▄▄   ▄▄▄▄▄   ▄▄▄▄▄▄▄     ▄▄▄▄  </text>
-    <text xml:space="preserve" x="62" y="55" fill="#6EE7B7" textLength="496" lengthAdjust="spacing">███▀▀▀▀▀ ████▄  ███ ▀███  ███▀ ▄███████▄ ███▀▀███▄ ▄██▀▀██▄</text>
-    <text xml:space="preserve" x="62" y="75" fill="#6EE7B7" textLength="496" lengthAdjust="spacing">███▄▄    ███▀██▄███  ███  ███  ███   ███ ███▄▄███▀ ███  ███</text>
-    <text xml:space="preserve" x="62" y="95" fill="#6EE7B7" textLength="496" lengthAdjust="spacing">███      ███  ▀████  ███▄▄███  ███▄▄▄███ ███▀▀██▄  ███▀▀███</text>
-    <text xml:space="preserve" x="62" y="115" fill="#6EE7B7" textLength="496" lengthAdjust="spacing">▀███████ ███    ███   ▀████▀    ▀█████▀  ███  ▀███ ███  ███</text>
-  </g>
-  <text x="310" y="145" text-anchor="middle" font-family="'SFMono-Regular','Menlo','Consolas',monospace" font-size="11" fill="#6B7280">encrypted .env vault</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" shape-rendering="crispEdges"><rect width="160" height="160" fill="#13111c"/><g fill="#6EE7B7"><rect x="38" y="17" width="98" height="14"/><rect x="24" y="31" width="112" height="14"/><rect x="24" y="45" width="42" height="14"/><rect x="24" y="59" width="42" height="14"/><rect x="24" y="73" width="70" height="14"/><rect x="24" y="87" width="42" height="14"/><rect x="24" y="101" width="42" height="14"/><rect x="24" y="115" width="112" height="14"/><rect x="38" y="129" width="98" height="14"/></g></svg>
