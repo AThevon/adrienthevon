@@ -210,7 +210,7 @@ Quantification de couleurs (max 20), numérotation par région, export PNG. Tout
     client: "OPEN SOURCE",
     link: "https://pix2paint.athevon.dev",
     image: "/images/projects/pix2paint-medium.png",
-    logo: "/images/logos/pix2paint.png",
+    logo: "/images/logos/pix2paint.svg",
     sections: [
       {
         type: "intro",
